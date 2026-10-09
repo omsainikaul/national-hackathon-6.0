@@ -1,3 +1,4 @@
+# MetrCheck AI - Frontend Production Image (National Hackathon 6.0)
 # Stage 1: Build static assets
 FROM node:20-alpine AS build
 

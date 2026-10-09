@@ -1,4 +1,5 @@
 # MetrCheck AI — Final Controlled Codebase Cleanup Execution Report
+> National Hackathon 6.0 Codebase Verification Archive
 
 **Project:** MetrCheck AI — Legal Metrology Compliance AI Prototype  
 **Date:** September 24, 2026  

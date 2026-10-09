@@ -1,3 +1,4 @@
+"""MetrCheck AI - Unified Server Runner for National Hackathon 6.0."""
 import os
 import sys
 import time

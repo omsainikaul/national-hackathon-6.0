@@ -1,5 +1,5 @@
 @echo off
-title MetrCheck AI - Windows Firewall Port Configuration
+title MetrCheck AI - Windows Firewall Port Configuration (National Hackathon 6.0)
 echo ============================================================
 echo   MetrCheck AI - Unblocking Ports 5173 and 8000 in Firewall
 echo ============================================================

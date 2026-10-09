@@ -1,4 +1,4 @@
-# MetrCheck AI — 10-Minute SIH Judge Demonstration Runbook
+# MetrCheck AI — National Hackathon 6.0 Demonstration Runbook
 **Smart India Hackathon 2026 | Problem Statement: PS 26034 (DoCA / MoCA)**  
 **Project:** AI-Assisted Statutory Package Compliance & Enforcement System
 

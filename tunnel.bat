@@ -1,5 +1,5 @@
 @echo off
-title MetrCheck AI - Mobile Cloud Tunnel (Zero-Prompt)
+title MetrCheck AI - Mobile Cloud Tunnel (National Hackathon 6.0)
 cd /d "%~dp0"
 echo ============================================================
 echo   MetrCheck AI - Instant Secure Cloud Tunnel for Phone

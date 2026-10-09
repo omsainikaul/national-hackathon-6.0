@@ -1,4 +1,5 @@
 # MetrCheck AI — Final Codebase Forensic Cleanup Audit
+> National Hackathon 6.0 Codebase Architecture Reference
 
 **Audit Execution Date:** 2026-09-24  
 **Status:** PHASE 1 — READ-ONLY FORENSIC AUDIT COMPLETE  

@@ -1,7 +1,7 @@
 # MetrCheck AI
 
 **AI-Assisted Smart Automation Platform for Packaged-Product Compliance**  
-*Smart India Hackathon 2026 — Problem Statement: SIH26202 (Student Innovation)*
+*National Hackathon 6.0 | Smart India Hackathon 2026 — Problem Statement: SIH26202 (Student Innovation)*
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)

@@ -1,3 +1,4 @@
+# MetrCheck AI - National Hackathon 6.0 Docker Build Exclusions
 .git
 .gitignore
 .github

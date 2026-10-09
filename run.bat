@@ -1,6 +1,6 @@
 @echo off
 setlocal
-title MetrCheck AI - Server Controller
+title MetrCheck AI - Server Controller (National Hackathon 6.0)
 cd /d "%~dp0"
 
 if not exist "venv\Scripts\python.exe" (

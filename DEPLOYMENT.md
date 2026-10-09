@@ -1,4 +1,4 @@
-# MetrCheck AI — Docker Deployment Guide
+# MetrCheck AI — National Hackathon 6.0 Docker Deployment Guide
 
 MetrCheck AI (PS 26034) is fully containerized using a two-container Docker architecture:
 1. **Backend Service (`metrcheck-backend`)**: Python 3.11 FastAPI with PaddleOCR deep learning engine (PP-OCRv4), SQLite database (aiosqlite), and rule compliance checking.

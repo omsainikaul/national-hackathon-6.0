@@ -1,3 +1,4 @@
+"""MetrCheck AI - Architecture PDF Documentation Generator (National Hackathon 6.0)."""
 import os
 import sys
 from datetime import datetime

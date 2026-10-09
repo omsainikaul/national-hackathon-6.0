@@ -1,5 +1,5 @@
 @echo off
-title MetrCheck AI - Stop Servers
+title MetrCheck AI - Stop Servers (National Hackathon 6.0)
 echo ============================================
 echo   MetrCheck AI - Stopping Servers...
 echo ============================================

@@ -1,4 +1,6 @@
-# React + TypeScript + Vite
+# MetrCheck AI — Frontend (National Hackathon 6.0)
+
+React + TypeScript + Vite frontend client for MetrCheck AI.
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 

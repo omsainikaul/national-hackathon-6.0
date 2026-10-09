@@ -1,3 +1,4 @@
+"""MetrCheck AI - Architecture Diagram Generator (National Hackathon 6.0)."""
 import os
 from PIL import Image, ImageDraw, ImageFont
 
