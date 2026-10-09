@@ -245,15 +245,77 @@ def _header_footer(canvas, doc):
     canvas.restoreState()
 
 
-# ── Helper: Safe image load ────────────────────────────────────
-def _load_image(image_url: str, max_width: float, max_height: float) -> Optional[RLImage]:
-    """Load image from uploads directory. Returns None on failure."""
+# ── Helper: Synthetic placeholder detection & Safe image load ──
+SYNTHETIC_PLACEHOLDER_NAMES = {
+    "placeholder.png",
+    "placeholder.jpg",
+    "placeholder.jpeg",
+    "placeholder.svg",
+    "placeholder.webp",
+    "placeholder",
+}
+
+SYNTHETIC_PLACEHOLDER_PREFIXES = (
+    "/placeholder.",
+    "placeholder.",
+    "/api/images/placeholder.",
+)
+
+
+def _is_synthetic_placeholder(image_url: Optional[str]) -> bool:
+    """Check if an image URI is a recognized synthetic benchmark placeholder."""
+    if not image_url or not isinstance(image_url, str):
+        return False
+    clean = image_url.strip().lower()
+    if not clean:
+        return False
+    normalized = clean.replace("\\", "/")
+    base_name = os.path.basename(normalized)
+    if base_name in SYNTHETIC_PLACEHOLDER_NAMES:
+        return True
+    if any(clean.startswith(prefix) for prefix in SYNTHETIC_PLACEHOLDER_PREFIXES):
+        return True
+    return False
+
+
+def _load_image(image_url: Optional[str], max_width: float, max_height: float) -> Optional[RLImage]:
+    """
+    Load image from uploads directory or absolute path. Returns None on failure or for synthetic placeholders.
+    Does NOT emit missing-file warnings for recognized synthetic placeholders.
+    """
     try:
-        if not image_url:
+        if not image_url or not isinstance(image_url, str):
             return None
 
-        filename = image_url.split('/')[-1] if '/' in image_url else image_url
-        filepath = os.path.join(settings.UPLOAD_DIR, filename)
+        clean_url = image_url.strip()
+        if not clean_url:
+            return None
+
+        # Detect expected synthetic placeholders before filesystem access
+        if _is_synthetic_placeholder(clean_url):
+            return None
+
+        # Safe filepath resolution
+        filepath = None
+        if os.path.isabs(clean_url) and os.path.isfile(clean_url):
+            filepath = os.path.abspath(clean_url)
+        else:
+            # Extract safe filename avoiding path traversal
+            normalized = clean_url.replace("\\", "/")
+            filename = os.path.basename(normalized)
+            if not filename:
+                return None
+            candidate_path = os.path.abspath(os.path.join(settings.UPLOAD_DIR, filename))
+            # Verify containment in upload dir to prevent path traversal
+            upload_dir_abs = os.path.abspath(settings.UPLOAD_DIR)
+            try:
+                common = os.path.commonpath([upload_dir_abs, candidate_path])
+                if common != upload_dir_abs:
+                    logger.warning(f"Unsafe image path traversal detected: {clean_url}")
+                    return None
+            except ValueError:
+                return None
+            filepath = candidate_path
 
         if not os.path.isfile(filepath):
             logger.warning(f"Image file not found: {filepath}")

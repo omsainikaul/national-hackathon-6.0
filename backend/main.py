@@ -20,6 +20,16 @@ async def lifespan(app: FastAPI):
     settings.verify_test_isolation()
     settings.validate_production_secrets()
     await init_db()
+
+    # Safe OCR Model Pre-warmup (Sprint 3: Demo Startup Reliability)
+    try:
+        import asyncio
+        from ocr.factory import warmup_ocr_engine
+        await asyncio.to_thread(warmup_ocr_engine, "en")
+    except Exception as exc:
+        import logging
+        logging.getLogger("main").warning("Safe OCR startup warmup warning: %s", exc)
+
     yield
     # Shutdown
 

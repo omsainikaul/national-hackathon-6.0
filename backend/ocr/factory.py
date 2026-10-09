@@ -29,3 +29,15 @@ def reset_ocr_engine() -> None:
     _GLOBAL_OCR_ENGINE = None
 
 
+def warmup_ocr_engine(lang: str = "en") -> bool:
+    """
+    Pre-warms the singleton OCR engine to eliminate cold-start delays on the first live demo scan.
+    Thread-safe, non-destructive, and resilient.
+    """
+    from ocr.paddle_engine import warmup_ocr
+    engine = get_ocr_engine()
+    if hasattr(engine, "warmup"):
+        return engine.warmup()
+    return warmup_ocr(lang=lang)
+
+

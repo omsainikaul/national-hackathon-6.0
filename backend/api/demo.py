@@ -1,7 +1,18 @@
-from fastapi import APIRouter, HTTPException
+import os
+import mimetypes
 from typing import List, Dict, Any
+
+from fastapi import APIRouter, HTTPException
+from fastapi.responses import FileResponse
+
 from demo.cases import DEMO_CASES, get_demo_cases_list
-from models.schemas import AnalysisResponse, OCRResult, OCRWord, ComplianceResult, ProductImageEvidence
+from models.schemas import (
+    AnalysisResponse,
+    OCRResult,
+    OCRWord,
+    ComplianceResult,
+    ProductImageEvidence,
+)
 from compliance.engine import engine
 from compliance.rules.legal_metrology import compute_font_size_and_readability
 
@@ -100,6 +111,65 @@ def build_demo_response(case_id: str) -> AnalysisResponse:
         created_at=BENCHMARK_FIXTURE_TIMESTAMP,
         font_size_analysis=font_size_analysis
     )
+
+
+FIXTURES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "fixtures"))
+
+VERIFIED_SAMPLE_WHITELIST = {
+    "alpino_front.png",
+    "alpino_back.png",
+    "takatak_front.jpeg",
+    "takatak_back.jpeg",
+    "lays_front.jpeg",
+    "lays_back.jpeg"
+}
+
+DEMO_LIVE_SAMPLES = [
+    {
+        "id": "alpino_oats",
+        "name": "Alpino Super Oats (400g)",
+        "badge": "COMPLIANT",
+        "category": "Breakfast Cereals",
+        "compliance_summary": "No statutory issues detected across Rules 6, 7, 8, 9, 10, 12",
+        "description": "Genuine consumer packaged food product with all mandatory declarations present: 400g Net Qty, MRP ₹199, FSSAI Lic 10716022000249, Veg symbol, and manufacturer address.",
+        "panels": [
+            {"slot": "front", "label": "Front", "filename": "alpino_front.png", "url": "/api/demo/sample-image/alpino_front.png", "local_path": "/demo-samples/alpino_front.png"},
+            {"slot": "back", "label": "Back", "filename": "alpino_back.png", "url": "/api/demo/sample-image/alpino_back.png", "local_path": "/demo-samples/alpino_back.png"}
+        ]
+    },
+    {
+        "id": "takatak_snacks",
+        "name": "Tak-a-Tak / Kurkure Snacks",
+        "badge": "DEFICIENT",
+        "category": "Packaged Snack",
+        "compliance_summary": "Action Required: Missing clear best-before date & dual/smudged ink-jet MRP",
+        "description": "Real snack package demonstrating common retail packaging non-compliance: dual printed MRP stamps and faint/absent statutory expiry dates under Rule 6(1)(d).",
+        "panels": [
+            {"slot": "front", "label": "Front", "filename": "takatak_front.jpeg", "url": "/api/demo/sample-image/takatak_front.jpeg", "local_path": "/demo-samples/takatak_front.jpeg"},
+            {"slot": "back", "label": "Back", "filename": "takatak_back.jpeg", "url": "/api/demo/sample-image/takatak_back.jpeg", "local_path": "/demo-samples/takatak_back.jpeg"}
+        ]
+    }
+]
+
+
+@router.get("/demo/samples", response_model=List[Dict[str, Any]])
+async def list_demo_samples():
+    """Return catalog of verified real packaging demo samples for one-click live analysis loading."""
+    return DEMO_LIVE_SAMPLES
+
+
+@router.get("/demo/sample-image/{filename}")
+async def get_demo_sample_image(filename: str):
+    """Securely serve verified demo fixture images for live analysis without requiring login."""
+    if not filename or filename not in VERIFIED_SAMPLE_WHITELIST:
+        raise HTTPException(status_code=404, detail="Demo sample image not found in verified whitelist.")
+    
+    file_path = os.path.abspath(os.path.join(FIXTURES_DIR, filename))
+    if not file_path.startswith(FIXTURES_DIR) or not os.path.isfile(file_path):
+        raise HTTPException(status_code=404, detail="Demo sample fixture image file not found.")
+    
+    mime_type, _ = mimetypes.guess_type(file_path)
+    return FileResponse(file_path, media_type=mime_type or "image/png")
 
 
 @router.get("/demo/cases", response_model=List[Dict[str, Any]])

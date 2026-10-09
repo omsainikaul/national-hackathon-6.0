@@ -83,8 +83,8 @@ const PackagePreview: React.FC<PackagePreviewProps> = ({
 
   if (!images || images.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs overflow-hidden mb-6 p-8 text-center">
-        <div className="inline-flex p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 mb-2">
+      <div className="bg-white dark:bg-[#101A2C] rounded-2xl border border-slate-200/90 dark:border-white/10 shadow-xs overflow-hidden mb-6 p-8 text-center">
+        <div className="inline-flex p-3 rounded-xl bg-slate-100 dark:bg-white/[0.04] text-slate-400 dark:text-slate-500 mb-2">
           <ImageIcon className="w-6 h-6" />
         </div>
         <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">{t('results.package_image_unavailable')}</h4>
@@ -103,11 +103,11 @@ const PackagePreview: React.FC<PackagePreviewProps> = ({
   const isFront = isFrontPanel(activeImage?.label, activeIndex);
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs overflow-hidden mb-6 transition-all">
+    <div className="bg-white dark:bg-[#101A2C] rounded-2xl border border-slate-200/90 dark:border-white/10 shadow-xs overflow-hidden mb-6 transition-all">
       {/* Header */}
-      <div className="px-5 py-3.5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-slate-800/40">
+      <div className="px-5 py-3.5 border-b border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/70 dark:bg-white/[0.02]">
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800/60 text-indigo-600 dark:text-indigo-400">
+          <div className="p-1.5 rounded-lg bg-teal-50 dark:bg-teal-950/60 border border-teal-200/80 dark:border-teal-800/60 text-teal-600 dark:text-teal-400">
             <ImageIcon className="w-4 h-4" />
           </div>
           <div>
@@ -121,8 +121,8 @@ const PackagePreview: React.FC<PackagePreviewProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-mono">
-            <Layers className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+          <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 font-mono">
+            <Layers className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
             {images.length === 1 ? t('results.panels_count_single', { count: 1 }) : t('results.panels_count_multiple', { count: images.length })}
           </span>
         </div>
@@ -130,10 +130,10 @@ const PackagePreview: React.FC<PackagePreviewProps> = ({
 
       {/* Main Image Display Box */}
       <div className="p-4 sm:p-6 flex flex-col items-center">
-        <div className="w-full max-w-xl min-h-[220px] max-h-[380px] bg-slate-950/5 dark:bg-slate-950/60 rounded-xl border border-slate-200/80 dark:border-slate-800 flex items-center justify-center p-3 relative overflow-hidden group">
+        <div className="w-full max-w-xl min-h-[220px] max-h-[380px] bg-slate-950/5 dark:bg-black/40 rounded-xl border border-slate-200/80 dark:border-white/10 flex items-center justify-center p-3 relative overflow-hidden group">
           {isCurrentLoading ? (
             <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 py-12 space-y-3">
-              <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+              <div className="w-8 h-8 border-2 border-teal-500 border-t-transparent rounded-full animate-spin" />
               <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
                 {t('results.loading_preview', { defaultValue: 'Loading package preview...' })}
               </span>
@@ -168,7 +168,7 @@ const PackagePreview: React.FC<PackagePreviewProps> = ({
             <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
               {activePanelLocalized}
             </h4>
-            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/10">
               {isFront ? t('results.primary_package_view', { defaultValue: 'Primary package view' }) : t('results.secondary_package_view', { defaultValue: 'Secondary package view' })}
             </span>
           </div>
@@ -181,8 +181,8 @@ const PackagePreview: React.FC<PackagePreviewProps> = ({
 
         {/* Panel Switching Tabs */}
         {images.length > 1 && (
-          <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800 w-full flex items-center justify-center gap-2 flex-wrap">
-            <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-1">
+          <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-white/10 w-full flex items-center justify-center gap-2 flex-wrap">
+            <span className="text-xs font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mr-1">
               {t('results.switch_panel', { defaultValue: 'Switch Panel:' })}
             </span>
             {images.map((img, idx) => {
@@ -195,8 +195,8 @@ const PackagePreview: React.FC<PackagePreviewProps> = ({
                   onClick={() => setSelectedIndex(idx)}
                   className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     isSelected
-                      ? 'bg-indigo-600 text-white shadow-xs scale-105'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
+                      ? 'bg-[#173B57] dark:bg-teal-500 text-white dark:text-[#101A2C] shadow-xs scale-105'
+                      : 'bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.08] border border-slate-200 dark:border-white/10'
                   }`}
                   aria-pressed={isSelected}
                 >
@@ -204,7 +204,7 @@ const PackagePreview: React.FC<PackagePreviewProps> = ({
                   <span>{panelLabel}</span>
                   {img.word_count ? (
                     <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
-                      isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                      isSelected ? 'bg-black/20 dark:bg-black/20 text-white dark:text-[#101A2C]' : 'bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-slate-300'
                     }`}>
                       {img.word_count}w
                     </span>

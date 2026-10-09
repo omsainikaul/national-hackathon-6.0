@@ -61,7 +61,10 @@ class PackagePanelDetector:
         if lines is not None:
             v_lines = []
             for line in lines:
-                x1, y1, x2, y2 = line[0]
+                line_coords = line.reshape(-1)
+                if line_coords.size < 4:
+                    continue
+                x1, y1, x2, y2 = int(line_coords[0]), int(line_coords[1]), int(line_coords[2]), int(line_coords[3])
                 # Check near vertical line (angle > 75 deg)
                 if abs(x2 - x1) < 20 and abs(y2 - y1) > h * 0.45:
                     v_lines.append((x1 + x2) // 2)

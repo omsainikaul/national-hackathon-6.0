@@ -1867,3 +1867,22 @@ export interface ManualProductCheckPayload {
   allergen_info?: string;
   nutritional_info?: string;
 }
+
+// ── Demo Live Samples (Sprint 3 Task 2) ──────────────────────────────────
+export interface DemoLivePanel {
+  slot: 'front' | 'back' | 'side1' | 'side2';
+  label: string;
+  filename: string;
+  url: string;
+  local_path?: string;
+}
+
+export interface DemoLiveSample {
+  id: string;
+  name: string;
+  badge: 'COMPLIANT' | 'DEFICIENT' | 'REVIEW_NEEDED';
+  category: string;
+  compliance_summary: string;
+  description: string;
+  panels: DemoLivePanel[];
+}

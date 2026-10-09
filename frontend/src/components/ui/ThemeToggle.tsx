@@ -16,9 +16,9 @@ export default function ThemeToggle({ className = '', showLabel = false }: Theme
       onClick={toggleTheme}
       className={`
         inline-flex items-center gap-2 p-2 rounded-xl border transition-all cursor-pointer select-none
-        focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50
+        focus:outline-hidden focus:ring-2 focus:ring-[#35C6B0]/50
         ${isDark 
-          ? 'bg-slate-800/90 border-slate-700 text-amber-300 hover:bg-slate-700 hover:text-amber-200 hover:border-slate-600' 
+          ? 'bg-[#101A2C] border-white/10 text-amber-300 hover:bg-[#173B57] hover:text-amber-200 hover:border-white/20' 
           : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 hover:border-slate-300 shadow-2xs'
         }
         ${className}

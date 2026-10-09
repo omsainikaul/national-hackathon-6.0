@@ -32,7 +32,7 @@ export default function BusinessProfile() {
         ]);
         if (statsRes) setStats(statsRes);
         if (prodRes) setProducts(prodRes);
-      } catch (err) {
+      } catch {
         // ignore
       } finally {
         setLoading(false);

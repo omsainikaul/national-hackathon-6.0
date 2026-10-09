@@ -152,32 +152,32 @@ export default function OfficerDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-400">
+      <div className="min-h-96 flex items-center justify-center text-slate-400">
         <div className="flex items-center gap-3">
-          <RefreshCw className="w-6 h-6 animate-spin text-indigo-500" />
-          <span>{t('audit_review.dashboard.loading')}</span>
+          <RefreshCw className="w-6 h-6 animate-spin text-teal-600 dark:text-teal-400" />
+          <span className="text-sm font-semibold">{t('audit_review.dashboard.loading')}</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8 space-y-8">
+    <div className="space-y-6 animate-in fade-in duration-300">
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-white/10">
         <div>
-          <div className="flex items-center gap-2.5">
-            <span className="p-2 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
-              <ShieldCheck className="w-6 h-6" />
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <span className="p-2 rounded-xl bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 border border-teal-200/60 dark:border-teal-800/60">
+              <ShieldCheck className="w-5 h-5" />
             </span>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
               {t('audit_review.dashboard.title')}
             </h1>
-            <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40">
               {t('audit_review.dashboard.badge_sec10')}
             </span>
           </div>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             {t('audit_review.dashboard.subtitle')}
           </p>
         </div>
@@ -186,9 +186,9 @@ export default function OfficerDashboard() {
           <button
             onClick={loadData}
             disabled={refreshing}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-600 text-sm font-medium text-slate-200 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 shadow-2xs transition-all cursor-pointer"
           >
-            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-indigo-400' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-teal-600 dark:text-teal-400' : ''}`} />
             <span>{t('audit_review.dashboard.refresh_queue')}</span>
           </button>
         </div>
@@ -196,46 +196,46 @@ export default function OfficerDashboard() {
 
       {/* KPI Metrics Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
-        <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-sm flex flex-col justify-between">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{t('audit_review.dashboard.kpi_total_queue')}</span>
-          <div className="text-2xl font-black text-white mt-2">{summary?.total_queue ?? 0}</div>
-          <span className="text-[10px] text-slate-400 mt-1">{t('audit_review.dashboard.kpi_total_desc')}</span>
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 shadow-xs flex flex-col justify-between">
+          <span className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('audit_review.dashboard.kpi_total_queue')}</span>
+          <div className="text-2xl font-bold text-slate-900 dark:text-white mt-2">{summary?.total_queue ?? 0}</div>
+          <span className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">{t('audit_review.dashboard.kpi_total_desc')}</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/30 shadow-sm flex flex-col justify-between">
-          <span className="text-xs font-semibold text-amber-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_pending')}</span>
-          <div className="text-2xl font-black text-amber-400 mt-2">{summary?.pending_review ?? 0}</div>
-          <span className="text-[10px] text-amber-400/70 mt-1">{t('audit_review.dashboard.kpi_pending_desc')}</span>
+        <div className="p-3.5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 shadow-xs flex flex-col justify-between">
+          <span className="text-[10px] sm:text-xs font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_pending')}</span>
+          <div className="text-2xl font-bold text-amber-700 dark:text-amber-400 mt-2">{summary?.pending_review ?? 0}</div>
+          <span className="text-[10px] text-amber-700/70 dark:text-amber-400/70 mt-1">{t('audit_review.dashboard.kpi_pending_desc')}</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-blue-950/20 border border-blue-500/30 shadow-sm flex flex-col justify-between">
-          <span className="text-xs font-semibold text-blue-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_assigned')}</span>
-          <div className="text-2xl font-black text-blue-400 mt-2">{summary?.assigned ?? 0}</div>
-          <span className="text-[10px] text-blue-400/70 mt-1">{t('audit_review.dashboard.kpi_assigned_desc')}</span>
+        <div className="p-3.5 rounded-2xl bg-teal-50/60 dark:bg-teal-950/20 border border-teal-200/80 dark:border-teal-900/40 shadow-xs flex flex-col justify-between">
+          <span className="text-[10px] sm:text-xs font-bold text-teal-800 dark:text-teal-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_assigned')}</span>
+          <div className="text-2xl font-bold text-teal-700 dark:text-teal-400 mt-2">{summary?.assigned ?? 0}</div>
+          <span className="text-[10px] text-teal-700/70 dark:text-teal-400/70 mt-1">{t('audit_review.dashboard.kpi_assigned_desc')}</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-indigo-950/20 border border-indigo-500/30 shadow-sm flex flex-col justify-between">
-          <span className="text-xs font-semibold text-indigo-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_in_review')}</span>
-          <div className="text-2xl font-black text-indigo-400 mt-2">{summary?.in_review ?? 0}</div>
-          <span className="text-[10px] text-indigo-400/70 mt-1">{t('audit_review.dashboard.kpi_in_review_desc')}</span>
+        <div className="p-3.5 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-200/80 dark:border-indigo-900/40 shadow-xs flex flex-col justify-between">
+          <span className="text-[10px] sm:text-xs font-bold text-indigo-800 dark:text-indigo-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_in_review')}</span>
+          <div className="text-2xl font-bold text-indigo-700 dark:text-indigo-400 mt-2">{summary?.in_review ?? 0}</div>
+          <span className="text-[10px] text-indigo-700/70 dark:text-indigo-400/70 mt-1">{t('audit_review.dashboard.kpi_in_review_desc')}</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 shadow-sm flex flex-col justify-between">
-          <span className="text-xs font-semibold text-emerald-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_verified')}</span>
-          <div className="text-2xl font-black text-emerald-400 mt-2">{summary?.verified ?? 0}</div>
-          <span className="text-[10px] text-emerald-400/70 mt-1">{t('audit_review.dashboard.kpi_verified_desc')}</span>
+        <div className="p-3.5 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/40 shadow-xs flex flex-col justify-between">
+          <span className="text-[10px] sm:text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_verified')}</span>
+          <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-400 mt-2">{summary?.verified ?? 0}</div>
+          <span className="text-[10px] text-emerald-700/70 dark:text-emerald-400/70 mt-1">{t('audit_review.dashboard.kpi_verified_desc')}</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-red-950/20 border border-red-500/30 shadow-sm flex flex-col justify-between">
-          <span className="text-xs font-semibold text-red-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_rejected')}</span>
-          <div className="text-2xl font-black text-red-400 mt-2">{summary?.rejected ?? 0}</div>
-          <span className="text-[10px] text-red-400/70 mt-1">{t('audit_review.dashboard.kpi_rejected_desc')}</span>
+        <div className="p-3.5 rounded-2xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 shadow-xs flex flex-col justify-between">
+          <span className="text-[10px] sm:text-xs font-bold text-rose-800 dark:text-rose-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_rejected')}</span>
+          <div className="text-2xl font-bold text-rose-700 dark:text-rose-400 mt-2">{summary?.rejected ?? 0}</div>
+          <span className="text-[10px] text-rose-700/70 dark:text-rose-400/70 mt-1">{t('audit_review.dashboard.kpi_rejected_desc')}</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-purple-950/20 border border-purple-500/30 shadow-sm flex flex-col justify-between">
-          <span className="text-xs font-semibold text-purple-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_escalated')}</span>
-          <div className="text-2xl font-black text-purple-400 mt-2">{summary?.escalated ?? 0}</div>
-          <span className="text-[10px] text-purple-400/70 mt-1">{t('audit_review.dashboard.kpi_escalated_desc')}</span>
+        <div className="p-3.5 rounded-2xl bg-purple-50/60 dark:bg-purple-950/20 border border-purple-200/80 dark:border-purple-900/40 shadow-xs flex flex-col justify-between">
+          <span className="text-[10px] sm:text-xs font-bold text-purple-800 dark:text-purple-300 uppercase tracking-wider">{t('audit_review.dashboard.kpi_escalated')}</span>
+          <div className="text-2xl font-bold text-purple-700 dark:text-purple-400 mt-2">{summary?.escalated ?? 0}</div>
+          <span className="text-[10px] text-purple-700/70 dark:text-purple-400/70 mt-1">{t('audit_review.dashboard.kpi_escalated_desc')}</span>
         </div>
       </div>
 
@@ -244,7 +244,7 @@ export default function OfficerDashboard() {
         {/* Left 3 Columns: Review Queue */}
         <div className="lg:col-span-3 space-y-4">
           {/* Filters Bar */}
-          <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+          <div className="p-4 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 space-y-3 shadow-xs">
             <div className="flex flex-col md:flex-row items-center gap-3 justify-between">
               <div className="relative flex-1 w-full">
                 <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -253,19 +253,19 @@ export default function OfficerDashboard() {
                   placeholder={t('audit_review.dashboard.search_placeholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-200 placeholder-slate-400 focus:outline-hidden focus:border-indigo-500"
+                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-teal-500"
                 />
               </div>
 
               <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
                 <div className="flex items-center gap-1.5 shrink-0">
                   <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
-                  <span className="text-xs text-slate-400 font-medium">{t('audit_review.dashboard.filter_status_label')}</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">{t('audit_review.dashboard.filter_status_label')}</span>
                 </div>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-300 focus:outline-hidden focus:border-indigo-500 cursor-pointer"
+                  className="px-2.5 py-1.5 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-xs text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-teal-500 cursor-pointer"
                 >
                   <option value="ALL">{t('audit_review.dashboard.status_all')}</option>
                   <option value="PENDING">{t('audit_review.dashboard.status_pending')}</option>
@@ -280,7 +280,7 @@ export default function OfficerDashboard() {
                 <select
                   value={riskFilter}
                   onChange={(e) => setRiskFilter(e.target.value)}
-                  className="px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-300 focus:outline-hidden focus:border-indigo-500 cursor-pointer"
+                  className="px-2.5 py-1.5 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-xs text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-teal-500 cursor-pointer"
                 >
                   <option value="ALL">{t('audit_review.dashboard.risk_all')}</option>
                   <option value="CRITICAL">{t('audit_review.dashboard.risk_critical')}</option>
@@ -292,7 +292,7 @@ export default function OfficerDashboard() {
                 <select
                   value={officerFilter}
                   onChange={(e) => setOfficerFilter(e.target.value)}
-                  className="px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-300 focus:outline-hidden focus:border-indigo-500 cursor-pointer"
+                  className="px-2.5 py-1.5 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-xs text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-teal-500 cursor-pointer"
                 >
                   <option value="ALL">{t('audit_review.dashboard.officer_all')}</option>
                   <option value="MY_ASSIGNMENTS">{t('audit_review.dashboard.officer_my_assignments')}</option>
@@ -306,56 +306,56 @@ export default function OfficerDashboard() {
           </div>
 
           {/* Queue Items Table */}
-          <div className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm">
-            <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+          <div className="rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 overflow-hidden shadow-xs">
+            <div className="p-4 bg-slate-50/80 dark:bg-white/[0.02] border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-sm text-white">{t('audit_review.dashboard.queue_title')}</span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-mono">
+                <span className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white uppercase tracking-wider">{t('audit_review.dashboard.queue_title')}</span>
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 font-mono font-bold border border-slate-200/80 dark:border-white/10">
                   {filteredQueue.length === 1 
                     ? t('audit_review.dashboard.queue_count_single', { count: filteredQueue.length }) 
                     : t('audit_review.dashboard.queue_count_multiple', { count: filteredQueue.length })}
                 </span>
               </div>
-              <span className="text-xs text-slate-400">
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:inline">
                 {t('audit_review.dashboard.queue_ordering_note')}
               </span>
             </div>
 
             {filteredQueue.length === 0 ? (
-              <div className="p-12 text-center text-slate-400 space-y-2">
-                <CheckCircle2 className="w-10 h-10 text-emerald-400/40 mx-auto" />
-                <p className="text-sm font-semibold text-slate-300">{t('audit_review.dashboard.empty_title')}</p>
-                <p className="text-xs text-slate-400">{t('audit_review.dashboard.empty_desc')}</p>
+              <div className="p-12 text-center text-slate-400 dark:text-slate-500 space-y-2">
+                <CheckCircle2 className="w-10 h-10 text-emerald-500/60 mx-auto" />
+                <p className="text-sm font-bold text-slate-700 dark:text-slate-200">{t('audit_review.dashboard.empty_title')}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{t('audit_review.dashboard.empty_desc')}</p>
               </div>
             ) : (
-              <div className="divide-y divide-slate-800/80">
+              <div className="divide-y divide-slate-100 dark:divide-white/5">
                 {filteredQueue.map(item => (
                   <div
                     key={item.review_id}
-                    className="p-4 hover:bg-slate-800/40 transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+                    className="p-4 hover:bg-slate-50/80 dark:hover:bg-white/[0.02] transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
                   >
                     <div className="flex items-start gap-3.5 min-w-0 flex-1">
-                      <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 shrink-0 mt-0.5">
-                        <AlertTriangle className={`w-5 h-5 ${item.ai_risk_level === 'CRITICAL' ? 'text-red-400' : (item.ai_risk_level === 'HIGH' ? 'text-amber-400' : 'text-slate-400')}`} />
+                      <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/10 shrink-0 mt-0.5">
+                        <AlertTriangle className={`w-5 h-5 ${item.ai_risk_level === 'CRITICAL' ? 'text-rose-500' : (item.ai_risk_level === 'HIGH' ? 'text-amber-500' : 'text-slate-400')}`} />
                       </div>
 
                       <div className="min-w-0 flex-1 space-y-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-bold text-sm text-white hover:text-indigo-400 transition-colors cursor-pointer" onClick={() => navigate(`/reviews/${item.review_id}`)}>
+                          <span className="font-bold text-sm text-slate-900 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer" onClick={() => navigate(`/reviews/${item.review_id}`)}>
                             {item.product_name}
                           </span>
                           {getRiskBadge(item.ai_risk_level)}
                           {getStatusBadge(item.status)}
                         </div>
 
-                        <div className="flex items-center gap-4 text-xs text-slate-400 flex-wrap">
-                          <span className="font-mono text-slate-400">{t('audit_review.dashboard.item_id_prefix')}{item.analysis_id.slice(0, 12)}</span>
-                          <span>{t('audit_review.dashboard.item_ai_score')} <strong className="text-slate-200">{item.ai_score.toFixed(1)}/100</strong></span>
-                          <span>{t('audit_review.dashboard.item_critical_violations')} <strong className={item.critical_issues_count > 0 ? 'text-red-400' : 'text-slate-200'}>{item.critical_issues_count}</strong></span>
+                        <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
+                          <span className="font-mono text-slate-500 dark:text-slate-400">{t('audit_review.dashboard.item_id_prefix')}{item.analysis_id.slice(0, 12)}</span>
+                          <span>{t('audit_review.dashboard.item_ai_score')} <strong className="text-slate-900 dark:text-white font-bold">{item.ai_score.toFixed(1)}/100</strong></span>
+                          <span>{t('audit_review.dashboard.item_critical_violations')} <strong className={item.critical_issues_count > 0 ? 'text-rose-600 dark:text-rose-400 font-bold' : 'text-slate-700 dark:text-slate-300 font-semibold'}>{item.critical_issues_count}</strong></span>
                           {item.assigned_officer ? (
-                            <span className="text-indigo-300 font-medium">{t('audit_review.dashboard.item_assigned_prefix', { officer: item.assigned_officer })}</span>
+                            <span className="text-teal-700 dark:text-teal-300 font-semibold">{t('audit_review.dashboard.item_assigned_prefix', { officer: item.assigned_officer })}</span>
                           ) : (
-                            <span className="text-amber-400/80 font-medium">{t('audit_review.dashboard.item_unassigned')}</span>
+                            <span className="text-amber-700 dark:text-amber-400 font-semibold">{t('audit_review.dashboard.item_unassigned')}</span>
                           )}
                           <span className="flex items-center gap-1 text-slate-400">
                             <Clock className="w-3 h-3" />
@@ -368,7 +368,7 @@ export default function OfficerDashboard() {
                         {item.review_reasons.length > 0 && (
                           <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
                             {item.review_reasons.slice(0, 3).map((r, i) => (
-                              <span key={i} className="text-[10px] px-2 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800">
+                              <span key={i} className="text-[10px] px-2 py-0.5 rounded-md bg-slate-50 dark:bg-white/[0.04] text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-white/10">
                                 {r}
                               </span>
                             ))}
@@ -388,7 +388,7 @@ export default function OfficerDashboard() {
                           setAssignModalReview(item);
                           setSelectedOfficer(item.assigned_officer || '');
                         }}
-                        className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors cursor-pointer"
+                        className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer border border-slate-200/80 dark:border-white/10"
                         title={t('audit_review.dashboard.btn_assign_tooltip')}
                       >
                         <UserCheck className="w-4 h-4" />
@@ -396,7 +396,7 @@ export default function OfficerDashboard() {
 
                       <button
                         onClick={() => navigate(`/reviews/${item.review_id}`)}
-                        className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-xs shadow-indigo-950 cursor-pointer"
+                        className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#173B57] hover:bg-[#101A2C] dark:bg-teal-500 dark:hover:bg-teal-400 text-white dark:text-[#101A2C] text-xs font-bold transition-all shadow-xs cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-teal-500"
                       >
                         <span>{t('audit_review.dashboard.btn_inspect_verify')}</span>
                         <ChevronRight className="w-3.5 h-3.5" />
@@ -411,43 +411,43 @@ export default function OfficerDashboard() {
 
         {/* Right 1 Column: Officer Workload Dashboard */}
         <div className="space-y-4">
-          <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 shadow-sm">
-            <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-              <Users className="w-4 h-4 text-indigo-400" />
-              <h2 className="font-bold text-sm text-white">{t('audit_review.dashboard.workload_title')}</h2>
+          <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 space-y-4 shadow-xs">
+            <div className="flex items-center gap-2 border-b border-slate-100 dark:border-white/10 pb-3">
+              <Users className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+              <h2 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white uppercase tracking-wider">{t('audit_review.dashboard.workload_title')}</h2>
             </div>
 
             {summary?.workload.length === 0 ? (
-              <p className="text-xs text-slate-400">{t('audit_review.dashboard.no_officers')}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('audit_review.dashboard.no_officers')}</p>
             ) : (
               <div className="space-y-3">
                 {summary?.workload.map(off => (
-                  <div key={off.officer_username} className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-2">
+                  <div key={off.officer_username} className="p-3 rounded-xl bg-slate-50/80 dark:bg-white/[0.02] border border-slate-100 dark:border-white/5 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-slate-200">
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">
                         {off.officer_name}
                       </span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-indigo-300">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.06] text-teal-700 dark:text-teal-300 font-bold border border-slate-200/80 dark:border-white/10">
                         {off.officer_role === 'ADMIN' ? t('audit_review.dashboard.role_admin') : (off.officer_role === 'ENFORCEMENT_OFFICER' ? t('audit_review.dashboard.role_enforcement') : t('audit_review.dashboard.role_audit'))}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-4 gap-1 text-center text-[10px]">
-                      <div className="p-1 rounded bg-slate-900 border border-slate-800">
-                        <span className="text-slate-400 block">{t('audit_review.dashboard.workload_total')}</span>
-                        <span className="font-bold text-white">{off.total_assigned}</span>
+                    <div className="grid grid-cols-4 gap-1.5 text-center text-[10px]">
+                      <div className="p-1.5 rounded-lg bg-white dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/10">
+                        <span className="text-slate-500 dark:text-slate-400 block">{t('audit_review.dashboard.workload_total')}</span>
+                        <span className="font-bold text-slate-900 dark:text-white">{off.total_assigned}</span>
                       </div>
-                      <div className="p-1 rounded bg-amber-950/20 border border-amber-500/20">
-                        <span className="text-amber-400/70 block">{t('audit_review.dashboard.workload_pending')}</span>
-                        <span className="font-bold text-amber-400">{off.pending_count}</span>
+                      <div className="p-1.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/40">
+                        <span className="text-amber-800 dark:text-amber-400/80 block">{t('audit_review.dashboard.workload_pending')}</span>
+                        <span className="font-bold text-amber-700 dark:text-amber-400">{off.pending_count}</span>
                       </div>
-                      <div className="p-1 rounded bg-indigo-950/20 border border-indigo-500/20">
-                        <span className="text-indigo-400/70 block">{t('audit_review.dashboard.workload_active')}</span>
-                        <span className="font-bold text-indigo-400">{off.in_review_count}</span>
+                      <div className="p-1.5 rounded-lg bg-teal-50 dark:bg-teal-950/30 border border-teal-200/80 dark:border-teal-900/40">
+                        <span className="text-teal-800 dark:text-teal-400/80 block">{t('audit_review.dashboard.workload_active')}</span>
+                        <span className="font-bold text-teal-700 dark:text-teal-400">{off.in_review_count}</span>
                       </div>
-                      <div className="p-1 rounded bg-emerald-950/20 border border-emerald-500/20">
-                        <span className="text-emerald-400/70 block">{t('audit_review.dashboard.workload_done')}</span>
-                        <span className="font-bold text-emerald-400">{off.completed_count}</span>
+                      <div className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/40">
+                        <span className="text-emerald-800 dark:text-emerald-400/80 block">{t('audit_review.dashboard.workload_done')}</span>
+                        <span className="font-bold text-emerald-700 dark:text-emerald-400">{off.completed_count}</span>
                       </div>
                     </div>
                   </div>
@@ -455,12 +455,12 @@ export default function OfficerDashboard() {
               </div>
             )}
 
-            <div className="p-3 rounded-xl bg-indigo-950/30 border border-indigo-500/20 text-xs text-indigo-300 space-y-1">
-              <div className="font-bold flex items-center gap-1.5">
+            <div className="p-3.5 rounded-xl bg-teal-50/60 dark:bg-teal-950/20 border border-teal-200/70 dark:border-teal-800/40 text-xs text-teal-950 dark:text-teal-200 space-y-1 shadow-2xs">
+              <div className="font-bold flex items-center gap-1.5 text-teal-950 dark:text-teal-300">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 {t('audit_review.dashboard.human_authority_title')}
               </div>
-              <p className="text-[11px] text-indigo-200/70 leading-relaxed">
+              <p className="text-[11px] text-teal-800/90 dark:text-teal-300/80 leading-relaxed">
                 {t('audit_review.dashboard.human_authority_desc')}
               </p>
             </div>
@@ -470,16 +470,16 @@ export default function OfficerDashboard() {
 
       {/* Quick Assign Modal */}
       {assignModalReview && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xs">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <UserCheck className="w-4 h-4 text-indigo-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
+          <div className="bg-white dark:bg-[#101A2C] border border-slate-200 dark:border-white/10 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/10 pb-3">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <UserCheck className="w-4 h-4 text-teal-600 dark:text-teal-400" />
                 {t('audit_review.modal_assign.title')}
               </h3>
               <button
                 onClick={() => setAssignModalReview(null)}
-                className="text-slate-400 hover:text-white cursor-pointer"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-white cursor-pointer"
               >
                 ✕
               </button>
@@ -487,17 +487,17 @@ export default function OfficerDashboard() {
 
             <div className="space-y-3">
               <div>
-                <span className="text-xs text-slate-400">{t('audit_review.modal_assign.target_audit')}</span>
-                <p className="text-sm font-bold text-white">{assignModalReview.product_name}</p>
-                <p className="text-[10px] font-mono text-slate-400">{t('audit_review.dashboard.item_id_prefix')}{assignModalReview.analysis_id}</p>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">{t('audit_review.modal_assign.target_audit')}</span>
+                <p className="text-sm font-bold text-slate-900 dark:text-white">{assignModalReview.product_name}</p>
+                <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400">{t('audit_review.dashboard.item_id_prefix')}{assignModalReview.analysis_id}</p>
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">{t('audit_review.modal_assign.select_officer')}</label>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">{t('audit_review.modal_assign.select_officer')}</label>
                 <select
                   value={selectedOfficer}
                   onChange={(e) => setSelectedOfficer(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-200 focus:outline-hidden focus:border-indigo-500"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-sm text-slate-900 dark:text-slate-100 focus:outline-hidden focus:ring-2 focus:ring-teal-500"
                 >
                   <option value="">{t('audit_review.modal_assign.choose_officer_placeholder')}</option>
                   {officers.map(o => (
@@ -509,28 +509,28 @@ export default function OfficerDashboard() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">{t('audit_review.modal_assign.instructions_label')}</label>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">{t('audit_review.modal_assign.instructions_label')}</label>
                 <textarea
                   value={assignComments}
                   onChange={(e) => setAssignComments(e.target.value)}
                   placeholder={t('audit_review.modal_assign.instructions_placeholder')}
                   rows={3}
-                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 focus:outline-hidden focus:border-indigo-500 resize-none"
+                  className="w-full p-3 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-slate-100 focus:outline-hidden focus:ring-2 focus:ring-teal-500 resize-none"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 border-t border-slate-800 pt-4">
+            <div className="flex items-center justify-end gap-2 border-t border-slate-100 dark:border-white/10 pt-4">
               <button
                 onClick={() => setAssignModalReview(null)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer transition-colors"
               >
                 {t('common.cancel')}
               </button>
               <button
                 onClick={handleAssignSubmit}
                 disabled={!selectedOfficer || assigning}
-                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-xs font-bold text-white cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-[#173B57] hover:bg-[#101A2C] dark:bg-teal-500 dark:hover:bg-teal-400 disabled:opacity-50 text-xs font-bold text-white dark:text-[#101A2C] cursor-pointer shadow-xs transition-all"
               >
                 {assigning ? t('audit_review.modal_assign.assigning_btn') : t('audit_review.modal_assign.confirm_btn')}
               </button>

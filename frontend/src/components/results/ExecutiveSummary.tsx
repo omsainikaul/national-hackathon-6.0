@@ -33,8 +33,8 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
   riskAssessment,
 }) => {
   const { t } = useLanguage();
-  let bgClass = 'bg-slate-50 dark:bg-slate-900';
-  let borderClass = 'border-slate-200/90 dark:border-slate-800';
+  let bgClass = 'bg-slate-50 dark:bg-[#101A2C]';
+  let borderClass = 'border-slate-200/90 dark:border-white/10';
   
   if (isCompliant) {
     bgClass = 'bg-emerald-50/70 dark:bg-emerald-950/20';
@@ -52,16 +52,16 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
     switch (lvl) {
       case 'CRITICAL': return 'bg-red-600 text-white';
       case 'HIGH': return 'bg-amber-600 text-white';
-      case 'MEDIUM': return 'bg-blue-600 text-white';
+      case 'MEDIUM': return 'bg-sky-600 text-white';
       case 'LOW': return 'bg-emerald-600 text-white';
       default: return 'bg-slate-600 text-white';
     }
   };
 
   return (
-    <div className={`rounded-2xl border ${bgClass} ${borderClass} p-4 sm:p-5 mb-6 shadow-2xs transition-all duration-200 space-y-4`}>
+    <div className={`rounded-2xl border ${bgClass} ${borderClass} p-4 sm:p-5 mb-6 shadow-xs transition-all duration-200 space-y-4`}>
       {/* Top Section: Overall Verdict Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-slate-200/70 dark:border-slate-800/70">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-slate-200/70 dark:border-white/10">
         <div className="flex items-center gap-3 flex-wrap">
           <StatusBadge status={status} size="lg" />
           {riskLevel && (
@@ -69,11 +69,11 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
               {riskLevel} RISK
             </span>
           )}
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400">
             {t('results.compliance_verdict')}
           </span>
         </div>
-        <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium leading-relaxed sm:text-right">
+        <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 font-medium leading-relaxed sm:text-right">
           {statusExplanation}
         </p>
       </div>
@@ -83,7 +83,7 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
         {/* Metric Badges Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 flex-1">
           {/* Passed */}
-          <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200/90 dark:border-emerald-900/60 shadow-2xs">
+          <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#101A2C] border border-emerald-200/90 dark:border-emerald-800/60 shadow-2xs">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
             <div className="min-w-0">
               <div className="text-xs sm:text-sm font-black text-emerald-950 dark:text-emerald-200 font-mono tracking-tight">
@@ -96,7 +96,7 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
           </div>
 
           {/* Needs Review */}
-          <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-amber-200/90 dark:border-amber-900/60 shadow-2xs">
+          <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#101A2C] border border-amber-200/90 dark:border-amber-800/60 shadow-2xs">
             <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
             <div className="min-w-0">
               <div className="text-xs sm:text-sm font-black text-amber-950 dark:text-amber-200 font-mono tracking-tight">
@@ -109,7 +109,7 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
           </div>
 
           {/* Failed */}
-          <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-red-200/90 dark:border-red-900/60 shadow-2xs">
+          <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#101A2C] border border-red-200/90 dark:border-red-800/60 shadow-2xs">
             <div className="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0" />
             <div className="min-w-0">
               <div className="text-xs sm:text-sm font-black text-red-950 dark:text-red-200 font-mono tracking-tight">
@@ -122,7 +122,7 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
           </div>
 
           {/* N/A */}
-          <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs">
+          <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 shadow-2xs">
             <div className="w-2.5 h-2.5 rounded-full bg-slate-400 shrink-0" />
             <div className="min-w-0">
               <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200 font-mono tracking-tight">
@@ -136,13 +136,13 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
         </div>
 
         {/* Dedicated Compliance Score Box */}
-        <div className="flex items-center justify-between sm:justify-end gap-3.5 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shrink-0 shadow-2xs">
+        <div className="flex items-center justify-between sm:justify-end gap-3.5 px-4 py-2.5 rounded-xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 shrink-0 shadow-2xs">
           <div className="text-left sm:text-right">
-            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
+            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-widest block">
               {t('results.compliance_score_label')}
             </span>
             <div className="flex items-baseline gap-1">
-              <span className="text-base sm:text-lg font-black text-slate-900 dark:text-slate-100 font-mono">
+              <span className="text-base sm:text-lg font-black text-slate-900 dark:text-white font-mono">
                 {Number(score || 0).toFixed(1)}
               </span>
               <span className="text-xs text-slate-400 dark:text-slate-500 font-semibold">

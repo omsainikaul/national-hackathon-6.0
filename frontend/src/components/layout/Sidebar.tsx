@@ -155,7 +155,7 @@ export default function Sidebar({
 
   const roleColor = user?.role === 'ADMIN' ? 'text-indigo-300'
     : user?.role === 'ENFORCEMENT_OFFICER' ? 'text-amber-300'
-    : user?.role === 'AUDIT_OFFICER' ? 'text-indigo-300'
+    : user?.role === 'AUDIT_OFFICER' ? 'text-[#5EEAD4]'
     : user?.role === 'MERCHANT_PUBLIC' ? 'text-sky-300'
     : 'text-emerald-300';
 
@@ -232,7 +232,6 @@ export default function Sidebar({
     { to: '/history', icon: History, label: t('navigation.screening_history') }
   ];
 
-
   const intelligenceLinks: NavItem[] = [
     { to: '/rules', icon: BookOpen, label: isNormalUser ? t('navigation.packaging_rules_guide') : t('navigation.compliance_rules') }
   ];
@@ -252,13 +251,13 @@ export default function Sidebar({
       title={collapsed ? link.label : undefined}
       aria-label={link.label}
       className={({ isActive }) =>
-        `flex items-center gap-3 px-3 py-2 rounded-xl transition-all group relative ${
+        `flex items-center gap-3 px-3 py-2 rounded-xl transition-all group relative border-l-2 ${
           isActive 
-            ? 'bg-indigo-600 text-white font-semibold shadow-sm shadow-indigo-950/30' 
+            ? 'bg-[#35C6B0]/15 text-[#35C6B0] border-[#35C6B0] font-semibold shadow-xs' 
             : link.highlight
-              ? 'text-slate-200 hover:bg-slate-800/90 hover:text-white font-medium bg-slate-800/30 border border-slate-700/40'
-              : 'text-slate-300 hover:bg-slate-800/80 hover:text-white font-medium'
-        } ${collapsed ? 'justify-center' : ''}`
+              ? 'text-slate-200 hover:bg-[#173B57]/60 hover:text-white font-medium bg-[#173B57]/30 border-white/10'
+              : 'text-slate-300 hover:bg-[#173B57]/40 hover:text-white font-medium border-transparent'
+        } ${collapsed ? 'justify-center border-l-0' : ''}`
       }
     >
       <link.icon className="w-4.5 h-4.5 shrink-0 transition-transform group-hover:scale-105" aria-hidden="true" />
@@ -269,8 +268,10 @@ export default function Sidebar({
           {link.badge && (
             <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md shrink-0 border ${
               link.badge === 'Core'
-                ? 'bg-sky-400/20 text-sky-300 border-sky-400/30'
-                : 'bg-amber-400/20 text-amber-300 border-amber-400/30'
+                ? 'bg-[#35C6B0]/20 text-[#5EEAD4] border-[#35C6B0]/30'
+                : link.badge === 'Legal'
+                ? 'bg-amber-400/20 text-amber-300 border-amber-400/30'
+                : 'bg-[#35C6B0]/20 text-[#5EEAD4] border-[#35C6B0]/30'
             }`}>
               {link.badge}
             </span>
@@ -279,7 +280,7 @@ export default function Sidebar({
       )}
 
       {collapsed && (
-        <span className="absolute left-full ml-3 px-2.5 py-1 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-lg border border-slate-700 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+        <span className="absolute left-full ml-3 px-2.5 py-1 bg-[#101A2C] text-white text-xs font-semibold rounded-lg shadow-xl border border-white/10 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
           {link.label}
         </span>
       )}
@@ -291,7 +292,7 @@ export default function Sidebar({
       {mobileOpen && (
         <div 
           onClick={onCloseMobile}
-          className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-xs md:hidden animate-in fade-in duration-200"
+          className="fixed inset-0 z-40 bg-slate-950/70 backdrop-blur-xs md:hidden animate-in fade-in duration-200"
           aria-hidden="true"
         />
       )}
@@ -302,22 +303,22 @@ export default function Sidebar({
         aria-modal={mobileOpen ? "true" : undefined}
         className={`
           fixed md:static inset-y-0 left-0 z-50 
-          bg-slate-900 text-slate-100 flex flex-col shrink-0 
-          border-r border-slate-800/80 shadow-xl md:shadow-none
+          bg-[#101A2C] text-slate-100 flex flex-col shrink-0 
+          border-r border-white/10 shadow-2xl md:shadow-none
           transition-all duration-300 ease-in-out select-none
           ${collapsed ? 'w-20' : 'w-64'}
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         `}
       >
-        <div className="p-4 border-b border-slate-800/90 flex items-center justify-between gap-3 h-16">
+        <div className="p-4 border-b border-white/10 flex items-center justify-between gap-3 h-16 bg-[#0E1726]">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center shrink-0 shadow-sm shadow-indigo-950/50">
-              <ShieldCheck className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-[#173B57] border border-[#35C6B0]/30 flex items-center justify-center shrink-0 shadow-xs text-[#35C6B0]">
+              <ShieldCheck className="w-6 h-6" />
             </div>
             {!collapsed && (
               <div className="flex flex-col min-w-0">
                 <span className="font-extrabold text-base text-white tracking-tight leading-tight">
-                  MetrCheck<span className="text-indigo-400"> AI</span>
+                  MetrCheck<span className="text-[#35C6B0]"> AI</span>
                 </span>
                 <span className="text-[10px] font-medium text-slate-400 truncate">
                   {t('header.ai_assisted_compliance')}
@@ -329,7 +330,7 @@ export default function Sidebar({
           <button 
             type="button"
             onClick={onCloseMobile}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 md:hidden cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#173B57]/50 md:hidden cursor-pointer transition-colors"
             aria-label="Close navigation drawer"
           >
             <X className="w-5 h-5" />
@@ -340,7 +341,7 @@ export default function Sidebar({
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6" aria-label="Main Navigation">
           {/* Workspaces */}
           <div className="space-y-1">
-            {!collapsed && <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 pb-1 block">{t('navigation.workspaces')}</span>}
+            {!collapsed && <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 pb-1 block">{t('navigation.workspaces')}</span>}
             <div className="space-y-1">
               {visibleWorkspaces.map(ws => {
                 const isActive = currentWorkspace === ws.id;
@@ -352,20 +353,20 @@ export default function Sidebar({
                     onClick={() => handleSelectWorkspace(ws.id)}
                     title={collapsed ? `${label} (${ws.action})` : undefined}
                     className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all group relative text-left cursor-pointer border ${
-                      isActive ? `${ws.activeClass} font-semibold` : 'border-transparent text-slate-400 hover:bg-slate-800/70 hover:text-slate-200'
+                      isActive ? `${ws.activeClass} font-semibold` : 'border-transparent text-slate-400 hover:bg-[#173B57]/40 hover:text-slate-200'
                     } ${collapsed ? 'justify-center' : ''}`}
                   >
                     <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-105 ${isActive ? '' : 'text-slate-400'}`} />
                     {!collapsed && (
                       <div className="flex items-center justify-between flex-1 min-w-0">
                         <span className="text-xs truncate">{label}</span>
-                        <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded tracking-wider ${isActive ? 'bg-white/10' : 'bg-slate-800 text-slate-400'}`}>
+                        <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded tracking-wider ${isActive ? 'bg-white/10' : 'bg-[#173B57]/60 text-slate-400'}`}>
                           {ws.action}
                         </span>
                       </div>
                     )}
                     {collapsed && (
-                      <span className="absolute left-full ml-3 px-2.5 py-1 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-lg border border-slate-700 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                      <span className="absolute left-full ml-3 px-2.5 py-1 bg-[#101A2C] text-white text-xs font-semibold rounded-lg shadow-xl border border-white/10 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
                         {label}
                       </span>
                     )}
@@ -376,15 +377,15 @@ export default function Sidebar({
           </div>
 
           <div className="space-y-1">
-            {!collapsed && <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-3 pb-1 block">{t('navigation.overview')}</span>}
+            {!collapsed && <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 pb-1 block">{t('navigation.overview')}</span>}
             {overviewLinks.map(renderNavLink)}
           </div>
 
           {user?.role === 'ADMIN' && (
             <div className="space-y-1">
               {!collapsed && (
-                <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider px-3 pb-1 flex items-center gap-1.5">
-                  <ShieldCheck className="w-3 h-3 text-indigo-400" />
+                <span className="text-[10px] font-bold text-[#5EEAD4] uppercase tracking-widest px-3 pb-1 flex items-center gap-1.5">
+                  <ShieldCheck className="w-3 h-3 text-[#35C6B0]" />
                   {t('navigation.administration')}
                 </span>
               )}
@@ -394,9 +395,9 @@ export default function Sidebar({
                 onClick={onCloseMobile}
                 title={collapsed ? t('navigation.user_management') : undefined}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2 rounded-xl transition-all group relative ${
-                    isActive ? 'bg-indigo-600 text-white font-semibold shadow-sm shadow-indigo-950/30' : 'text-slate-300 hover:bg-slate-800/80 hover:text-white font-medium'
-                  } ${collapsed ? 'justify-center' : ''}`
+                  `flex items-center gap-3 px-3 py-2 rounded-xl transition-all group relative border-l-2 ${
+                    isActive ? 'bg-[#35C6B0]/15 text-[#35C6B0] border-[#35C6B0] font-semibold shadow-xs' : 'text-slate-300 hover:bg-[#173B57]/40 hover:text-white font-medium border-transparent'
+                  } ${collapsed ? 'justify-center border-l-0' : ''}`
                 }
               >
                 <Users className="w-4.5 h-4.5 shrink-0 transition-transform group-hover:scale-105" />
@@ -406,7 +407,7 @@ export default function Sidebar({
                   </div>
                 )}
                 {collapsed && (
-                  <span className="absolute left-full ml-3 px-2.5 py-1 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-lg border border-slate-700 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                  <span className="absolute left-full ml-3 px-2.5 py-1 bg-[#101A2C] text-white text-xs font-semibold rounded-lg shadow-xl border border-white/10 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
                     {t('navigation.user_management')}
                   </span>
                 )}
@@ -417,9 +418,9 @@ export default function Sidebar({
                 onClick={onCloseMobile}
                 title={collapsed ? t('navigation.officer_requests') : undefined}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2 rounded-xl transition-all group relative ${
-                    isActive ? 'bg-indigo-600 text-white font-semibold shadow-sm shadow-indigo-950/30' : 'text-slate-300 hover:bg-slate-800/80 hover:text-white font-medium'
-                  } ${collapsed ? 'justify-center' : ''}`
+                  `flex items-center gap-3 px-3 py-2 rounded-xl transition-all group relative border-l-2 ${
+                    isActive ? 'bg-[#35C6B0]/15 text-[#35C6B0] border-[#35C6B0] font-semibold shadow-xs' : 'text-slate-300 hover:bg-[#173B57]/40 hover:text-white font-medium border-transparent'
+                  } ${collapsed ? 'justify-center border-l-0' : ''}`
                 }
               >
                 <UserCheck className="w-4.5 h-4.5 shrink-0 transition-transform group-hover:scale-105" />
@@ -429,7 +430,7 @@ export default function Sidebar({
                   </div>
                 )}
                 {collapsed && (
-                  <span className="absolute left-full ml-3 px-2.5 py-1 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-lg border border-slate-700 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                  <span className="absolute left-full ml-3 px-2.5 py-1 bg-[#101A2C] text-white text-xs font-semibold rounded-lg shadow-xl border border-white/10 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
                     {t('navigation.officer_requests')}
                   </span>
                 )}
@@ -440,9 +441,9 @@ export default function Sidebar({
                 onClick={onCloseMobile}
                 title={collapsed ? t('navigation.security_audit_logs') : undefined}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2 rounded-xl transition-all group relative ${
-                    isActive ? 'bg-indigo-600 text-white font-semibold shadow-sm shadow-indigo-950/30' : 'text-slate-300 hover:bg-slate-800/80 hover:text-white font-medium'
-                  } ${collapsed ? 'justify-center' : ''}`
+                  `flex items-center gap-3 px-3 py-2 rounded-xl transition-all group relative border-l-2 ${
+                    isActive ? 'bg-[#35C6B0]/15 text-[#35C6B0] border-[#35C6B0] font-semibold shadow-xs' : 'text-slate-300 hover:bg-[#173B57]/40 hover:text-white font-medium border-transparent'
+                  } ${collapsed ? 'justify-center border-l-0' : ''}`
                 }
               >
                 <History className="w-4.5 h-4.5 shrink-0 transition-transform group-hover:scale-105" />
@@ -452,7 +453,7 @@ export default function Sidebar({
                   </div>
                 )}
                 {collapsed && (
-                  <span className="absolute left-full ml-3 px-2.5 py-1 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-lg border border-slate-700 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                  <span className="absolute left-full ml-3 px-2.5 py-1 bg-[#101A2C] text-white text-xs font-semibold rounded-lg shadow-xl border border-white/10 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
                     {t('navigation.security_audit_logs')}
                   </span>
                 )}
@@ -462,34 +463,34 @@ export default function Sidebar({
 
           {(currentWorkspace === 'MERCHANT' || user?.role === 'MERCHANT_PUBLIC' || user?.role === 'ADMIN') && (
             <div className="space-y-1">
-              {!collapsed && <span className="text-[10px] font-bold text-sky-400 uppercase tracking-wider px-3 pb-1 block">{t('navigation.catalog_entity')}</span>}
+              {!collapsed && <span className="text-[10px] font-bold text-sky-400 uppercase tracking-widest px-3 pb-1 block">{t('navigation.catalog_entity')}</span>}
               {merchantCatalogLinks.map(renderNavLink)}
             </div>
           )}
 
           <div className="space-y-1">
-            {!collapsed && <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-3 pb-1 block">{t('navigation.screening')}</span>}
+            {!collapsed && <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 pb-1 block">{t('navigation.screening')}</span>}
             {screeningLinks.map(renderNavLink)}
           </div>
 
           <div className="space-y-1">
-            {!collapsed && <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-3 pb-1 block">{isNormalUser ? (t('navigation.guidance') || 'Guidance') : t('navigation.intelligence')}</span>}
+            {!collapsed && <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 pb-1 block">{isNormalUser ? (t('navigation.guidance') || 'Guidance') : t('navigation.intelligence')}</span>}
             {intelligenceLinks.map(renderNavLink)}
           </div>
 
           <div className="space-y-1">
-            {!collapsed && <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-3 pb-1 block">{t('navigation.tools')}</span>}
+            {!collapsed && <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 pb-1 block">{t('navigation.tools')}</span>}
             {toolsLinks.map(renderNavLink)}
           </div>
         </nav>
 
-        <div className="p-3 border-t border-slate-800/90 space-y-2">
+        <div className="p-3 border-t border-white/10 space-y-2 bg-[#0E1726]">
           {user && (
-            <div className={`p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 ${collapsed ? 'flex flex-col items-center gap-1.5' : ''}`}>
+            <div className={`p-2.5 rounded-xl bg-[#101A2C] border border-white/10 ${collapsed ? 'flex flex-col items-center gap-1.5' : ''}`}>
               {!collapsed ? (
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center shrink-0">
-                    <UserCircle2 className="w-5 h-5 text-indigo-300" />
+                  <div className="w-8 h-8 rounded-lg bg-[#173B57] border border-[#35C6B0]/30 flex items-center justify-center shrink-0 text-[#35C6B0]">
+                    <UserCircle2 className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-slate-200 truncate">
@@ -502,25 +503,27 @@ export default function Sidebar({
                   </div>
                   <button
                     onClick={() => { navigate('/settings'); onCloseMobile?.(); }}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-300 hover:bg-indigo-500/10 cursor-pointer"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-[#35C6B0] hover:bg-[#35C6B0]/10 cursor-pointer transition-colors"
                     title={t('navigation.settings')}
+                    aria-label={t('navigation.settings')}
                   >
                     <Settings className="w-4 h-4" />
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 cursor-pointer"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 cursor-pointer transition-colors"
                     title={t('navigation.sign_out')}
+                    aria-label={t('navigation.sign_out')}
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
                 </div>
               ) : (
                 <>
-                  <button onClick={() => navigate('/settings')} className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-300 cursor-pointer" title={t('navigation.settings')}>
+                  <button onClick={() => navigate('/settings')} className="p-1.5 rounded-lg text-slate-400 hover:text-[#35C6B0] cursor-pointer transition-colors" title={t('navigation.settings')} aria-label={t('navigation.settings')}>
                     <Settings className="w-4 h-4" />
                   </button>
-                  <button onClick={handleLogout} className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 cursor-pointer" title={t('navigation.sign_out')}>
+                  <button onClick={handleLogout} className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 cursor-pointer transition-colors" title={t('navigation.sign_out')} aria-label={t('navigation.sign_out')}>
                     <LogOut className="w-4 h-4" />
                   </button>
                 </>
@@ -529,25 +532,25 @@ export default function Sidebar({
           )}
 
           {!collapsed ? (
-            <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 flex items-center justify-between gap-2">
+            <div className="p-2.5 rounded-xl bg-[#101A2C] border border-white/10 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 min-w-0">
                 <span className="relative flex h-2 w-2 shrink-0">
-                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${systemHealth?.status === 'degraded' ? 'bg-amber-400' : 'bg-emerald-400'}`}></span>
-                  <span className={`relative inline-flex rounded-full h-2 w-2 ${systemHealth?.status === 'degraded' ? 'bg-amber-500' : 'bg-emerald-500'}`}></span>
+                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${systemHealth?.status === 'degraded' ? 'bg-amber-400' : 'bg-[#35C6B0]'}`}></span>
+                  <span className={`relative inline-flex rounded-full h-2 w-2 ${systemHealth?.status === 'degraded' ? 'bg-amber-500' : 'bg-[#35C6B0]'}`}></span>
                 </span>
                 <span className="text-[11px] font-medium text-slate-300 truncate">
                   {systemHealth?.status === 'degraded' ? t('navigation.system_degraded') : t('navigation.system_operational')}
                 </span>
               </div>
-              <span className="text-[10px] font-mono text-slate-500 font-semibold shrink-0">
+              <span className="text-[10px] font-mono text-slate-400 font-semibold shrink-0">
                 v{systemHealth?.version || '2.4.0'}
               </span>
             </div>
           ) : (
             <div className="flex justify-center p-1" title={systemHealth?.status === 'degraded' ? t('navigation.system_degraded') : t('navigation.system_operational')}>
               <span className="relative flex h-2.5 w-2.5">
-                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${systemHealth?.status === 'degraded' ? 'bg-amber-400' : 'bg-emerald-400'}`}></span>
-                <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${systemHealth?.status === 'degraded' ? 'bg-amber-500' : 'bg-emerald-500'}`}></span>
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${systemHealth?.status === 'degraded' ? 'bg-amber-400' : 'bg-[#35C6B0]'}`}></span>
+                <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${systemHealth?.status === 'degraded' ? 'bg-amber-500' : 'bg-[#35C6B0]'}`}></span>
               </span>
             </div>
           )}
@@ -555,7 +558,8 @@ export default function Sidebar({
           {onToggleCollapse && (
             <button
               onClick={onToggleCollapse}
-              className="hidden md:flex items-center justify-center w-full py-1.5 text-xs text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-lg cursor-pointer"
+              className="hidden md:flex items-center justify-center w-full py-1.5 text-xs text-slate-400 hover:text-slate-200 hover:bg-[#173B57]/50 rounded-lg cursor-pointer transition-colors"
+              aria-label={collapsed ? "Expand sidebar navigation" : "Collapse sidebar navigation"}
             >
               {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>

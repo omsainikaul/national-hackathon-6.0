@@ -248,7 +248,7 @@ export default function ManualProductCheck() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-teal-500/15 text-teal-600 dark:text-teal-400 flex items-center justify-center">
               <FileText className="w-5 h-5" />
             </div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
@@ -262,20 +262,20 @@ export default function ManualProductCheck() {
       </div>
 
       {/* Informational Disclaimer Notice */}
-      <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 flex items-start gap-3 text-slate-700 dark:text-slate-300">
-        <Info className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+      <div className="p-4 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 flex items-start gap-3 text-slate-700 dark:text-slate-300 shadow-2xs">
+        <Info className="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
         <div className="text-xs sm:text-sm space-y-1">
-          <p className="font-semibold text-slate-900 dark:text-slate-100">
+          <p className="font-bold text-slate-900 dark:text-slate-100">
             {t('manual_check.disclaimer_title')}
           </p>
-          <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-xs">
             {t('manual_check.disclaimer_desc')}
           </p>
         </div>
       </div>
 
       {/* Demo Sample Package Loader (Judge & Testing Helper) */}
-      <Card className="p-4 sm:p-5 bg-gradient-to-r from-amber-500/5 via-indigo-500/5 to-purple-500/5 border border-amber-200 dark:border-amber-900/40">
+      <Card className="p-4 sm:p-5 bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-800/60">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -298,7 +298,7 @@ export default function ManualProductCheck() {
             <button
               type="button"
               onClick={handleLoadSample}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-bold text-xs shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-bold text-xs shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-98"
             >
               <Sparkles className="w-3.5 h-3.5" />
               {t('manual_check.demo_btn')}
@@ -307,8 +307,8 @@ export default function ManualProductCheck() {
         </div>
 
         {sampleLoadedNotice && (
-          <div className="mt-3 pt-3 border-t border-amber-200/60 dark:border-amber-900/40 flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
-            <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500" />
+          <div className="mt-3 pt-3 border-t border-amber-200/60 dark:border-amber-900/40 flex items-center gap-2 text-xs font-semibold text-teal-700 dark:text-[#5EEAD4]">
+            <CheckCircle2 className="w-4 h-4 shrink-0 text-teal-500" />
             <span>{sampleLoadedNotice}</span>
           </div>
         )}
@@ -318,20 +318,20 @@ export default function ManualProductCheck() {
       <Card className="p-4 sm:p-5">
         <div className="space-y-3">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-            <Layers className="w-4 h-4 text-indigo-500" />
+            <Layers className="w-4 h-4 text-teal-600 dark:text-teal-400" />
             {t('manual_check.classification_label')}
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button
               type="button"
               onClick={() => handleClassificationChange('FOOD')}
-              className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all text-left cursor-pointer ${
+              className={`flex items-center gap-3 p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
                 formData.productType === 'FOOD'
-                  ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-950 dark:text-emerald-100 ring-2 ring-emerald-500/20'
-                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                  ? 'bg-teal-500/10 border-teal-500/40 text-teal-950 dark:text-teal-100 ring-2 ring-teal-500/20'
+                  : 'bg-white dark:bg-[#101A2C] border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/20'
               }`}
             >
-              <div className={`p-2 rounded-lg ${formData.productType === 'FOOD' ? 'bg-emerald-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}>
+              <div className={`p-2 rounded-xl ${formData.productType === 'FOOD' ? 'bg-teal-600 text-white' : 'bg-slate-100 dark:bg-white/[0.05] text-slate-500'}`}>
                 <Apple className="w-5 h-5" />
               </div>
               <div>
@@ -343,13 +343,13 @@ export default function ManualProductCheck() {
             <button
               type="button"
               onClick={() => handleClassificationChange('NON_FOOD')}
-              className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all text-left cursor-pointer ${
+              className={`flex items-center gap-3 p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
                 formData.productType === 'NON_FOOD'
-                  ? 'bg-indigo-500/10 border-indigo-500/40 text-indigo-950 dark:text-indigo-100 ring-2 ring-indigo-500/20'
-                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                  ? 'bg-[#173B57]/20 border-slate-400 dark:border-teal-500/40 text-slate-950 dark:text-white ring-2 ring-teal-500/20'
+                  : 'bg-white dark:bg-[#101A2C] border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/20'
               }`}
             >
-              <div className={`p-2 rounded-lg ${formData.productType === 'NON_FOOD' ? 'bg-indigo-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}>
+              <div className={`p-2 rounded-xl ${formData.productType === 'NON_FOOD' ? 'bg-[#173B57] text-white' : 'bg-slate-100 dark:bg-white/[0.05] text-slate-500'}`}>
                 <Package className="w-5 h-5" />
               </div>
               <div>
@@ -365,9 +365,9 @@ export default function ManualProductCheck() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* GROUP 1: Product Information */}
         <Card className="p-5 space-y-4">
-          <div className="border-b border-slate-200 dark:border-slate-800 pb-3 flex items-center justify-between">
+          <div className="border-b border-slate-200 dark:border-white/10 pb-3 flex items-center justify-between">
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
-              <Tag className="w-4 h-4 text-indigo-500" />
+              <Tag className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               {t('manual_check.group_1')}
             </h2>
             <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded border border-amber-200/50 dark:border-amber-800/50">
@@ -378,7 +378,7 @@ export default function ManualProductCheck() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5 md:col-span-2">
               <label htmlFor="productName" className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                {t('manual_check.field_product_name')} <span className="text-red-500">*</span>
+                {t('manual_check.field_product_name')} <span className="text-rose-500">*</span>
               </label>
               <input
                 id="productName"
@@ -386,7 +386,7 @@ export default function ManualProductCheck() {
                 value={formData.productName}
                 onChange={(e) => updateField('productName', e.target.value)}
                 placeholder="e.g. High Protein Crunchy Peanut Butter"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
                 required
               />
               <p className="text-[11px] text-slate-500">{t('manual_check.product_name_hint')}</p>
@@ -402,7 +402,7 @@ export default function ManualProductCheck() {
                 value={formData.brand}
                 onChange={(e) => updateField('brand', e.target.value)}
                 placeholder="e.g. Alpino"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
             </div>
 
@@ -416,7 +416,7 @@ export default function ManualProductCheck() {
                 value={formData.genericName}
                 onChange={(e) => updateField('genericName', e.target.value)}
                 placeholder="e.g. Roasted Peanut Spread"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
             </div>
 
@@ -430,7 +430,7 @@ export default function ManualProductCheck() {
                 value={formData.category}
                 onChange={(e) => updateField('category', e.target.value)}
                 placeholder="e.g. Food & Grocery / Spreads"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
             </div>
           </div>
@@ -438,15 +438,15 @@ export default function ManualProductCheck() {
 
         {/* GROUP 2: Quantity & Pricing */}
         <Card className="p-5 space-y-4">
-          <div className="border-b border-slate-200 dark:border-slate-800 pb-3 flex items-center justify-between">
+          <div className="border-b border-slate-200 dark:border-white/10 pb-3 flex items-center justify-between">
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
-              <Scale className="w-4 h-4 text-indigo-500" />
+              <Scale className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               {t('manual_check.group_2')}
             </h2>
             <button
               type="button"
               onClick={handleCalculateUSP}
-              className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 flex items-center gap-1.5 cursor-pointer"
+              className="text-xs font-bold text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 flex items-center gap-1.5 cursor-pointer transition-colors"
             >
               <Calculator className="w-3.5 h-3.5" />
               {t('manual_check.auto_calc_usp')}
@@ -464,7 +464,7 @@ export default function ManualProductCheck() {
                 value={formData.netQuantity}
                 onChange={(e) => updateField('netQuantity', e.target.value)}
                 placeholder="e.g. 500 g, 1 kg, 250 ml"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
               <p className="text-[11px] text-slate-500">{t('manual_check.net_quantity_hint')}</p>
             </div>
@@ -479,7 +479,7 @@ export default function ManualProductCheck() {
                 value={formData.mrp}
                 onChange={(e) => updateField('mrp', e.target.value)}
                 placeholder="e.g. ₹ 499.00 or 499"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
               <p className="text-[11px] text-slate-500">{t('manual_check.mrp_hint')}</p>
             </div>
@@ -497,10 +497,10 @@ export default function ManualProductCheck() {
                   setCalculatedUspNote(null);
                 }}
                 placeholder="e.g. ₹ 0.50 / g or ₹ 500 / kg"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
               {calculatedUspNote ? (
-                <p className="text-[11px] text-indigo-600 dark:text-indigo-400 font-medium">{calculatedUspNote}</p>
+                <p className="text-[11px] text-teal-600 dark:text-teal-400 font-medium">{calculatedUspNote}</p>
               ) : (
                 <p className="text-[11px] text-slate-500">{t('manual_check.usp_hint')}</p>
               )}
@@ -510,9 +510,9 @@ export default function ManualProductCheck() {
 
         {/* GROUP 3: Dates */}
         <Card className="p-5 space-y-4">
-          <div className="border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div className="border-b border-slate-200 dark:border-white/10 pb-3">
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-indigo-500" />
+              <Calendar className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               {t('manual_check.group_3')}
             </h2>
           </div>
@@ -528,7 +528,7 @@ export default function ManualProductCheck() {
                 value={formData.manufactureDate}
                 onChange={(e) => updateField('manufactureDate', e.target.value)}
                 placeholder="e.g. 15/01/2026 or Jan 2026"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
               <p className="text-[11px] text-slate-500">{t('manual_check.mfg_date_hint')}</p>
             </div>
@@ -543,7 +543,7 @@ export default function ManualProductCheck() {
                 value={formData.expiryDate}
                 onChange={(e) => updateField('expiryDate', e.target.value)}
                 placeholder="e.g. 15/01/2027"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
             </div>
 
@@ -557,7 +557,7 @@ export default function ManualProductCheck() {
                 value={formData.bestBefore}
                 onChange={(e) => updateField('bestBefore', e.target.value)}
                 placeholder="e.g. 12 months from packing"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
             </div>
           </div>
@@ -565,9 +565,9 @@ export default function ManualProductCheck() {
 
         {/* GROUP 4: Manufacturer / Packer */}
         <Card className="p-5 space-y-4">
-          <div className="border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div className="border-b border-slate-200 dark:border-white/10 pb-3">
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
-              <Building2 className="w-4 h-4 text-indigo-500" />
+              <Building2 className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               {t('manual_check.group_4')}
             </h2>
           </div>
@@ -583,7 +583,7 @@ export default function ManualProductCheck() {
                 value={formData.manufacturerName}
                 onChange={(e) => updateField('manufacturerName', e.target.value)}
                 placeholder="e.g. Alpino Health Foods Pvt Ltd"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
             </div>
 
@@ -597,7 +597,7 @@ export default function ManualProductCheck() {
                 value={formData.manufacturerAddress}
                 onChange={(e) => updateField('manufacturerAddress', e.target.value)}
                 placeholder="e.g. Plot No 12, GIDC, Surat, Gujarat - 395007"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
             </div>
           </div>
@@ -605,9 +605,9 @@ export default function ManualProductCheck() {
 
         {/* GROUP 5: Other Declarations */}
         <Card className="p-5 space-y-4">
-          <div className="border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div className="border-b border-slate-200 dark:border-white/10 pb-3">
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
-              <Phone className="w-4 h-4 text-indigo-500" />
+              <Phone className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               {t('manual_check.group_5')}
             </h2>
           </div>
@@ -623,7 +623,7 @@ export default function ManualProductCheck() {
                 value={formData.batchNumber}
                 onChange={(e) => updateField('batchNumber', e.target.value)}
                 placeholder="e.g. BATCH-2026-04"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
             </div>
 
@@ -637,7 +637,7 @@ export default function ManualProductCheck() {
                 value={formData.countryOfOrigin}
                 onChange={(e) => updateField('countryOfOrigin', e.target.value)}
                 placeholder="e.g. India"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
             </div>
 
@@ -651,7 +651,7 @@ export default function ManualProductCheck() {
                 value={formData.consumerCarePhone}
                 onChange={(e) => updateField('consumerCarePhone', e.target.value)}
                 placeholder="e.g. 1800-123-4567"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
             </div>
 
@@ -665,7 +665,7 @@ export default function ManualProductCheck() {
                 value={formData.consumerCareEmail}
                 onChange={(e) => updateField('consumerCareEmail', e.target.value)}
                 placeholder="e.g. care@alpino.in or same as manufacturer address"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
               />
             </div>
           </div>
@@ -673,13 +673,13 @@ export default function ManualProductCheck() {
 
         {/* GROUP 6: Food Information (Only if Food Product) */}
         {formData.productType === 'FOOD' && (
-          <Card className="p-5 space-y-4 border-emerald-500/30 dark:border-emerald-500/20 bg-emerald-50/20 dark:bg-emerald-950/10">
-            <div className="border-b border-emerald-200/60 dark:border-emerald-800/40 pb-3 flex items-center justify-between">
-              <h2 className="text-sm font-bold text-emerald-950 dark:text-emerald-200 uppercase tracking-wider flex items-center gap-2">
-                <Apple className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+          <Card className="p-5 space-y-4 border-teal-500/30 dark:border-teal-500/20 bg-teal-50/15 dark:bg-[#101A2C]">
+            <div className="border-b border-teal-200/60 dark:border-teal-800/40 pb-3 flex items-center justify-between">
+              <h2 className="text-sm font-bold text-teal-950 dark:text-teal-200 uppercase tracking-wider flex items-center gap-2">
+                <Apple className="w-4 h-4 text-teal-600 dark:text-teal-400" />
                 {t('manual_check.group_6')}
               </h2>
-              <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/40 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-semibold text-teal-800 dark:text-teal-300 bg-teal-100 dark:bg-teal-900/40 px-2 py-0.5 rounded">
                 {t('manual_check.food_only_badge')}
               </span>
             </div>
@@ -695,7 +695,7 @@ export default function ManualProductCheck() {
                   value={formData.fssaiLicense}
                   onChange={(e) => updateField('fssaiLicense', e.target.value)}
                   placeholder="e.g. 10019021004567"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
                 />
               </div>
 
@@ -709,7 +709,7 @@ export default function ManualProductCheck() {
                   value={formData.ingredients}
                   onChange={(e) => updateField('ingredients', e.target.value)}
                   placeholder="e.g. Roasted Peanuts (100%), Salt"
-                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 resize-y"
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 resize-y transition-colors"
                 />
               </div>
 
@@ -723,7 +723,7 @@ export default function ManualProductCheck() {
                   value={formData.allergenInfo}
                   onChange={(e) => updateField('allergenInfo', e.target.value)}
                   placeholder="e.g. Contains Peanuts. May contain tree nuts."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
                 />
               </div>
 
@@ -737,7 +737,7 @@ export default function ManualProductCheck() {
                   value={formData.nutritionalInfo}
                   onChange={(e) => updateField('nutritionalInfo', e.target.value)}
                   placeholder="e.g. Energy: 588 kcal, Protein: 30g, Carbs: 20g"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
                 />
               </div>
             </div>
@@ -753,8 +753,8 @@ export default function ManualProductCheck() {
         )}
 
         {apiError && (
-          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-900 dark:text-red-200 text-xs sm:text-sm flex items-center gap-2.5">
-            <AlertTriangle className="w-5 h-5 text-red-500 shrink-0" />
+          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-900 dark:text-rose-200 text-xs sm:text-sm flex items-center gap-2.5">
+            <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0" />
             <span>{apiError}</span>
           </div>
         )}
@@ -765,7 +765,7 @@ export default function ManualProductCheck() {
             type="button"
             onClick={handleReset}
             disabled={loading}
-            className="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-sm transition-colors cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-[#173B57]/40 text-slate-700 dark:text-slate-300 font-bold text-sm transition-colors cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <RotateCcw className="w-4 h-4" />
             {t('manual_check.clear_form')}
@@ -774,7 +774,7 @@ export default function ManualProductCheck() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-sm shadow-md shadow-indigo-600/30 transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-500 active:bg-teal-700 text-white font-bold text-sm shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed active:scale-98"
           >
             {loading ? (
               <>

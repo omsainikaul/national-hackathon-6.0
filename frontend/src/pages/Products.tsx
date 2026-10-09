@@ -108,12 +108,12 @@ export default function Products() {
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
       {/* Header & Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400">
+            <div className="p-2.5 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20">
               <Boxes className="w-5 h-5" />
             </div>
             <div>
@@ -130,7 +130,7 @@ export default function Products() {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => navigate('/products/new')}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow-md cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#173B57] to-slate-900 dark:from-teal-600 dark:to-teal-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs hover:opacity-95 active:scale-95 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>{t('merchant.products.add_new_sku')}</span>
@@ -139,18 +139,18 @@ export default function Products() {
       </div>
 
       {/* KPI Stats Strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        <div className="p-4 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 shadow-xs transition-all hover:border-slate-300 dark:hover:border-white/20">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('merchant.products.active_skus')}</span>
-            <Package className="w-4 h-4 text-sky-500" />
+            <Package className="w-4 h-4 text-teal-500" />
           </div>
           <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-2">
             {stats?.active_products ?? products.filter(p => p.status === 'ACTIVE').length}
           </p>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+        <div className="p-4 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 shadow-xs transition-all hover:border-slate-300 dark:hover:border-white/20">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('merchant.products.screened_checks')}</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-500" />
@@ -160,7 +160,7 @@ export default function Products() {
           </p>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+        <div className="p-4 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 shadow-xs transition-all hover:border-slate-300 dark:hover:border-white/20">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('merchant.products.attention_required')}</span>
             <AlertTriangle className="w-4 h-4 text-amber-500" />
@@ -170,7 +170,7 @@ export default function Products() {
           </p>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+        <div className="p-4 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 shadow-xs transition-all hover:border-slate-300 dark:hover:border-white/20">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('merchant.products.preprint_artworks')}</span>
             <Printer className="w-4 h-4 text-indigo-500" />
@@ -191,15 +191,15 @@ export default function Products() {
       )}
 
       {/* Filter and Search Bar */}
-      <div className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div className="p-3.5 bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             placeholder={t('merchant.products.search_placeholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
           />
         </div>
 
@@ -208,7 +208,7 @@ export default function Products() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 cursor-pointer"
+            className="px-3 py-2 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 cursor-pointer"
             aria-label={t('sku_workflow.all_statuses')}
           >
             <option value="ALL">{t('sku_workflow.all_statuses')}</option>
@@ -221,7 +221,7 @@ export default function Products() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 cursor-pointer"
+              className="px-3 py-2 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 cursor-pointer"
             >
               <option value="ALL">{t('merchant.categories.ALL') || 'All Categories'}</option>
               {categories.map(c => (
@@ -234,11 +234,11 @@ export default function Products() {
 
       {/* Catalog Table / Grid */}
       {filteredProducts.length > 0 ? (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+        <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm border-collapse">
               <thead>
-                <tr className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <tr className="bg-slate-50/80 dark:bg-white/[0.02] border-b border-slate-100 dark:border-white/10 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   <th className="py-3 px-4 font-semibold">{t('merchant.products.table.sku_info')}</th>
                   <th className="py-3 px-4 font-semibold">{t('merchant.products.table.category')}</th>
                   <th className="py-3 px-4 font-semibold">{t('merchant.products.table.gtin')}</th>
@@ -248,16 +248,16 @@ export default function Products() {
                   <th className="py-3 px-4 text-right font-semibold">{t('merchant.products.table.actions')}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
+              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                 {filteredProducts.map((p) => (
                   <tr
                     key={p.id}
                     onClick={() => navigate(`/products/${p.id}`)}
-                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors group cursor-pointer"
+                    className="hover:bg-slate-50/80 dark:hover:bg-white/[0.03] transition-colors group cursor-pointer"
                   >
-                    <td className="py-3 px-4">
+                    <td className="py-3.5 px-4">
                       <div>
-                        <div className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+                        <div className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
                           {p.product_name}
                         </div>
                         {p.brand_name && (
@@ -266,26 +266,26 @@ export default function Products() {
                           </div>
                         )}
                         {p.manufacturer_name && (
-                          <div className="text-[11px] text-slate-400 truncate max-w-xs">
+                          <div className="text-[11px] text-slate-400 dark:text-slate-500 truncate max-w-xs">
                             {p.manufacturer_name}
                           </div>
                         )}
                       </div>
                     </td>
 
-                    <td className="py-3 px-4">
-                      <span className="text-xs px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">
+                    <td className="py-3.5 px-4">
+                      <span className="text-xs px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 font-medium">
                         {p.category ? (t(`merchant.categories.${p.category}`) || p.category) : t('merchant.categories.GENERAL')}
                       </span>
                     </td>
 
-                    <td className="py-3 px-4">
+                    <td className="py-3.5 px-4">
                       <span className="font-mono text-xs text-slate-600 dark:text-slate-300">
                         {p.gtin_barcode || '—'}
                       </span>
                     </td>
 
-                    <td className="py-3 px-4">
+                    <td className="py-3.5 px-4">
                       <div className="text-xs">
                         <div className="font-semibold text-slate-800 dark:text-slate-200">
                           {p.mrp_declared ? `₹${p.mrp_declared.toFixed(2)}` : '—'}
@@ -298,8 +298,8 @@ export default function Products() {
                       </div>
                     </td>
 
-                    <td className="py-3 px-4">
-                      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                    <td className="py-3.5 px-4">
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         p.status === 'ACTIVE'
                           ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
                           : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700'
@@ -309,16 +309,16 @@ export default function Products() {
                       </span>
                     </td>
 
-                    <td className="py-3 px-4 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                    <td className="py-3.5 px-4 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
                       {formatAnalysisDateTime(p.created_at)}
                     </td>
 
-                    <td className="py-3 px-4 text-right">
+                    <td className="py-3.5 px-4 text-right">
                       <div className="inline-flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => navigate(`/products/${p.id}`)}
                           title={t('merchant.products.tooltips.view_details')}
-                          className="p-1.5 rounded-lg text-slate-500 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-sky-950/40 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-slate-500 hover:text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-950/40 transition-colors cursor-pointer"
                         >
                           <ChevronRight className="w-4 h-4" />
                         </button>
@@ -347,7 +347,7 @@ export default function Products() {
           </div>
         </div>
       ) : (
-        <div className="p-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
+        <div className="p-12 bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl shadow-xs">
           <EmptyState
             icon={Boxes}
             title={
@@ -377,9 +377,9 @@ export default function Products() {
       {/* Archive Modal */}
       {productToArchive && (
         <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-white dark:bg-[#101A2C] border border-slate-200 dark:border-white/10 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
+              <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                 <Archive className="w-5 h-5" />
               </div>
               <div>
@@ -392,7 +392,7 @@ export default function Products() {
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               {t('merchant.products.archive_modal_desc')}
             </p>
 
@@ -401,7 +401,7 @@ export default function Products() {
                 type="button"
                 onClick={() => setProductToArchive(null)}
                 disabled={isArchiving}
-                className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl transition-colors cursor-pointer"
               >
                 {t('common.cancel') || 'Cancel'}
               </button>
@@ -409,7 +409,7 @@ export default function Products() {
                 type="button"
                 onClick={handleArchive}
                 disabled={isArchiving}
-                className="px-4 py-2 text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 rounded-xl transition-colors shadow-sm cursor-pointer"
+                className="px-4 py-2 text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 rounded-xl transition-colors shadow-xs cursor-pointer"
               >
                 {isArchiving ? t('merchant.products.archiving') : t('merchant.products.confirm_archive')}
               </button>
@@ -420,3 +420,4 @@ export default function Products() {
     </div>
   );
 }
+

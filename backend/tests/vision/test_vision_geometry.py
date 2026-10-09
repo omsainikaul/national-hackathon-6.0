@@ -62,3 +62,77 @@ def test_panel_classifier_front_vs_back():
     )
     assert res_back.primary_panel == "back_candidate"
     assert res_back.confidence > 0.60
+
+
+def test_hough_lines_unpacking_formats(monkeypatch):
+    """Regression test for DEF-001: verifies 1D, 2D/nested, and malformed HoughLinesP arrays are safely handled."""
+    from vision.quality import quality_gate
+
+    # 1. Test 3D nested line array shape (N, 1, 4)
+    lines_3d = np.array([[[250, 50, 255, 550]], [[252, 60, 256, 560]]], dtype=np.int32)
+    monkeypatch.setattr(cv2, "HoughLinesP", lambda *args, **kwargs: lines_3d)
+    
+    img = np.ones((800, 600, 3), dtype=np.uint8) * 200
+    res = panel_detector.detect_and_classify(
+        img_bgr=img,
+        ocr_text="ALPINO FRONT BRAND PANEL",
+        words=[{"text": "ALPINO", "bbox": [50, 50, 200, 100], "confidence": 0.95}]
+    )
+    assert res.primary_panel is not None
+    assert len(res.panels) >= 1
+
+    # 2. Test 2D line array shape (N, 4) where iterating yields 1D line elements
+    lines_2d = np.array([[250, 50, 255, 550], [252, 60, 256, 560]], dtype=np.int32)
+    monkeypatch.setattr(cv2, "HoughLinesP", lambda *args, **kwargs: lines_2d)
+    
+    res_2d = panel_detector.detect_and_classify(
+        img_bgr=img,
+        ocr_text="ALPINO FRONT BRAND PANEL",
+        words=[{"text": "ALPINO", "bbox": [50, 50, 200, 100], "confidence": 0.95}]
+    )
+    assert res_2d.primary_panel is not None
+    assert len(res_2d.panels) >= 1
+
+    # 3. Test malformed / incomplete line data (must skip safely without raising TypeError)
+    lines_malformed = [np.array([250, 50]), np.array([1]), np.array([])]
+    monkeypatch.setattr(cv2, "HoughLinesP", lambda *args, **kwargs: lines_malformed)
+    
+    res_malformed = panel_detector.detect_and_classify(
+        img_bgr=img,
+        ocr_text="ALPINO BRAND",
+        words=[]
+    )
+    assert res_malformed.primary_panel is not None
+    assert len(res_malformed.panels) == 1
+
+    # 4. Test quality gate skew estimation with 2D line arrays
+    skew_lines_2d = np.array([[10, 10, 200, 15], [20, 50, 300, 55]], dtype=np.int32)
+    monkeypatch.setattr(cv2, "HoughLinesP", lambda *args, **kwargs: skew_lines_2d)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    angle, rot = quality_gate._estimate_skew_angle(gray)
+    assert isinstance(angle, float)
+    assert isinstance(rot, int)
+
+
+def test_multi_facet_split_detection_with_vertical_seam(monkeypatch):
+    """Verifies that a valid vertical seam line produces left and right panel facets."""
+    # Vertical line at x=300 in a 600px wide image
+    seam_lines = np.array([[300, 20, 300, 780]], dtype=np.int32)
+    monkeypatch.setattr(cv2, "HoughLinesP", lambda *args, **kwargs: seam_lines)
+
+    img = np.ones((800, 600, 3), dtype=np.uint8) * 220
+    words = [
+        {"text": "ALPINO BRAND", "bbox": [50, 100, 250, 200], "confidence": 0.98},
+        {"text": "NUTRITION FACTS", "bbox": [350, 100, 550, 500], "confidence": 0.95}
+    ]
+    res = panel_detector.detect_and_classify(
+        img_bgr=img,
+        ocr_text="ALPINO BRAND NUTRITION FACTS",
+        words=words
+    )
+    assert len(res.panels) == 3  # full panel + left facet + right facet
+    panel_ids = [p.id for p in res.panels]
+    assert "panel_primary" in panel_ids
+    assert "facet_left" in panel_ids
+    assert "facet_right" in panel_ids
+

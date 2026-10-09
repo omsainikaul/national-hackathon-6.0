@@ -7,7 +7,7 @@ export default function About() {
       title: 'Vite + React UI',
       desc: 'Multi-panel image inspection, interactive Evidence Viewer & high-density compliance matrix.',
       icon: FileText,
-      color: 'indigo'
+      color: 'teal'
     },
     {
       title: 'FastAPI Backend',
@@ -42,7 +42,7 @@ export default function About() {
     <div className="max-w-5xl mx-auto space-y-8 pb-12 animate-in fade-in duration-300">
       {/* Hero Header */}
       <div className="text-center py-6 max-w-2xl mx-auto space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800/60 rounded-full text-xs font-semibold text-indigo-700 dark:text-indigo-300">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal-50 dark:bg-[#101A2C] border border-teal-200/80 dark:border-teal-800/60 rounded-full text-xs font-semibold text-teal-700 dark:text-[#35C6B0]">
           <Sparkles className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
           <span>Smart India Hackathon 2026 Submission</span>
         </div>
@@ -80,10 +80,10 @@ export default function About() {
           {architectureComponents.map((comp) => (
             <div 
               key={comp.title}
-              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs flex flex-col justify-between hover:shadow-xs transition-shadow"
+              className="p-5 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 shadow-2xs flex flex-col justify-between hover:border-teal-500/30 transition-all"
             >
               <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-teal-600 dark:text-[#35C6B0]">
                   <comp.icon className="w-5 h-5" />
                 </div>
                 <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100">{comp.title}</h4>

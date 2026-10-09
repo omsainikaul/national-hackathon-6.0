@@ -47,33 +47,33 @@ const ComplianceTable: React.FC<ComplianceTableProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs mb-6 overflow-hidden">
-      <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-col gap-4">
+    <div className="bg-white dark:bg-[#101A2C] rounded-2xl border border-slate-200/90 dark:border-white/10 shadow-xs mb-6 overflow-hidden">
+      <div className="p-4 border-b border-slate-100 dark:border-white/10 flex flex-col gap-4 bg-slate-50/80 dark:bg-white/[0.02]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-semibold uppercase tracking-wider text-xs sm:text-sm">
-            <ShieldCheck className="w-5 h-5 text-indigo-500" />
+            <ShieldCheck className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" />
             {t('results.compliance_requirements')}
           </div>
-          <div className="text-sm text-slate-500 dark:text-slate-400">
+          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400">
             {t('results.showing_checks', { filtered: filteredChecks.length, total: checks.length })}
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col sm:flex-row gap-2.5">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               placeholder={t('results.search_placeholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-slate-100"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-white dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
             />
           </div>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-slate-100 cursor-pointer"
+            className="px-3 py-2 text-xs bg-white dark:bg-[#101A2C] border border-slate-200/80 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-900 dark:text-slate-100 cursor-pointer"
           >
             <option value="All">{t('results.all_status')}</option>
             <option value="PASS">{t('results.passed_label')}</option>
@@ -84,7 +84,7 @@ const ComplianceTable: React.FC<ComplianceTableProps> = ({
           <select
             value={domainFilter}
             onChange={(e) => setDomainFilter(e.target.value)}
-            className="px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-slate-100 cursor-pointer"
+            className="px-3 py-2 text-xs bg-white dark:bg-[#101A2C] border border-slate-200/80 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-900 dark:text-slate-100 cursor-pointer"
           >
             <option value="All">{t('results.all_domains')}</option>
             <option value="Legal Metrology">Legal Metrology</option>
@@ -95,31 +95,31 @@ const ComplianceTable: React.FC<ComplianceTableProps> = ({
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left">
-          <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs uppercase text-slate-500 dark:text-slate-400">
+          <thead className="bg-slate-50/80 dark:bg-white/[0.03] text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-white/10">
             <tr>
-              <th className="px-4 py-3 font-medium">{t('results.status_rule')}</th>
-              <th className="px-4 py-3 font-medium">{t('results.requirement')}</th>
-              <th className="px-4 py-3 font-medium hidden sm:table-cell">{t('results.detected_value')}</th>
-              <th className="px-4 py-3 font-medium text-right">{t('results.action')}</th>
+              <th className="px-4 py-3 font-semibold">{t('results.status_rule')}</th>
+              <th className="px-4 py-3 font-semibold">{t('results.requirement')}</th>
+              <th className="px-4 py-3 font-semibold hidden sm:table-cell">{t('results.detected_value')}</th>
+              <th className="px-4 py-3 font-semibold text-right">{t('results.action')}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
+          <tbody className="divide-y divide-slate-100 dark:divide-white/5">
             {filteredChecks.map((check) => (
               <tr 
                 key={check.rule_id}
                 onClick={() => onSelectRequirement(check)}
-                className={`hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer border-l-4 ${getBorderColor(check.status)}`}
+                className={`hover:bg-slate-50/80 dark:hover:bg-white/[0.02] transition-colors cursor-pointer border-l-4 ${getBorderColor(check.status)}`}
               >
                 <td className="px-4 py-3 whitespace-nowrap">
                   <div className="flex flex-col gap-1">
                     <StatusBadge status={check.status} />
-                    <span className="font-mono text-[10px] text-slate-500">{check.rule_id}</span>
+                    <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">{check.rule_id}</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100">
+                <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100 text-xs sm:text-sm">
                   {check.field_label && check.field_label.length > 2 ? check.field_label : (check.field || check.rule_id)}
                 </td>
-                <td className="px-4 py-3 text-slate-500 dark:text-slate-400 max-w-[200px] truncate hidden sm:table-cell">
+                <td className="px-4 py-3 text-xs text-slate-500 dark:text-slate-400 max-w-[200px] truncate hidden sm:table-cell">
                   {check.detected_value || <span className="italic opacity-50">{t('results.not_reliably_detected')}</span>}
                 </td>
                 <td className="px-4 py-3 text-right whitespace-nowrap">
@@ -128,7 +128,7 @@ const ComplianceTable: React.FC<ComplianceTableProps> = ({
                       e.stopPropagation();
                       onViewEvidence(check.rule_id, check.evidence_image_label);
                     }}
-                    className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline text-xs bg-transparent border-0 cursor-pointer"
+                    className="text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 font-semibold hover:underline text-xs bg-transparent border-0 cursor-pointer"
                   >
                     {t('results.nav_evidence')}
                   </button>
@@ -138,7 +138,7 @@ const ComplianceTable: React.FC<ComplianceTableProps> = ({
           </tbody>
         </table>
         {filteredChecks.length === 0 && (
-          <div className="p-8 text-center text-slate-500 dark:text-slate-400">
+          <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400">
             {t('common.noResults') || 'No requirements match the current filters.'}
           </div>
         )}

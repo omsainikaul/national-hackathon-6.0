@@ -461,11 +461,11 @@ export default function EvidenceViewer({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden" tabIndex={0}>
+    <div className="bg-white dark:bg-[#101A2C] rounded-2xl shadow-xs border border-slate-200/90 dark:border-white/10 overflow-hidden" tabIndex={0}>
       {/* 1. Header Bar: Evidence Inspector Title & Context */}
-      <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 bg-slate-50/80 dark:bg-white/[0.02] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-xl border border-indigo-100 dark:border-indigo-800/60 shadow-2xs">
+          <div className="p-2.5 bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 rounded-xl border border-teal-200/60 dark:border-teal-800/60 shadow-2xs">
             <ScanSearch className="w-5 h-5" />
           </div>
           <div>
@@ -473,7 +473,7 @@ export default function EvidenceViewer({
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 tracking-tight">
                 {t('evidence.title', { defaultValue: 'Evidence Viewer & Visual Proof System' })}
               </h2>
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60">
+              <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-teal-50 dark:bg-teal-950/70 text-teal-700 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60">
                 {t('evidence.badge_phase', { defaultValue: 'Phase 3 Visual Proof' })}
               </span>
             </div>
@@ -486,25 +486,25 @@ export default function EvidenceViewer({
         {/* Action Controls & Navigation */}
         <div className="flex items-center gap-2 flex-wrap">
           {displayedFindings.length > 1 && (
-            <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-0.5 shadow-2xs">
+            <div className="flex items-center bg-white dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/10 rounded-xl p-0.5 shadow-2xs">
               <button
                 type="button"
                 onClick={handlePrevFinding}
                 disabled={currentFindingIndex <= 0}
-                className="p-1.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed rounded hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                className="p-1.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed rounded-lg hover:bg-slate-50 dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
                 title={t('evidence.prev_finding', { defaultValue: 'Previous finding' })}
                 aria-label={t('evidence.prev_finding', { defaultValue: 'Previous finding' })}
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <span className="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 px-2 select-none border-x border-slate-100 dark:border-slate-800">
+              <span className="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 px-2.5 select-none border-x border-slate-100 dark:border-white/10">
                 {currentFindingIndex >= 0 ? currentFindingIndex + 1 : 1} of {displayedFindings.length}
               </span>
               <button
                 type="button"
                 onClick={handleNextFinding}
                 disabled={currentFindingIndex >= displayedFindings.length - 1}
-                className="p-1.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed rounded hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                className="p-1.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed rounded-lg hover:bg-slate-50 dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
                 title={t('evidence.next_finding', { defaultValue: 'Next finding' })}
                 aria-label={t('evidence.next_finding', { defaultValue: 'Next finding' })}
               >
@@ -517,9 +517,9 @@ export default function EvidenceViewer({
             <button
               type="button"
               onClick={onReturnToRecommendations}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-semibold shadow-2xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/[0.08] text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold shadow-2xs transition-all cursor-pointer"
             >
-              <ArrowUp className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+              <ArrowUp className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
               <span>{t('evidence.back_to_top', { defaultValue: 'Back to Top' })}</span>
             </button>
           )}
@@ -527,7 +527,7 @@ export default function EvidenceViewer({
       </div>
 
       {/* 2. Image Tabs, Overlay Toggles & Zoom Controls */}
-      <div className="px-6 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-wrap items-center justify-between gap-3">
+      <div className="px-6 py-3 border-b border-slate-100 dark:border-white/10 bg-white dark:bg-[#101A2C] flex flex-wrap items-center justify-between gap-3">
         {/* Package Image Tabs */}
         <div className="flex items-center gap-2 flex-wrap" role="tablist" aria-label="Package Image Panels">
           <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-1">
@@ -544,16 +544,16 @@ export default function EvidenceViewer({
                   setSelectedImageIndex(idx);
                   setShowCombinedOCR(false);
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-indigo-600 text-white shadow-xs'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-transparent'
+                    ? 'bg-[#173B57] hover:bg-[#101A2C] dark:bg-teal-500 dark:text-[#101A2C] text-white shadow-xs'
+                    : 'bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.08] border border-transparent'
                 }`}
               >
                 <ImageIcon className="w-3.5 h-3.5" />
                 <span>{getLocalizedPanelName(img.label, idx, t)}</span>
                 {img.word_count ? (
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white dark:bg-[#101A2C]/20 dark:text-[#101A2C]' : 'bg-slate-200 dark:bg-white/[0.08] text-slate-600 dark:text-slate-300'}`}>
                     {img.word_count}w
                   </span>
                 ) : null}
@@ -565,10 +565,10 @@ export default function EvidenceViewer({
             <button
               type="button"
               onClick={() => setShowCombinedOCR(prev => !prev)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 showCombinedOCR
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                  ? 'bg-[#173B57] hover:bg-[#101A2C] dark:bg-teal-500 dark:text-[#101A2C] text-white shadow-xs'
+                  : 'bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.08]'
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
@@ -578,18 +578,18 @@ export default function EvidenceViewer({
         </div>
 
         {/* Visual Proof Layer Controls & Zoom Bar */}
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex items-center gap-2.5 flex-wrap">
           {/* Overlay Toggle Buttons */}
-          <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold gap-1">
+          <div className="flex items-center bg-slate-100/90 dark:bg-white/[0.04] p-1 rounded-xl border border-slate-200/80 dark:border-white/10 text-xs font-semibold gap-1">
             <button
               type="button"
               onClick={() => {
                 setHighlightActiveOnly(true);
                 setShowAllBBoxes(false);
               }}
-              className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                 highlightActiveOnly && !showAllBBoxes
-                  ? 'bg-indigo-600 text-white shadow-2xs'
+                  ? 'bg-[#173B57] dark:bg-teal-500 text-white dark:text-[#101A2C] shadow-2xs'
                   : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
               title="Highlight only the selected compliance finding"
@@ -604,9 +604,9 @@ export default function EvidenceViewer({
                 setShowAllBBoxes(prev => !prev);
                 setHighlightActiveOnly(false);
               }}
-              className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                 showAllBBoxes
-                  ? 'bg-indigo-600 text-white shadow-2xs'
+                  ? 'bg-[#173B57] dark:bg-teal-500 text-white dark:text-[#101A2C] shadow-2xs'
                   : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
               title="Show all statutory finding boxes on this panel"
@@ -618,9 +618,9 @@ export default function EvidenceViewer({
             <button
               type="button"
               onClick={() => setShowRawTokens(prev => !prev)}
-              className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                 showRawTokens
-                  ? 'bg-indigo-600 text-white shadow-2xs'
+                  ? 'bg-[#173B57] dark:bg-teal-500 text-white dark:text-[#101A2C] shadow-2xs'
                   : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
               title="Display fine bounding boxes for all OCR word tokens"
@@ -630,13 +630,13 @@ export default function EvidenceViewer({
           </div>
 
           {/* Zoom & Canvas Controls */}
-          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
+          <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-white/[0.04] p-1 rounded-xl border border-slate-200/80 dark:border-white/10">
             <button
               type="button"
               onClick={handleZoomOut}
               title="Zoom out (25%)"
               aria-label="Zoom out"
-              className="p-1.5 rounded hover:bg-white dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg hover:bg-white dark:hover:bg-white/[0.08] text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
             >
               <ZoomOut className="w-3.5 h-3.5" />
             </button>
@@ -644,7 +644,7 @@ export default function EvidenceViewer({
               type="button"
               onClick={handleFitToggle}
               title="Toggle 100% / 150%"
-              className="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 px-2 min-w-[50px] text-center select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
+              className="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 px-2 min-w-[50px] text-center select-none hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer"
             >
               {Math.round(zoomLevel * 100)}%
             </button>
@@ -653,7 +653,7 @@ export default function EvidenceViewer({
               onClick={handleZoomIn}
               title="Zoom in (25%)"
               aria-label="Zoom in"
-              className="p-1.5 rounded hover:bg-white dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg hover:bg-white dark:hover:bg-white/[0.08] text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
             >
               <ZoomIn className="w-3.5 h-3.5" />
             </button>
@@ -662,7 +662,7 @@ export default function EvidenceViewer({
               onClick={handleResetZoom}
               title="Reset Zoom & View"
               aria-label="Reset View"
-              className="p-1.5 rounded hover:bg-white dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors ml-0.5 cursor-pointer"
+              className="p-1.5 rounded-lg hover:bg-white dark:hover:bg-white/[0.08] text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors ml-0.5 cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
@@ -671,17 +671,17 @@ export default function EvidenceViewer({
       </div>
 
       {/* 3. Main Split View: Left Interactive Canvas (7 Cols) & Right Finding Details (5 Cols) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 dark:divide-slate-800">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 dark:divide-white/10">
         
         {/* Left Side: Package Artwork Inspection Canvas with Interactive Overlays */}
-        <div className="lg:col-span-7 p-6 flex flex-col justify-between bg-slate-900/5 dark:bg-slate-950/40 min-h-[540px]">
+        <div className="lg:col-span-7 p-6 flex flex-col justify-between bg-slate-900/5 dark:bg-black/30 min-h-[540px]">
           
           {/* Top Canvas Bar */}
           <div className="w-full mb-3 flex items-center justify-between text-xs gap-2 flex-wrap">
             <div className="flex items-center gap-2 font-medium text-slate-700 dark:text-slate-300">
-              <MapPin className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+              <MapPin className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" />
               <span>{t('evidence.inspecting', { defaultValue: 'Inspecting:' })}</span>
-              <span className="font-mono font-bold text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700 shadow-2xs">
+              <span className="font-mono font-bold text-slate-900 dark:text-slate-100 bg-white dark:bg-[#101A2C] px-2 py-0.5 rounded-lg border border-slate-200/80 dark:border-white/10 shadow-2xs">
                 {activeFinding?.rule_id || t('evidence.screening_overview', { defaultValue: 'Screening Overview' })}
               </span>
               <span className="text-slate-600 dark:text-slate-400 truncate max-w-[200px] font-semibold">
@@ -690,11 +690,11 @@ export default function EvidenceViewer({
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-white/[0.04] px-2 py-0.5 rounded-lg border border-slate-200/60 dark:border-white/10">
                 {t('evidence.face', { defaultValue: 'Face:' })} {getLocalizedPanelName(activeImage?.label, selectedImageIndex, t)}
               </span>
               {activeBBox && (
-                <span className="text-[10px] font-mono text-indigo-600 dark:text-indigo-400 font-bold bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-200 dark:border-indigo-800/60">
+                <span className="text-[10px] font-mono text-teal-700 dark:text-teal-300 font-bold bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-lg border border-teal-200/60 dark:border-teal-800/60">
                   [{activeBBox.join(', ')}]
                 </span>
               )}
@@ -703,11 +703,11 @@ export default function EvidenceViewer({
 
           {/* Interactive Package Image & SVG Overlay Canvas */}
           <div 
-            className="relative w-full max-h-[560px] flex items-center justify-center overflow-auto rounded-xl bg-slate-950 p-4 border border-slate-800 shadow-inner"
+            className="relative w-full max-h-[560px] flex items-center justify-center overflow-auto rounded-2xl bg-slate-950 p-4 border border-slate-800/80 dark:border-white/10 shadow-inner"
           >
             {imgLoadingMap[selectedImageIndex] && !imgSrcMap[selectedImageIndex] ? (
               <div className="py-20 flex flex-col items-center justify-center text-slate-400 space-y-3">
-                <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                <div className="w-8 h-8 border-2 border-teal-500 border-t-transparent rounded-full animate-spin" />
                 <span className="text-xs font-semibold text-slate-300">{t('evidence.loading_image', { defaultValue: 'Loading evidence image...' })}</span>
                 <span className="text-[11px] text-slate-500 font-mono">{t('evidence.panel', { defaultValue: 'Panel:' })} {getLocalizedPanelName(activeImage?.label, selectedImageIndex, t)}</span>
               </div>
@@ -718,8 +718,8 @@ export default function EvidenceViewer({
               >
                 {/* Floating Hover Tooltip */}
                 {hoveredRuleId && (
-                  <div className="absolute top-3 left-3 z-20 bg-slate-900/90 text-white text-xs px-3 py-1.5 rounded-lg border border-slate-700 shadow-lg backdrop-blur-sm pointer-events-none flex items-center gap-2">
-                    <span className="font-mono font-bold text-indigo-400">{hoveredRuleId}</span>
+                  <div className="absolute top-3 left-3 z-20 bg-[#101A2C]/95 text-white text-xs px-3 py-1.5 rounded-xl border border-white/15 shadow-xl backdrop-blur-md pointer-events-none flex items-center gap-2">
+                    <span className="font-mono font-bold text-teal-400">{hoveredRuleId}</span>
                     <span className="text-slate-300 truncate max-w-[220px]">
                       {evidenceItems.find(i => i.rule_id === hoveredRuleId)?.title}
                     </span>
@@ -765,8 +765,8 @@ export default function EvidenceViewer({
                         y={by}
                         width={bw}
                         height={bh}
-                        fill="rgba(99, 102, 241, 0.06)"
-                        stroke="rgba(99, 102, 241, 0.45)"
+                        fill="rgba(53, 198, 176, 0.06)"
+                        stroke="rgba(53, 198, 176, 0.45)"
                         strokeWidth="1.2"
                         strokeDasharray="3 3"
                         className="pointer-events-none"
@@ -868,7 +868,7 @@ export default function EvidenceViewer({
                           y="0"
                           width={Math.max(70, activeFinding.rule_id.length * 9 + (currentEvidence?.field_type ? 65 : 45))}
                           height="20"
-                          fill="#0f172a"
+                          fill="#101A2C"
                           stroke={getStatusStrokeColor(activeFinding.status)}
                           strokeWidth="1.5"
                           rx="4"
@@ -897,8 +897,8 @@ export default function EvidenceViewer({
 
                 {/* Non-Visual / Derived Finding Notice on Image Canvas */}
                 {(!activeBBox || !isFindingOnCurrentPanel) && (
-                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 bg-slate-900/95 text-white text-xs px-3.5 py-1.5 rounded-xl border border-slate-700 shadow-xl backdrop-blur-md flex items-center gap-2 max-w-[92%] pointer-events-none">
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 bg-[#101A2C]/95 text-white text-xs px-3.5 py-1.5 rounded-xl border border-white/15 shadow-xl backdrop-blur-md flex items-center gap-2 max-w-[92%] pointer-events-none">
+                    <Sparkles className="w-3.5 h-3.5 text-teal-400 shrink-0" />
                     <span className="text-slate-300 text-[11px] font-medium truncate">
                       {!isFindingOnCurrentPanel 
                         ? `Evidence located on ${activeEvidenceLabel || 'another'} panel (switch package face above)`
@@ -925,7 +925,7 @@ export default function EvidenceViewer({
           </div>
 
           {/* Canvas Footer Bar */}
-          <div className="w-full mt-3 pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 flex-wrap gap-2">
+          <div className="w-full mt-3 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 flex-wrap gap-2">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
               <span className="font-semibold text-slate-700 dark:text-slate-300">
@@ -941,10 +941,10 @@ export default function EvidenceViewer({
         </div>
 
         {/* Right Side: Finding Details & Statutory Evidence Chain (5 Cols) */}
-        <div className="lg:col-span-5 p-6 flex flex-col space-y-5 bg-white dark:bg-slate-900">
+        <div className="lg:col-span-5 p-6 flex flex-col space-y-5 bg-white dark:bg-[#101A2C]">
           
           {/* Finding Header */}
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/10 pb-3">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                 {t('evidence.finding_details', { defaultValue: 'Finding Details' })}
@@ -963,24 +963,24 @@ export default function EvidenceViewer({
             <div className="space-y-4">
               
               {/* Evidence Chain Flow (5-Stage Trust Pipeline) */}
-              <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/70 rounded-xl p-3">
+              <div className="bg-slate-50/80 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/10 rounded-xl p-3.5">
                 <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-indigo-500 dark:text-indigo-400" /> {t('evidence.evidence_chain', { defaultValue: 'Statutory Evidence Chain' })}
+                  <Sparkles className="w-3 h-3 text-teal-600 dark:text-teal-400" /> {t('evidence.evidence_chain', { defaultValue: 'Statutory Evidence Chain' })}
                 </div>
                 <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-600 dark:text-slate-300 overflow-x-auto pb-1">
-                  <span className="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md font-semibold text-slate-800 dark:text-slate-200 shrink-0">
+                  <span className="px-2 py-1 bg-white dark:bg-[#101A2C] border border-slate-200/80 dark:border-white/10 rounded-lg font-semibold text-slate-800 dark:text-slate-200 shrink-0">
                     📸 {activeEvidenceLabel || 'Package'}
                   </span>
                   <span className="text-slate-400 shrink-0">→</span>
-                  <span className="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md text-slate-700 dark:text-slate-300 shrink-0 font-mono">
+                  <span className="px-2 py-1 bg-white dark:bg-[#101A2C] border border-slate-200/80 dark:border-white/10 rounded-lg text-slate-700 dark:text-slate-300 shrink-0 font-mono">
                     📐 {currentEvidence?.geometry_type || activeFinding.geometry_type || 'BBOX'}
                   </span>
                   <span className="text-slate-400 shrink-0">→</span>
-                  <span className="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md font-semibold text-slate-800 dark:text-slate-200 shrink-0">
+                  <span className="px-2 py-1 bg-white dark:bg-[#101A2C] border border-slate-200/80 dark:border-white/10 rounded-lg font-semibold text-slate-800 dark:text-slate-200 shrink-0">
                     📝 {activeFinding.field_label || activeFinding.field}
                   </span>
                   <span className="text-slate-400 shrink-0">→</span>
-                  <span className="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md font-mono font-bold text-indigo-700 dark:text-indigo-300 shrink-0">
+                  <span className="px-2 py-1 bg-white dark:bg-[#101A2C] border border-slate-200/80 dark:border-white/10 rounded-lg font-mono font-bold text-teal-700 dark:text-teal-300 shrink-0">
                     ⚖️ {activeFinding.rule_id}
                   </span>
                   <span className="text-slate-400 shrink-0">→</span>
@@ -993,48 +993,48 @@ export default function EvidenceViewer({
               {/* Finding Title, Domain, Evidence Status & Method Badges */}
               <div>
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <span className="font-mono text-xs font-bold px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700">
+                  <span className="font-mono text-xs font-bold px-2 py-0.5 bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 rounded-lg border border-slate-200/60 dark:border-white/10">
                     {activeFinding.rule_id}
                   </span>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                     activeFinding.domain === 'FSSAI' 
-                      ? 'bg-orange-50 dark:bg-orange-950/60 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-800/60'
-                      : 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60'
+                      ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60'
+                      : 'bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800/60'
                   }`}>
                     {activeFinding.domain.replace(/_/g, ' ')}
                   </span>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                     activeEvidenceStatus === 'VERIFIED'
-                      ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60'
                       : activeEvidenceStatus === 'NEEDS_REVIEW' || activeEvidenceStatus === 'CONTEXTUAL'
-                      ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                      ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/60'
+                      : 'bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 border border-slate-200/60 dark:border-white/10'
                   }`}>
                     {t('evidence.evidence_label', { defaultValue: 'Evidence:' })} {activeEvidenceStatus}
                   </span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-white/10">
                     {activeMatchMethod.replace(/_/g, ' ')}
                   </span>
                   {activeQualityScore > 0 && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 font-mono border border-slate-200/60 dark:border-white/10">
                       Q-Score: {Math.round(activeQualityScore)}%
                     </span>
                   )}
                   {activeFinding.reliability_tier && (
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase font-mono ${
                       activeFinding.reliability_tier === 'HIGH'
-                        ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
+                        ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60'
                         : activeFinding.reliability_tier === 'MEDIUM'
-                        ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-700'
+                        ? 'bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800/60'
                         : activeFinding.reliability_tier === 'LOW'
-                        ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700'
-                        : 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-700'
+                        ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60'
+                        : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60'
                     }`}>
                       🛡️ {t('evidence.reliability', { defaultValue: 'Reliability:' })} {activeFinding.reliability_tier} ({Math.round(activeFinding.reliability_score ?? 0)}%)
                     </span>
                   )}
                   {(currentEvidence?.language || activeFinding.language) && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800/60 font-mono">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60 font-mono">
                       🌐 {(currentEvidence?.language || activeFinding.language)?.toUpperCase()}
                       {(currentEvidence?.script || activeFinding.script) ? ` · ${currentEvidence?.script || activeFinding.script}` : ''}
                     </span>
@@ -1047,10 +1047,10 @@ export default function EvidenceViewer({
 
               {/* Multi-Evidence Item Switcher (e.g. Phone vs Email, Name vs Address) */}
               {activeFinding.evidence_list && activeFinding.evidence_list.length > 1 && (
-                <div className="bg-slate-100/90 dark:bg-slate-800/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                <div className="bg-slate-100/80 dark:bg-white/[0.03] p-3 rounded-xl border border-slate-200/80 dark:border-white/10">
                   <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">
                     <span>{t('evidence.multi_item_proof', { defaultValue: 'Multi-Item Statutory Proof' })} ({activeFinding.evidence_list.length})</span>
-                    <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold">{t('evidence.select_item_highlight', { defaultValue: 'Select item to highlight' })}</span>
+                    <span className="text-[10px] text-teal-600 dark:text-teal-400 font-semibold">{t('evidence.select_item_highlight', { defaultValue: 'Select item to highlight' })}</span>
                   </div>
                   <div className="flex gap-2 flex-wrap">
                     {activeFinding.evidence_list.map((ev, evIdx) => {
@@ -1065,15 +1065,15 @@ export default function EvidenceViewer({
                               setSelectedImageIndex(ev.image_index);
                             }
                           }}
-                          className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                          className={`px-3 py-1.5 text-xs rounded-xl font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
                             isEvSelected 
-                              ? 'bg-indigo-600 text-white shadow-xs font-semibold' 
-                              : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600'
+                              ? 'bg-[#173B57] dark:bg-teal-500 text-white dark:text-[#101A2C] shadow-xs' 
+                              : 'bg-white dark:bg-white/[0.06] text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/[0.1]'
                           }`}
                         >
                           <span>{ev.field_type || `Item ${evIdx + 1}`}</span>
                           <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
-                            isEvSelected ? 'bg-indigo-700 text-indigo-100' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                            isEvSelected ? 'bg-white/20 text-white dark:bg-[#101A2C]/20 dark:text-[#101A2C]' : 'bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300'
                           }`}>
                             {ev.evidence_status || 'DETECTED'}
                           </span>
@@ -1086,7 +1086,7 @@ export default function EvidenceViewer({
 
               {/* Status & Confidence Dual Badges */}
               <div className="grid grid-cols-2 gap-2.5">
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+                <div className="p-3 bg-slate-50/80 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/10 rounded-xl">
                   <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1">
                     {t('evidence.screening_status', { defaultValue: 'Screening Status' })}
                   </span>
@@ -1095,7 +1095,7 @@ export default function EvidenceViewer({
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+                <div className="p-3 bg-slate-50/80 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/10 rounded-xl">
                   <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1">
                     {t('evidence.ocr_confidence', { defaultValue: 'OCR Confidence' })}
                   </span>
@@ -1103,10 +1103,10 @@ export default function EvidenceViewer({
                     {activeFinding.confidence !== null && activeFinding.confidence !== undefined ? (
                       <span className={`px-2 py-0.5 rounded font-mono ${
                         activeFinding.confidence >= 80 
-                          ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300' 
+                          ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60' 
                           : activeFinding.confidence >= 50 
-                          ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300' 
-                          : 'bg-red-100 dark:bg-red-950/60 text-red-800 dark:text-red-300'
+                          ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/60' 
+                          : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/60'
                       }`}>
                         {Math.round(activeFinding.confidence)}% {t('evidence.certainty', { defaultValue: 'Certainty' })}
                       </span>
@@ -1122,16 +1122,16 @@ export default function EvidenceViewer({
                 <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1">
                   {t('evidence.detected_declaration_value', { defaultValue: 'Detected Declaration Value:' })}
                 </span>
-                <div className="p-2.5 bg-slate-100/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-mono text-slate-800 dark:text-slate-200 select-all">
+                <div className="p-3 bg-slate-100/80 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/10 rounded-xl text-xs font-mono text-slate-800 dark:text-slate-200 select-all">
                   {getFormattedDetectedValue()}
                 </div>
               </div>
 
               {/* Semantic Evidence Banner when Visual BBox is Unavailable */}
               {!activeBBox && (
-                <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-xl text-xs flex items-start gap-2.5">
+                <div className="p-3.5 bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 rounded-xl text-xs flex items-start gap-2.5">
                   <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                  <div className="text-amber-900 dark:text-amber-200 space-y-0.5">
+                  <div className="text-amber-950 dark:text-amber-200 space-y-0.5">
                     <strong className="block font-semibold">{t('evidence.semantic_evidence_title', { defaultValue: 'Semantic evidence — precise visual location unavailable' })}</strong>
                     <p className="text-[11px] text-amber-800 dark:text-amber-300 leading-relaxed">
                       {activeFinding.explanation || (
@@ -1151,29 +1151,29 @@ export default function EvidenceViewer({
                 <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1">
                   {t('evidence.visual_evidence_box_title', { defaultValue: 'Visual Evidence Bounding Box & Panel:' })}
                 </span>
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 space-y-2">
+                <div className="p-3.5 bg-slate-50/80 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/10 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400 shrink-0" />
+                      <MapPin className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
                       <span>{activeEvidenceLabel} {t('evidence.panel_word', { defaultValue: 'Panel' })}</span>
                     </span>
-                    <span className="font-mono text-[11px] text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-100 dark:border-indigo-800/60">
+                    <span className="font-mono text-[11px] text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-md border border-teal-200/60 dark:border-teal-800/60">
                       {currentEvidence?.geometry_type || activeFinding.geometry_type || (activeBBox ? 'TOKEN_UNION' : 'NON_VISUAL')}
                     </span>
                   </div>
                   {activeBBox ? (
-                    <div className="font-mono text-[11px] text-slate-600 dark:text-slate-400 pt-1.5 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                    <div className="font-mono text-[11px] text-slate-600 dark:text-slate-400 pt-2 border-t border-slate-200/70 dark:border-white/10 flex justify-between items-center">
                       <span>{t('evidence.coordinates', { defaultValue: 'Coordinates:' })}</span>
-                      <span className="bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200">
+                      <span className="bg-white dark:bg-[#101A2C] px-2 py-0.5 rounded-md border border-slate-200/80 dark:border-white/10 font-bold text-slate-800 dark:text-slate-200">
                         [x1: {activeBBox[0]}, y1: {activeBBox[1]}, x2: {activeBBox[2]}, y2: {activeBBox[3]}]
                       </span>
                     </div>
                   ) : activeFinding.rule_id === 'LM-009' ? (
-                    <div className="text-indigo-800 dark:text-indigo-300 bg-indigo-50/70 dark:bg-indigo-950/40 p-2.5 rounded-lg border border-indigo-200 dark:border-indigo-900/60 text-[11px] leading-relaxed">
+                    <div className="text-teal-900 dark:text-teal-200 bg-teal-50/70 dark:bg-teal-950/40 p-2.5 rounded-lg border border-teal-200 dark:border-teal-900/60 text-[11px] leading-relaxed">
                       <strong>{t('evidence.cross_field_title', { defaultValue: 'Cross-Field Consistency:' })}</strong> Evaluated by cross-referencing Maximum Retail Price (MRP), Net Quantity, and unit price declarations across panels.
                     </div>
                   ) : activeFinding.status === 'NOT_APPLICABLE' ? (
-                    <div className="text-slate-700 dark:text-slate-300 bg-slate-100/80 dark:bg-slate-800/80 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-[11px] leading-relaxed">
+                    <div className="text-slate-700 dark:text-slate-300 bg-slate-100/80 dark:bg-white/[0.04] p-2.5 rounded-lg border border-slate-200/80 dark:border-white/10 text-[11px] leading-relaxed">
                       <strong>{t('evidence.food_proviso_title', { defaultValue: 'Statutory Food Proviso:' })}</strong> Date marking for food commodities is governed under FSSAI Regulation 5(10) (Rule FS-005) under the Rule 6(1)(d) proviso.
                     </div>
                   ) : (
@@ -1186,7 +1186,7 @@ export default function EvidenceViewer({
 
               {/* Grounded Pass Rationale */}
               {activeFinding.status === 'PASS' && (activeFinding.pass_reason || activeFinding.reason) && (
-                <div className="p-3 bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 rounded-xl text-xs space-y-1">
+                <div className="p-3.5 bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200/60 dark:border-emerald-800/40 rounded-xl text-xs space-y-1">
                   <strong className="text-emerald-950 dark:text-emerald-200 font-bold flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     {t('evidence.pass_rationale', { defaultValue: 'Verified Pass Rationale' })}
@@ -1199,7 +1199,7 @@ export default function EvidenceViewer({
 
               {/* Grounded Review Required */}
               {isReviewRequired && (activeFinding.review_reason || activeFinding.reason) && (
-                <div className="p-3 bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl text-xs space-y-1">
+                <div className="p-3.5 bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-800/40 rounded-xl text-xs space-y-1">
                   <strong className="text-amber-950 dark:text-amber-200 font-bold flex items-center gap-1.5">
                     <AlertTriangle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
                     {t('evidence.review_rationale', { defaultValue: 'Audit Review Rationale' })}
@@ -1212,12 +1212,12 @@ export default function EvidenceViewer({
 
               {/* Grounded Statutory Failure */}
               {isFail && (activeFinding.fail_reason || activeFinding.reason) && (
-                <div className="p-3 bg-red-50/70 dark:bg-red-950/30 border border-red-200 dark:border-red-800/60 rounded-xl text-xs space-y-1">
-                  <strong className="text-red-950 dark:text-red-200 font-bold flex items-center gap-1.5">
-                    <XCircle className="w-3.5 h-3.5 text-red-600 dark:text-red-400 shrink-0" />
+                <div className="p-3.5 bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200/60 dark:border-rose-800/40 rounded-xl text-xs space-y-1">
+                  <strong className="text-rose-950 dark:text-rose-200 font-bold flex items-center gap-1.5">
+                    <XCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
                     {t('evidence.fail_issue', { defaultValue: 'Statutory Non-Compliance Issue' })}
                   </strong>
-                  <p className="text-red-900 dark:text-red-300 leading-relaxed font-medium">
+                  <p className="text-rose-900 dark:text-rose-300 leading-relaxed font-medium">
                     {activeFinding.fail_reason || activeFinding.reason}
                   </p>
                 </div>
@@ -1225,17 +1225,17 @@ export default function EvidenceViewer({
 
               {/* Extraction Candidates Breakdown */}
               {activeFinding.candidates && activeFinding.candidates.length > 1 && (
-                <div className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-3">
+                <div className="bg-slate-50/80 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/10 rounded-xl p-3.5">
                   <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
                     {t('evidence.candidates', { defaultValue: 'Extraction Candidates' })} ({activeFinding.candidates.length})
                   </div>
                   <div className="space-y-1.5">
                     {activeFinding.candidates.map((cand: any, cIdx: number) => (
-                      <div key={cIdx} className="flex items-center justify-between text-xs font-mono bg-white dark:bg-slate-800 p-2 rounded border border-slate-200 dark:border-slate-700">
+                      <div key={cIdx} className="flex items-center justify-between text-xs font-mono bg-white dark:bg-[#101A2C] p-2.5 rounded-lg border border-slate-200/80 dark:border-white/10">
                         <span className="font-semibold text-slate-800 dark:text-slate-200 truncate mr-2">{cand.value || cand.raw_text}</span>
                         <div className="flex items-center gap-2 shrink-0">
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">{cand.source || 'OCR'}</span>
-                          <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400">{Math.round((cand.confidence ?? 0) * (cand.confidence <= 1.0 ? 100 : 1))}%</span>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300">{cand.source || 'OCR'}</span>
+                          <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400">{Math.round((cand.confidence ?? 0) * (cand.confidence <= 1.0 ? 100 : 1))}%</span>
                         </div>
                       </div>
                     ))}
@@ -1245,17 +1245,17 @@ export default function EvidenceViewer({
 
               {/* Recommended Action & Verification Step */}
               {activeFinding.recommended_action && (
-                <div className="p-3 bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/60 rounded-xl text-xs space-y-1.5">
-                  <strong className="text-indigo-950 dark:text-indigo-200 font-bold flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                <div className="p-3.5 bg-teal-50/50 dark:bg-teal-950/20 border border-teal-100 dark:border-teal-900/40 rounded-xl text-xs space-y-1.5">
+                  <strong className="text-teal-950 dark:text-teal-200 font-bold flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" />
                     {t('evidence.recommended_action', { defaultValue: 'Recommended Action:' })}
                   </strong>
-                  <p className="text-indigo-900 dark:text-indigo-300 leading-relaxed font-medium">
+                  <p className="text-teal-900 dark:text-teal-300 leading-relaxed font-medium">
                     {activeFinding.recommended_action}
                   </p>
 
                   {activeFinding.verification_step && (
-                    <div className="pt-1.5 border-t border-indigo-100/80 dark:border-indigo-900/60 text-[11px] text-indigo-800 dark:text-indigo-300">
+                    <div className="pt-2 border-t border-teal-100/80 dark:border-teal-900/40 text-[11px] text-teal-800 dark:text-teal-300">
                       <span className="font-semibold">{t('evidence.what_to_verify', { defaultValue: 'What to Verify:' })} </span>
                       {activeFinding.verification_step}
                     </div>
@@ -1265,7 +1265,7 @@ export default function EvidenceViewer({
 
               {/* Statutory Legal Source Citation */}
               {(activeFinding.source_name || activeFinding.source_reference) && (
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                <div className="pt-2 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
                   <span className="font-medium">{t('evidence.legal_reference', { defaultValue: 'Legal Reference:' })}</span>
                   <div className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
                     <span>
@@ -1276,7 +1276,7 @@ export default function EvidenceViewer({
                         href={activeFinding.source_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 ml-1"
+                        className="text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 ml-1"
                         title="View official statutory text"
                       >
                         <ExternalLink className="w-3 h-3" />
@@ -1293,7 +1293,7 @@ export default function EvidenceViewer({
           )}
 
           {/* Finding Selector List */}
-          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex-1 flex flex-col">
+          <div className="pt-4 border-t border-slate-100 dark:border-white/10 flex-1 flex flex-col">
             <div className="flex items-center justify-between mb-2.5">
               <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 {t('evidence.all_findings', { defaultValue: 'All Findings on Label' })} ({displayedFindings.length})
@@ -1301,7 +1301,7 @@ export default function EvidenceViewer({
               <button
                 type="button"
                 onClick={() => setFilterByImage(!filterByImage)}
-                className="text-[11px] text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-semibold cursor-pointer"
+                className="text-[11px] text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 font-semibold cursor-pointer"
               >
                 {filterByImage ? t('evidence.show_all_images', { defaultValue: 'Show all images' }) : t('evidence.filter_active_image', { defaultValue: 'Filter by active image' })}
               </button>
@@ -1312,9 +1312,9 @@ export default function EvidenceViewer({
                 const isSelected = item.rule_id === activeRuleId;
                 const statusColor = 
                   item.status === 'PASS' ? 'bg-emerald-500' :
-                  item.status === 'FAIL' ? 'bg-red-500' :
+                  item.status === 'FAIL' ? 'bg-rose-500' :
                   item.status === 'WARNING' ? 'bg-amber-500' :
-                  item.status === 'NEEDS_REVIEW' ? 'bg-indigo-500' : 'bg-slate-400';
+                  item.status === 'NEEDS_REVIEW' ? 'bg-teal-500' : 'bg-slate-400';
 
                 return (
                   <button
@@ -1323,8 +1323,8 @@ export default function EvidenceViewer({
                     onClick={() => handleSelectFinding(item)}
                     className={`w-full text-left p-2.5 rounded-xl border text-xs transition-all flex items-center justify-between gap-2 cursor-pointer ${
                       isSelected
-                        ? 'bg-indigo-50/90 dark:bg-indigo-950/60 border-indigo-300 dark:border-indigo-700 shadow-2xs'
-                        : 'bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700'
+                        ? 'bg-teal-50/90 dark:bg-teal-950/50 border-teal-300/80 dark:border-teal-700/80 shadow-2xs'
+                        : 'bg-slate-50/60 dark:bg-white/[0.02] hover:bg-slate-100 dark:hover:bg-white/[0.06] border-slate-200/70 dark:border-white/10'
                     }`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
@@ -1335,9 +1335,9 @@ export default function EvidenceViewer({
 
                     <div className="flex items-center gap-1.5 shrink-0">
                       {item.bbox && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" title="Visual BBox Available"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-teal-500" title="Visual BBox Available"></span>
                       )}
-                      <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono bg-white dark:bg-[#101A2C] px-1.5 py-0.5 rounded border border-slate-200/60 dark:border-white/10">
                         {item.evidence_image_label}
                       </span>
                     </div>
@@ -1352,11 +1352,11 @@ export default function EvidenceViewer({
 
       {/* 4. Raw OCR Text Drawer (Toggled by Combined OCR button) */}
       {showCombinedOCR && (
-        <div className="p-5 border-t border-slate-200 dark:border-slate-800 bg-slate-900 text-slate-100">
-          <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
+        <div className="p-5 border-t border-slate-100 dark:border-white/10 bg-[#101A2C] text-slate-100">
+          <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-indigo-400" />
-              <span className="text-xs font-mono font-bold text-indigo-400 uppercase tracking-wider">
+              <FileText className="w-4 h-4 text-teal-400" />
+              <span className="text-xs font-mono font-bold text-teal-400 uppercase tracking-wider">
                 {t('evidence.raw_ocr_stream', { defaultValue: 'Raw OCR Text Stream' })}
               </span>
             </div>
@@ -1364,7 +1364,7 @@ export default function EvidenceViewer({
               {activeImage?.word_count || ocrResult?.words?.length || 0} {t('evidence.words_extracted', { defaultValue: 'words extracted' })}
             </span>
           </div>
-          <pre className="text-xs font-mono leading-relaxed overflow-y-auto max-h-[200px] whitespace-pre-wrap text-slate-200 p-3 bg-slate-950 rounded-lg border border-slate-800">
+          <pre className="text-xs font-mono leading-relaxed overflow-y-auto max-h-[200px] whitespace-pre-wrap text-slate-200 p-3 bg-black/40 rounded-xl border border-white/10">
             {activeImage?.ocr_text || ocrResult?.full_text || t('evidence.no_ocr_text', { defaultValue: 'No OCR text available for this image.' })}
           </pre>
         </div>

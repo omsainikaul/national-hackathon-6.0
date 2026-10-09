@@ -1,28 +1,77 @@
 import en from './locales/en.json';
-import hi from './locales/hi.json';
-import mr from './locales/mr.json';
-import bn from './locales/bn.json';
-import gu from './locales/gu.json';
-import pa from './locales/pa.json';
-import ta from './locales/ta.json';
-import te from './locales/te.json';
-import kn from './locales/kn.json';
-import ml from './locales/ml.json';
 
 export type SupportedLocale = 'en' | 'hi' | 'mr' | 'bn' | 'gu' | 'pa' | 'ta' | 'te' | 'kn' | 'ml';
 
-export const LOCALES: Record<SupportedLocale, Record<string, any>> = {
+// In-memory dictionary cache for loaded locales (English is pre-loaded as baseline)
+export const LOADED_LOCALES: Record<SupportedLocale, Record<string, any> | undefined> = {
   en,
-  hi,
-  mr,
-  bn,
-  gu,
-  pa,
-  ta,
-  te,
-  kn,
-  ml,
+  hi: undefined,
+  mr: undefined,
+  bn: undefined,
+  gu: undefined,
+  pa: undefined,
+  ta: undefined,
+  te: undefined,
+  kn: undefined,
+  ml: undefined,
 };
+
+// Dynamic loaders for on-demand dictionary chunk splitting
+const LOCALE_LOADERS: Record<SupportedLocale, () => Promise<{ default: Record<string, any> }>> = {
+  en: () => Promise.resolve({ default: en }),
+  hi: () => import('./locales/hi.json'),
+  mr: () => import('./locales/mr.json'),
+  bn: () => import('./locales/bn.json'),
+  gu: () => import('./locales/gu.json'),
+  pa: () => import('./locales/pa.json'),
+  ta: () => import('./locales/ta.json'),
+  te: () => import('./locales/te.json'),
+  kn: () => import('./locales/kn.json'),
+  ml: () => import('./locales/ml.json'),
+};
+
+const IN_FLIGHT_LOADS = new Map<SupportedLocale, Promise<Record<string, any>>>();
+
+export async function loadLocale(lang: string): Promise<Record<string, any>> {
+  const targetLocale = (lang in LOCALE_LOADERS ? lang : 'en') as SupportedLocale;
+  
+  if (LOADED_LOCALES[targetLocale]) {
+    return LOADED_LOCALES[targetLocale]!;
+  }
+
+  if (IN_FLIGHT_LOADS.has(targetLocale)) {
+    return IN_FLIGHT_LOADS.get(targetLocale)!;
+  }
+
+  const loadPromise = LOCALE_LOADERS[targetLocale]()
+    .then((mod) => {
+      const dict = mod.default || mod;
+      LOADED_LOCALES[targetLocale] = dict;
+      IN_FLIGHT_LOADS.delete(targetLocale);
+      return dict;
+    })
+    .catch((err) => {
+      console.warn(`[i18n] Failed to load locale '${targetLocale}', falling back to 'en':`, err);
+      IN_FLIGHT_LOADS.delete(targetLocale);
+      return en;
+    });
+
+  IN_FLIGHT_LOADS.set(targetLocale, loadPromise);
+  return loadPromise;
+}
+
+export function isLocaleLoaded(lang: string): boolean {
+  const targetLocale = (lang in LOADED_LOCALES ? lang : 'en') as SupportedLocale;
+  return LOADED_LOCALES[targetLocale] !== undefined;
+}
+
+// Backward-compatible dictionary accessor
+export const LOCALES = new Proxy(LOADED_LOCALES as Record<SupportedLocale, Record<string, any>>, {
+  get(target, prop: string) {
+    const locale = prop as SupportedLocale;
+    return target[locale] || target.en;
+  }
+});
 
 function toCamelCase(str: string): string {
   return str.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
@@ -76,12 +125,12 @@ export function translate(
   key: string,
   params?: Record<string, string | number>
 ): string {
-  const targetLocale = (LOCALES[lang as SupportedLocale] ? lang : 'en') as SupportedLocale;
-  const dict = LOCALES[targetLocale];
-  const fallbackDict = LOCALES.en;
+  const targetLocale = (lang in LOADED_LOCALES ? lang : 'en') as SupportedLocale;
+  const dict = LOADED_LOCALES[targetLocale];
+  const fallbackDict = LOADED_LOCALES.en || en;
 
   // Try target language
-  let val = getNestedValue(dict, key);
+  let val = dict ? getNestedValue(dict, key) : undefined;
 
   // Fallback to English
   if (val === undefined && targetLocale !== 'en') {

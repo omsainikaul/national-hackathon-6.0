@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState, useMemo, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useMemo, useCallback, useRef, type ReactNode } from 'react';
 import { type SupportedReportLanguage, SUPPORTED_REPORT_LANGUAGES } from '../types';
-import { translate } from '../i18n';
+import { translate, loadLocale, isLocaleLoaded } from '../i18n';
 
 export const LANGUAGE_STORAGE_KEY = 'metrcheck_report_language';
 
@@ -10,6 +10,7 @@ interface LanguageContextType {
   currentLanguage: SupportedReportLanguage;
   supportedLanguages: SupportedReportLanguage[];
   t: (key: string, params?: Record<string, string | number>) => string;
+  isLanguageLoading: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -27,7 +28,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     return 'en';
   });
 
-  const setLanguage = (langCode: string) => {
+  const [loadedVersion, setLoadedVersion] = useState(0);
+  const [isLanguageLoading, setIsLanguageLoading] = useState(false);
+  const activeRequestIdRef = useRef(0);
+
+  const setLanguage = useCallback((langCode: string) => {
     const valid = SUPPORTED_REPORT_LANGUAGES.some(l => l.code === langCode);
     const target = valid ? langCode : 'en';
     setSelectedLanguageState(target);
@@ -36,7 +41,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     } catch {
       // Ignore
     }
-  };
+  }, []);
 
   useEffect(() => {
     try {
@@ -44,15 +49,32 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     } catch {
       // Ignore
     }
+
+    if (selectedLanguage === 'en' || isLocaleLoaded(selectedLanguage)) {
+      setIsLanguageLoading(false);
+      return;
+    }
+
+    const currentRequestId = ++activeRequestIdRef.current;
+    setIsLanguageLoading(true);
+
+    loadLocale(selectedLanguage).then(() => {
+      // Prevent stale slower request from overwriting a newer language selection
+      if (currentRequestId === activeRequestIdRef.current) {
+        setIsLanguageLoading(false);
+        setLoadedVersion(v => v + 1);
+      }
+    });
   }, [selectedLanguage]);
 
   const currentLanguage = useMemo(() => {
     return SUPPORTED_REPORT_LANGUAGES.find(l => l.code === selectedLanguage) || SUPPORTED_REPORT_LANGUAGES[0];
   }, [selectedLanguage]);
 
+  // t is memoized against selectedLanguage AND loadedVersion so components re-render when dictionary arrives
   const t = useCallback((key: string, params?: Record<string, string | number>) => {
     return translate(selectedLanguage, key, params);
-  }, [selectedLanguage]);
+  }, [selectedLanguage, loadedVersion]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <LanguageContext.Provider
@@ -62,6 +84,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         currentLanguage,
         supportedLanguages: SUPPORTED_REPORT_LANGUAGES,
         t,
+        isLanguageLoading,
       }}
     >
       {children}
@@ -76,3 +99,4 @@ export function useLanguage(): LanguageContextType {
   }
   return context;
 }
+

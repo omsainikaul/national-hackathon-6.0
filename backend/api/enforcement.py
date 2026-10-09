@@ -8,6 +8,7 @@ Phase 4B Architecture:
 """
 import io
 import json
+import logging
 import uuid
 import asyncio
 import sqlite3
@@ -15,6 +16,8 @@ import threading
 from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any
 from pydantic import BaseModel, Field
+
+logger = logging.getLogger(__name__)
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import StreamingResponse
@@ -98,42 +101,110 @@ def _now_iso() -> str:
 
 def _violations_from_analysis(data: dict) -> list:
     """Convert stored compliance checks into {'severity','what','why','source_reference','rule_id'} dicts."""
+    if not isinstance(data, dict):
+        logger.error(f"[Enforcement] Cannot extract violations from non-dict data: {type(data).__name__}")
+        raise ValueError(f"Analysis data must be a dictionary, got {type(data).__name__}")
+
+    record_id = data.get("id") or data.get("analysis_id") or data.get("case_reference") or "unknown"
     violations = []
-    try:
-        comp = json.loads(data["compliance_result"]) if isinstance(data["compliance_result"], str) else data.get("compliance_result") or {}
-        for c in comp.get("checks", []):
-            status_val = (c.get("status") or "").upper()
+
+    raw_comp = data.get("compliance_result")
+    comp = {}
+
+    if raw_comp is not None:
+        if isinstance(raw_comp, str):
+            if raw_comp.strip():
+                try:
+                    comp = json.loads(raw_comp)
+                except json.JSONDecodeError as e:
+                    logger.error(f"[Enforcement] Failed to parse compliance_result JSON for record '{record_id}': {e}")
+                    raise ValueError(f"Malformed compliance_result JSON in analysis '{record_id}': {e}") from e
+                if not isinstance(comp, dict):
+                    logger.error(f"[Enforcement] Parsed compliance_result is not a dictionary for record '{record_id}': {type(comp).__name__}")
+                    raise ValueError(f"Invalid compliance_result structure in analysis '{record_id}': expected dict, got {type(comp).__name__}")
+            else:
+                comp = {}
+        elif hasattr(raw_comp, "model_dump"):
+            comp = raw_comp.model_dump()
+        elif hasattr(raw_comp, "dict") and callable(raw_comp.dict):
+            comp = raw_comp.dict()
+        elif isinstance(raw_comp, dict):
+            comp = raw_comp
+        else:
+            logger.error(f"[Enforcement] Invalid compliance_result type for record '{record_id}': {type(raw_comp).__name__}")
+            raise ValueError(f"Invalid compliance_result data type in analysis '{record_id}': {type(raw_comp).__name__}")
+
+    raw_checks = comp.get("checks", [])
+    if raw_checks is None:
+        raw_checks = []
+    elif not isinstance(raw_checks, list):
+        logger.error(f"[Enforcement] Malformed 'checks' in compliance_result for record '{record_id}': expected list, got {type(raw_checks).__name__}")
+        raise ValueError(f"Malformed 'checks' list in compliance_result for analysis '{record_id}': expected list, got {type(raw_checks).__name__}")
+
+    for idx, c in enumerate(raw_checks):
+        if hasattr(c, "model_dump"):
+            c_dict = c.model_dump()
+        elif hasattr(c, "dict") and callable(c.dict):
+            c_dict = c.dict()
+        elif isinstance(c, dict):
+            c_dict = c
+        else:
+            logger.warning(f"[Enforcement] Skipping malformed check at index {idx} in record '{record_id}': expected dict, got {type(c).__name__}")
+            continue
+
+        try:
+            status_val = str(c_dict.get("status") or "").upper()
             if status_val in ("FAIL", "FAILED", "NON_COMPLIANT"):
+                field_str = c_dict.get("field_label") or c_dict.get("field") or "Mandatory Declaration"
+                reason_str = c_dict.get("reason") or c_dict.get("message") or c_dict.get("explanation") or "not declared or non-compliant"
+                rule_id_str = str(c_dict.get("rule_id") or "LMPC Rules, 2011")
+                is_req = c_dict.get("required", True)
+                if not isinstance(is_req, bool):
+                    is_req = True
+
                 violations.append({
-                    "severity": "high" if c.get("required", True) else "medium",
-                    "rule_id": c.get("rule_id", ""),
-                    "what": f"{c.get('field_label') or c.get('field')} — {c.get('reason') or c.get('message') or 'not declared'}",
-                    "why": c.get("rule_id", "Legal Metrology (PC) Rules, 2011"),
-                    "source_reference": c.get("rule_id", "LMPC Rules, 2011"),
+                    "severity": "high" if is_req else "medium",
+                    "rule_id": rule_id_str,
+                    "what": f"{field_str} — {reason_str}",
+                    "why": c_dict.get("source_reference") or c_dict.get("source_name") or rule_id_str or "Legal Metrology (PC) Rules, 2011",
+                    "source_reference": c_dict.get("source_reference") or rule_id_str or "LMPC Rules, 2011",
                 })
-    except Exception:
-        pass
+        except Exception as item_err:
+            logger.warning(f"[Enforcement] Error processing check at index {idx} in record '{record_id}': {item_err}")
+            continue
 
     # Include font-size / readability failure if present
-    try:
-        import ast
-        fs = data.get("font_size_analysis") or data.get("font_size_analysis_json")
-        if fs:
-            if isinstance(fs, str):
+    fs = data.get("font_size_analysis") or data.get("font_size_analysis_json")
+    if fs:
+        fs_dict = None
+        if isinstance(fs, str):
+            try:
+                fs_dict = json.loads(fs)
+            except Exception:
                 try:
-                    fs = json.loads(fs)
-                except Exception:
-                    fs = ast.literal_eval(fs)
-            if isinstance(fs, dict) and (fs.get("rule_12_verdict") or "").startswith("FAIL"):
+                    import ast
+                    fs_dict = ast.literal_eval(fs)
+                except Exception as fs_err:
+                    logger.warning(f"[Enforcement] Could not parse font_size_analysis for record '{record_id}': {fs_err}")
+                    fs_dict = None
+        elif isinstance(fs, dict):
+            fs_dict = fs
+        else:
+            logger.warning(f"[Enforcement] Unexpected font_size_analysis type for record '{record_id}': {type(fs).__name__}")
+
+        if isinstance(fs_dict, dict):
+            verdict = str(fs_dict.get("rule_12_verdict") or "").upper()
+            if verdict.startswith("FAIL"):
+                font_ht = fs_dict.get("net_quantity_font_height_mm", "unknown")
+                min_ht = fs_dict.get("min_required_font_height_mm", "unknown")
                 violations.append({
                     "severity": "medium",
                     "rule_id": "LM-012",
-                    "what": f"Rule 12 font-size violation — net qty font {fs.get('net_quantity_font_height_mm')}mm below required {fs.get('min_required_font_height_mm')}mm",
+                    "what": f"Rule 12 font-size violation — net qty font {font_ht}mm below required {min_ht}mm",
                     "why": "Rule 12, LMPC Rules, 2011",
                     "source_reference": "Rule 12",
                 })
-    except Exception:
-        pass
+
     return violations
 
 
@@ -227,7 +298,10 @@ async def create_enforcement_case_endpoint(
         case_id = f"case-{uuid.uuid4().hex[:8]}"
         case_ref = generate_case_reference()
 
-        violations = _violations_from_analysis(analysis)
+        try:
+            violations = _violations_from_analysis(analysis)
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=f"Invalid compliance data in analysis: {e}")
         viol_count = len(violations)
         auto_summary = req.violation_summary or (
             f"{viol_count} statutory violation(s) identified on '{analysis.get('product_name', 'product')}'"
@@ -402,7 +476,13 @@ async def get_enforcement_case_detail_endpoint(
 
     # Fetch source analysis
     analysis = await get_analysis(case["analysis_id"])
-    violations = _violations_from_analysis(analysis) if analysis else []
+    violations = []
+    if analysis:
+        try:
+            violations = _violations_from_analysis(analysis)
+        except ValueError as e:
+            logger.warning(f"[Enforcement] Error extracting violations for case '{case['id']}': {e}")
+            violations = []
 
     # Fetch source review if linked
     review = None
@@ -711,7 +791,10 @@ async def calculate_and_save_case_penalty(
     if not analysis:
         raise HTTPException(status_code=404, detail=f"Analysis '{case['analysis_id']}' not found.")
 
-    violations = _violations_from_analysis(analysis)
+    try:
+        violations = _violations_from_analysis(analysis)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid compliance data in analysis: {e}")
     calc_res = estimate_penalty(
         violations,
         repeat_offence=req.repeat_offence,
@@ -816,7 +899,10 @@ async def create_notice_for_case_endpoint(
     if not analysis:
         raise HTTPException(status_code=404, detail=f"Analysis '{case['analysis_id']}' not found.")
 
-    violations = _violations_from_analysis(analysis)
+    try:
+        violations = _violations_from_analysis(analysis)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid compliance data in analysis: {e}")
     
     # Notice content generation
     if req.custom_content:
@@ -963,7 +1049,10 @@ async def penalty_estimate_compat(req: PenaltyRequest, user: dict = Depends(get_
 
     check_tenant_access(user, data, raise_exception=True)
 
-    violations = _violations_from_analysis(data)
+    try:
+        violations = _violations_from_analysis(data)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid compliance data: {e}")
     result = estimate_penalty(
         violations,
         repeat_offence=req.repeat_offence,
@@ -1001,8 +1090,8 @@ async def penalty_estimate_compat(req: PenaltyRequest, user: dict = Depends(get_
             result["case_id"] = case["id"]
             result["case_reference"] = case["case_reference"]
             result["penalty_record_id"] = pen_id
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"[Enforcement] Failed to auto-persist penalty calculation on linked case for analysis '{req.analysis_id}': {e}")
 
     return result
 
@@ -1018,7 +1107,10 @@ async def show_cause_compat(req: NoticeRequest, user: dict = Depends(get_current
 
     check_tenant_access(user, data, raise_exception=True)
 
-    violations = _violations_from_analysis(data)
+    try:
+        violations = _violations_from_analysis(data)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid compliance data: {e}")
     if not violations:
         return {
             "notice": "No violations recorded for this analysis — show-cause notice is not applicable.",
@@ -1069,7 +1161,7 @@ async def show_cause_compat(req: NoticeRequest, user: dict = Depends(get_current
             resp["case_reference"] = case["case_reference"]
             resp["notice_id"] = n_id
             resp["notice_reference"] = n_ref
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"[Enforcement] Failed to auto-persist notice on linked case for analysis '{req.analysis_id}': {e}")
 
     return resp

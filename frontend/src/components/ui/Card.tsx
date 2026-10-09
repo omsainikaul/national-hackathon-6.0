@@ -34,15 +34,15 @@ export default function Card({
   const resolvedBodyClassName = bodyClassName !== undefined ? bodyClassName : (compact ? 'p-4' : 'p-6');
 
   return (
-    <div id={id} className={`bg-white dark:bg-slate-900 rounded-2xl shadow-2xs border border-slate-200/90 dark:border-slate-800 overflow-hidden transition-all duration-200 ${className}`}>
+    <div id={id} className={`bg-white dark:bg-[#101A2C] rounded-2xl shadow-2xs border border-slate-200/90 dark:border-white/10 overflow-hidden transition-all duration-200 ${className}`}>
       {(title || Icon || action || collapsible) && (
         <div 
-          className={`${headerPadding} border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3 bg-slate-50/60 dark:bg-slate-800/40 ${collapsible ? 'cursor-pointer hover:bg-slate-100/60 dark:hover:bg-slate-800/60 transition-colors' : ''}`}
+          className={`${headerPadding} border-b border-slate-100 dark:border-white/10 flex items-center justify-between gap-3 bg-slate-50/70 dark:bg-[#173B57]/20 ${collapsible ? 'cursor-pointer hover:bg-slate-100/70 dark:hover:bg-[#173B57]/40 transition-colors' : ''}`}
           onClick={() => collapsible && setIsOpen(!isOpen)}
         >
           <div className="flex items-center gap-3">
             {Icon && (
-              <div className="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+              <div className="p-2 rounded-xl bg-white dark:bg-[#101A2C] border border-slate-200/80 dark:border-white/10 shadow-2xs">
                 <Icon className={`w-4 h-4 ${iconColor}`} />
               </div>
             )}
@@ -58,7 +58,7 @@ export default function Card({
               </div>
             )}
             {collapsible && (
-              <div className="p-1 rounded-md text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+              <div className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-white/10 transition-colors">
                 {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </div>
             )}

@@ -21,13 +21,13 @@ export default function ScoreCircle({
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (safeScore / 100) * circumference;
 
-  let strokeColor = 'text-red-500 stroke-red-500';
-  let trackColor = 'text-red-100 dark:text-red-950/60 stroke-red-100/70 dark:stroke-red-950/70';
-  let scoreColor = 'text-slate-900 dark:text-slate-100';
+  let strokeColor = 'text-rose-500 stroke-rose-500';
+  let trackColor = 'text-rose-100 dark:text-rose-950/60 stroke-rose-100/70 dark:stroke-rose-950/70';
+  let scoreColor = 'text-slate-900 dark:text-white';
 
   if (safeScore >= 90) {
-    strokeColor = 'text-emerald-500 stroke-emerald-500';
-    trackColor = 'text-emerald-100 dark:text-emerald-950/60 stroke-emerald-100/70 dark:stroke-emerald-950/70';
+    strokeColor = 'text-[#35C6B0] stroke-[#35C6B0]';
+    trackColor = 'text-teal-100 dark:text-[#173B57]/60 stroke-teal-100/70 dark:stroke-[#173B57]/80';
   } else if (safeScore >= 70) {
     strokeColor = 'text-amber-500 stroke-amber-500';
     trackColor = 'text-amber-100 dark:text-amber-950/60 stroke-amber-100/70 dark:stroke-amber-950/70';

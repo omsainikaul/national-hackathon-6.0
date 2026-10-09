@@ -509,7 +509,7 @@ export default function AnalyzeListing() {
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2.5">
-            <ClipboardCheck className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
+            <ClipboardCheck className="w-7 h-7 text-teal-600 dark:text-[#35C6B0]" />
             <span>{t('merchant.listing_check.title')}</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
@@ -526,7 +526,7 @@ export default function AnalyzeListing() {
             type="button"
             onClick={handleLoadSample}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/80 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors shadow-2xs cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-teal-50 dark:bg-[#101A2C] text-teal-700 dark:text-[#35C6B0] border border-teal-200/80 dark:border-white/10 hover:bg-teal-100 dark:hover:bg-white/5 transition-colors shadow-2xs cursor-pointer disabled:opacity-50"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>{t('merchant.listing_check.load_sample')}</span>
@@ -544,7 +544,7 @@ export default function AnalyzeListing() {
             type="button"
             onClick={handleRunCompliance}
             disabled={loading}
-            className="inline-flex items-center gap-2 px-4.5 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-950/30 transition-all cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-4.5 py-2 rounded-xl text-xs font-bold text-white bg-teal-600 hover:bg-teal-500 shadow-sm shadow-teal-950/30 transition-all cursor-pointer disabled:opacity-50"
           >
             {loading ? (
               <>
@@ -569,7 +569,7 @@ export default function AnalyzeListing() {
             onClick={() => setMode('STRUCTURED')}
             className={`px-4 py-2.5 text-xs font-bold border-b-2 transition-colors flex items-center gap-2 cursor-pointer ${
               mode === 'STRUCTURED'
-                ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400 dark:border-indigo-400'
+                ? 'border-teal-600 text-teal-600 dark:text-[#35C6B0] dark:border-[#35C6B0]'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
             }`}
           >
@@ -581,7 +581,7 @@ export default function AnalyzeListing() {
             onClick={() => setMode('RAW_TEXT')}
             className={`px-4 py-2.5 text-xs font-bold border-b-2 transition-colors flex items-center gap-2 cursor-pointer ${
               mode === 'RAW_TEXT'
-                ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400 dark:border-indigo-400'
+                ? 'border-teal-600 text-teal-600 dark:text-[#35C6B0] dark:border-[#35C6B0]'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
             }`}
           >
@@ -596,7 +596,7 @@ export default function AnalyzeListing() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <label htmlFor="master-sku-select" className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-              <Package className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <Package className="w-4 h-4 text-teal-600 dark:text-[#35C6B0]" />
               <span>{t('sku_workflow.link_to_sku')}</span>
               <span className="text-[10px] font-normal text-slate-400">({t('analysis.slots.optional')})</span>
             </label>
@@ -608,7 +608,7 @@ export default function AnalyzeListing() {
           <div className="flex items-center gap-2">
             {loadingProducts ? (
               <div className="flex items-center gap-1.5 text-xs text-slate-500 py-1.5 px-3">
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-500" />
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-teal-500" />
                 <span>{t('sku_workflow.loading_products')}</span>
               </div>
             ) : productLoadError ? (
@@ -620,7 +620,7 @@ export default function AnalyzeListing() {
                 id="master-sku-select"
                 value={selectedProductId}
                 onChange={(e) => setSelectedProductId(e.target.value)}
-                className="text-xs px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none cursor-pointer max-w-xs sm:max-w-md truncate"
+                className="text-xs px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-medium focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none cursor-pointer max-w-xs sm:max-w-md truncate"
                 aria-label={t('sku_workflow.link_to_sku')}
               >
                 <option value="">{t('sku_workflow.no_linked_sku')}</option>
@@ -672,13 +672,13 @@ export default function AnalyzeListing() {
 
       {/* ── Loading Overlay / Progress ────────────────────────────── */}
       {loading && (
-        <div className="p-6 bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 rounded-2xl flex items-center gap-4">
-          <Loader2 className="w-6 h-6 text-indigo-600 dark:text-indigo-400 animate-spin shrink-0" />
+        <div className="p-6 bg-teal-50/70 dark:bg-teal-950/20 border border-teal-100 dark:border-teal-800/40 rounded-2xl flex items-center gap-4">
+          <Loader2 className="w-6 h-6 text-teal-600 dark:text-[#35C6B0] animate-spin shrink-0" />
           <div className="space-y-0.5">
-            <h4 className="text-xs font-bold text-indigo-950 dark:text-indigo-200">
+            <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100">
               {loadingStep || 'Evaluating Statutory Compliance…'}
             </h4>
-            <p className="text-[11px] text-indigo-700 dark:text-indigo-300">
+            <p className="text-[11px] text-teal-800 dark:text-teal-300">
               Screening 14+ mandatory declarations against Legal Metrology Rules and FSSAI standards. Directing to Results...
             </p>
           </div>
@@ -695,13 +695,13 @@ export default function AnalyzeListing() {
               title="Product Classification"
               subtitle="Select commodity domain to enable relevant statutory declaration fields"
               icon={Package}
-              iconColor="text-indigo-600 dark:text-indigo-400"
+              iconColor="text-teal-600 dark:text-[#35C6B0]"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <label
                   className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
                     formData.productType === 'FOOD'
-                      ? 'bg-indigo-50/60 dark:bg-indigo-950/40 border-indigo-300 dark:border-indigo-700 ring-2 ring-indigo-500/20'
+                      ? 'bg-teal-50/60 dark:bg-teal-950/30 border-teal-300 dark:border-teal-700 ring-2 ring-teal-500/20'
                       : 'border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40'
                   }`}
                 >
@@ -710,7 +710,7 @@ export default function AnalyzeListing() {
                     name="productType"
                     checked={formData.productType === 'FOOD'}
                     onChange={() => updateField('productType', 'FOOD')}
-                    className="mt-1 text-indigo-600 focus:ring-indigo-500"
+                    className="mt-1 text-teal-600 focus:ring-teal-500"
                   />
                   <div>
                     <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900 dark:text-slate-100">
@@ -726,7 +726,7 @@ export default function AnalyzeListing() {
                 <label
                   className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
                     formData.productType === 'NON_FOOD'
-                      ? 'bg-indigo-50/60 dark:bg-indigo-950/40 border-indigo-300 dark:border-indigo-700 ring-2 ring-indigo-500/20'
+                      ? 'bg-teal-50/60 dark:bg-teal-950/30 border-teal-300 dark:border-teal-700 ring-2 ring-teal-500/20'
                       : 'border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40'
                   }`}
                 >
@@ -735,7 +735,7 @@ export default function AnalyzeListing() {
                     name="productType"
                     checked={formData.productType === 'NON_FOOD'}
                     onChange={() => updateField('productType', 'NON_FOOD')}
-                    className="mt-1 text-indigo-600 focus:ring-indigo-500"
+                    className="mt-1 text-teal-600 focus:ring-teal-500"
                   />
                   <div>
                     <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900 dark:text-slate-100">
@@ -755,7 +755,7 @@ export default function AnalyzeListing() {
               title="1. Product Information & Pricing"
               subtitle="Core statutory declarations printed on the primary display panel"
               icon={Tag}
-              iconColor="text-indigo-600 dark:text-indigo-400"
+              iconColor="text-teal-600 dark:text-[#35C6B0]"
             >
               <div className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -768,7 +768,7 @@ export default function AnalyzeListing() {
                       value={formData.brand}
                       onChange={(e) => updateField('brand', e.target.value)}
                       placeholder="e.g. Alpino Health Foods"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                     />
                   </div>
 
@@ -781,7 +781,7 @@ export default function AnalyzeListing() {
                       value={formData.productName}
                       onChange={(e) => updateField('productName', e.target.value)}
                       placeholder="e.g. Super High Protein Rolled Oats - Dark Chocolate"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                     />
                   </div>
                 </div>
@@ -796,7 +796,7 @@ export default function AnalyzeListing() {
                       value={formData.genericName}
                       onChange={(e) => updateField('genericName', e.target.value)}
                       placeholder="e.g. Rolled Oats with Added Whey Protein"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                     />
                   </div>
 
@@ -809,7 +809,7 @@ export default function AnalyzeListing() {
                       value={formData.category}
                       onChange={(e) => updateField('category', e.target.value)}
                       placeholder="e.g. Packaged Food / Breakfast Cereals"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                     />
                   </div>
                 </div>
@@ -826,7 +826,7 @@ export default function AnalyzeListing() {
                         value={formData.netQtyAmount}
                         onChange={(e) => updateField('netQtyAmount', e.target.value)}
                         placeholder="e.g. 400"
-                        className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                        className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                       />
                       <select
                         value={formData.netQtyUnit}
@@ -855,7 +855,7 @@ export default function AnalyzeListing() {
                         value={formData.mrp}
                         onChange={(e) => updateField('mrp', e.target.value)}
                         placeholder="299.00"
-                        className="w-full text-xs pl-7 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                        className="w-full text-xs pl-7 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                       />
                     </div>
                     <span className="block text-[10px] text-slate-400 dark:text-slate-500 mt-1">
@@ -871,7 +871,7 @@ export default function AnalyzeListing() {
                       <button
                         type="button"
                         onClick={handleCalculateUSP}
-                        className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-0.5 cursor-pointer"
+                        className="text-[11px] font-bold text-teal-600 dark:text-[#35C6B0] hover:underline flex items-center gap-0.5 cursor-pointer"
                         title="Auto-calculate USP from Net Quantity and MRP"
                       >
                         <Calculator className="w-3 h-3" />
@@ -883,7 +883,7 @@ export default function AnalyzeListing() {
                       value={formData.unitSalePrice}
                       onChange={(e) => updateField('unitSalePrice', e.target.value)}
                       placeholder="e.g. Rs. 747.50 / kg"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                     />
                     <span className="block text-[10px] text-slate-400 dark:text-slate-500 mt-1">
                       Required by Rule 6(1)(e)
@@ -902,7 +902,7 @@ export default function AnalyzeListing() {
                       value={formData.batchNumber}
                       onChange={(e) => updateField('batchNumber', e.target.value)}
                       placeholder="BATCH-2026-10"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                     />
                   </div>
 
@@ -915,7 +915,7 @@ export default function AnalyzeListing() {
                       value={formData.mfgDate}
                       onChange={(e) => updateField('mfgDate', e.target.value)}
                       placeholder="e.g. 10/2026"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                     />
                   </div>
 
@@ -928,7 +928,7 @@ export default function AnalyzeListing() {
                       value={formData.expiryDate}
                       onChange={(e) => updateField('expiryDate', e.target.value)}
                       placeholder="e.g. 12 months"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                     />
                   </div>
 
@@ -941,7 +941,7 @@ export default function AnalyzeListing() {
                       value={formData.countryOfOrigin}
                       onChange={(e) => updateField('countryOfOrigin', e.target.value)}
                       placeholder="India"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                     />
                   </div>
                 </div>
@@ -953,7 +953,7 @@ export default function AnalyzeListing() {
               title="2. Manufacturer, Packer & Consumer Care"
               subtitle="Statutory entity identity, physical address and consumer grievance contact details"
               icon={Building2}
-              iconColor="text-indigo-600 dark:text-indigo-400"
+              iconColor="text-teal-600 dark:text-[#35C6B0]"
             >
               <div className="space-y-4">
                 <div>
@@ -965,7 +965,7 @@ export default function AnalyzeListing() {
                     value={formData.manufacturerName}
                     onChange={(e) => updateField('manufacturerName', e.target.value)}
                     placeholder="e.g. Alpino Health Foods Pvt. Ltd."
-                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                   />
                 </div>
 
@@ -978,7 +978,7 @@ export default function AnalyzeListing() {
                     value={formData.manufacturerAddress}
                     onChange={(e) => updateField('manufacturerAddress', e.target.value)}
                     placeholder="Plot No. 12, GIDC Industrial Estate, Surat, Gujarat - 395007"
-                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none resize-y"
+                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none resize-y"
                   />
                 </div>
 
@@ -996,7 +996,7 @@ export default function AnalyzeListing() {
                           updateField('marketerAddress', formData.manufacturerAddress);
                         }
                       }}
-                      className="rounded text-indigo-600 focus:ring-indigo-500"
+                      className="rounded text-teal-600 focus:ring-teal-500"
                     />
                     <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
                       Marketed by same entity as Manufacturer / Packer
@@ -1046,7 +1046,7 @@ export default function AnalyzeListing() {
                         value={formData.consumerCarePhone}
                         onChange={(e) => updateField('consumerCarePhone', e.target.value)}
                         placeholder="1800-123-4567"
-                        className="w-full text-xs pl-8 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                        className="w-full text-xs pl-8 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                       />
                     </div>
                   </div>
@@ -1062,7 +1062,7 @@ export default function AnalyzeListing() {
                         value={formData.consumerCareEmail}
                         onChange={(e) => updateField('consumerCareEmail', e.target.value)}
                         placeholder="care@alpino.store"
-                        className="w-full text-xs pl-8 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                        className="w-full text-xs pl-8 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                       />
                     </div>
                   </div>
@@ -1077,7 +1077,7 @@ export default function AnalyzeListing() {
                     value={formData.consumerCareAddress}
                     onChange={(e) => updateField('consumerCareAddress', e.target.value)}
                     placeholder="Plot No. 12, GIDC Industrial Estate, Surat, Gujarat - 395007"
-                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                   />
                 </div>
               </div>
@@ -1104,7 +1104,7 @@ export default function AnalyzeListing() {
                         onChange={(e) => updateField('fssaiLicense', e.target.value)}
                         placeholder="10716022000249"
                         maxLength={14}
-                        className="w-full text-xs pl-8 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none font-mono"
+                        className="w-full text-xs pl-8 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none font-mono"
                       />
                     </div>
                     <span className="block text-[10px] text-slate-400 dark:text-slate-500 mt-1">
@@ -1121,7 +1121,7 @@ export default function AnalyzeListing() {
                       value={formData.ingredients}
                       onChange={(e) => updateField('ingredients', e.target.value)}
                       placeholder="e.g. Rolled Oats (75%), Whey Protein Isolate (15%), Cocoa Powder (7%), Natural Sweetener (Stevia)."
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none resize-y"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none resize-y"
                     />
                   </div>
 
@@ -1134,7 +1134,7 @@ export default function AnalyzeListing() {
                       value={formData.allergenInfo}
                       onChange={(e) => updateField('allergenInfo', e.target.value)}
                       placeholder="e.g. Contains Gluten and Milk. Processed in a facility that also handles nuts and soy."
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none"
                     />
                   </div>
 
@@ -1146,7 +1146,7 @@ export default function AnalyzeListing() {
                       className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                     >
                       <div className="flex items-center gap-2">
-                        <Scale className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                        <Scale className="w-4 h-4 text-teal-600 dark:text-[#35C6B0]" />
                         <div>
                           <span className="font-bold text-xs text-slate-900 dark:text-slate-100 block">
                             Nutritional Facts Panel
@@ -1156,7 +1156,7 @@ export default function AnalyzeListing() {
                           </span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs text-indigo-600 dark:text-indigo-400 font-bold">
+                      <div className="flex items-center gap-1.5 text-xs text-teal-600 dark:text-[#35C6B0] font-bold">
                         <span>{showNutrition ? 'Collapse' : 'Expand Form'}</span>
                         {showNutrition ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                       </div>
@@ -1279,18 +1279,18 @@ export default function AnalyzeListing() {
               title="Declaration Coverage"
               subtitle="Pre-flight data entry readiness tracker"
               icon={Layers}
-              iconColor="text-indigo-600 dark:text-indigo-400"
+              iconColor="text-teal-600 dark:text-[#35C6B0]"
             >
               <div className="space-y-4">
                 {/* Progress bar */}
                 <div>
                   <div className="flex items-center justify-between text-xs font-bold mb-1.5">
                     <span className="text-slate-700 dark:text-slate-300">Form Readiness</span>
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono">{coveragePercent}%</span>
+                    <span className="text-teal-600 dark:text-[#35C6B0] font-mono">{coveragePercent}%</span>
                   </div>
                   <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
                     <div
-                      className="bg-indigo-600 dark:bg-indigo-500 h-full rounded-full transition-all duration-300"
+                      className="bg-teal-600 dark:bg-[#35C6B0] h-full rounded-full transition-all duration-300"
                       style={{ width: `${coveragePercent}%` }}
                     />
                   </div>
@@ -1326,7 +1326,7 @@ export default function AnalyzeListing() {
 
                 {/* Disclaimer Note */}
                 <div className="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed flex items-start gap-2 border border-slate-200/60 dark:border-slate-800">
-                  <Info className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                  <Info className="w-4 h-4 text-teal-500 shrink-0 mt-0.5" />
                   <span>
                     This checklist tracks data entry completeness. The authoritative statutory compliance verdict is computed by the Legal Metrology and FSSAI rules engine.
                   </span>
@@ -1337,7 +1337,7 @@ export default function AnalyzeListing() {
                   type="button"
                   onClick={handleRunCompliance}
                   disabled={loading}
-                  className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md shadow-indigo-950/20 flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
+                  className="w-full py-3 px-4 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-bold text-xs shadow-md shadow-teal-950/20 flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
                 >
                   {loading ? (
                     <>
@@ -1364,7 +1364,7 @@ export default function AnalyzeListing() {
             title="Product Listing / Label Text"
             subtitle="Paste complete product catalogue text, e-commerce listing, or OCR transcript"
             icon={FileText}
-            iconColor="text-indigo-600 dark:text-indigo-400"
+            iconColor="text-teal-600 dark:text-[#35C6B0]"
           >
             <div className="space-y-4">
               <textarea
@@ -1381,7 +1381,7 @@ export default function AnalyzeListing() {
                 className={`w-full font-mono text-xs sm:text-sm p-4 rounded-xl border bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 transition-all resize-y ${
                   validationError
                     ? 'border-red-300 dark:border-red-800 focus:ring-red-500/20 focus:border-red-500'
-                    : 'border-slate-200 dark:border-slate-800 focus:ring-indigo-500/20 focus:border-indigo-500'
+                    : 'border-slate-200 dark:border-slate-800 focus:ring-teal-500/20 focus:border-teal-500'
                 }`}
               />
 
@@ -1398,7 +1398,7 @@ export default function AnalyzeListing() {
                   type="button"
                   onClick={handleRunCompliance}
                   disabled={loading}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-950/30 transition-all cursor-pointer disabled:opacity-60"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-teal-600 hover:bg-teal-500 shadow-sm shadow-teal-950/30 transition-all cursor-pointer disabled:opacity-60"
                 >
                   {loading ? (
                     <>

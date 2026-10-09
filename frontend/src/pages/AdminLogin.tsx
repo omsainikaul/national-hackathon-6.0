@@ -55,12 +55,12 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col justify-between py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-slate-100">
+    <div className="min-h-screen w-full flex flex-col justify-between py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#101A2C] via-[#173B57]/50 to-[#101A2C] text-slate-100">
       {/* Top Header */}
       <div className="max-w-md w-full mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="p-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/30 group-hover:border-indigo-500/50 transition-colors">
-            <ShieldCheck className="w-6 h-6 text-indigo-400" />
+          <div className="p-2.5 rounded-xl bg-teal-500/15 border border-teal-500/30 group-hover:border-teal-500/50 transition-colors">
+            <ShieldCheck className="w-6 h-6 text-teal-400" />
           </div>
           <div>
             <span className="text-base font-extrabold tracking-tight text-white block">MetrCheck AI</span>
@@ -68,7 +68,7 @@ export default function AdminLogin() {
           </div>
         </Link>
 
-        <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-red-950/80 text-red-300 border border-red-800/60 flex items-center gap-1">
+        <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-rose-950/80 text-rose-300 border border-rose-800/60 flex items-center gap-1">
           <Lock className="w-3 h-3" />
           <span>Admin Portal</span>
         </span>
@@ -76,11 +76,11 @@ export default function AdminLogin() {
 
       {/* Main Admin Login Card */}
       <div className="max-w-md w-full mx-auto my-8">
-        <div className="rounded-3xl border border-indigo-500/30 bg-slate-900/90 backdrop-blur-md shadow-2xl overflow-hidden p-6 sm:p-8 space-y-6">
+        <div className="rounded-3xl border border-slate-700/80 bg-[#101A2C]/90 backdrop-blur-md shadow-2xl overflow-hidden p-6 sm:p-8 space-y-6">
           {/* Title and Scope Banner */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+              <span className="p-1.5 rounded-lg bg-teal-500/20 text-teal-400 border border-teal-500/30">
                 <ShieldAlert className="w-4 h-4" />
               </span>
               <h1 className="text-xl font-black text-white tracking-tight">
@@ -106,7 +106,7 @@ export default function AdminLogin() {
                   placeholder="Enter admin username"
                   autoComplete="username"
                   required
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700 focus:border-indigo-500 outline-none text-sm text-white placeholder:text-slate-500"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 text-sm text-white placeholder:text-slate-500 transition-colors"
                 />
               </div>
             </div>
@@ -118,7 +118,7 @@ export default function AdminLogin() {
                 </label>
                 <Link
                   to="/forgot-password"
-                  className="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+                  className="text-[11px] font-semibold text-teal-400 hover:text-teal-300 transition-colors"
                 >
                   Forgot password?
                 </Link>
@@ -132,7 +132,7 @@ export default function AdminLogin() {
                   placeholder="••••••••"
                   autoComplete="current-password"
                   required
-                  className="w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700 focus:border-indigo-500 outline-none text-sm text-white placeholder:text-slate-500"
+                  className="w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 text-sm text-white placeholder:text-slate-500 transition-colors"
                 />
                 <button
                   type="button"
@@ -146,7 +146,7 @@ export default function AdminLogin() {
             </div>
 
             {error && (
-              <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 leading-relaxed">
+              <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs text-rose-300 leading-relaxed">
                 {error}
               </div>
             )}
@@ -154,7 +154,7 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={busy}
-              className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-950/50 cursor-pointer transition-all active:scale-98"
+              className="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-60 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-teal-950/50 cursor-pointer transition-all active:scale-98"
             >
               {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <KeyRound className="w-4 h-4" />}
               <span>{busy ? 'Authenticating Administrator…' : 'Authenticate & Enter Admin Area'}</span>
@@ -180,7 +180,7 @@ export default function AdminLogin() {
       </div>
 
       {/* Footer */}
-      <div className="max-w-md w-full mx-auto text-center text-xs text-slate-600">
+      <div className="max-w-md w-full mx-auto text-center text-xs text-slate-500">
         MetrCheck AI Security Boundary · Directorate of Legal Metrology
       </div>
     </div>

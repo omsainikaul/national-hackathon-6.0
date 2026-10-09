@@ -14,6 +14,7 @@ import {
   ChevronUp,
   ChevronDown,
   Trash2,
+  Clock,
 } from 'lucide-react';
 import { api } from '../services/api';
 import { type AnalysisResponse, type ProductImageEvidence, type ComplianceCheck } from '../types';
@@ -192,26 +193,26 @@ export default function Results() {
 
   if (error || !data) {
     return (
-      <div className="max-w-2xl mx-auto my-12 p-8 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 text-center space-y-4">
+      <div className="max-w-2xl mx-auto my-12 p-8 bg-white dark:bg-[#101A2C] rounded-2xl shadow-xs border border-slate-200/90 dark:border-white/10 text-center space-y-4">
         <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('results.unable_to_load')}</h2>
         <p className="text-slate-600 dark:text-slate-400 text-sm">{error || 'No analysis data found for this product.'}</p>
         <div className="pt-4 flex flex-wrap justify-center gap-3">
           <button
             onClick={() => navigate('/demo')}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors text-sm shadow-sm cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#173B57] hover:bg-[#101A2C] dark:bg-teal-500 dark:hover:bg-teal-400 text-white dark:text-[#101A2C] rounded-xl font-semibold transition-colors text-xs sm:text-sm shadow-xs cursor-pointer"
           >
-            <Sparkles className="w-4 h-4 text-amber-300" />
+            <Sparkles className="w-4 h-4 text-amber-300 dark:text-[#101A2C]" />
             <span>{t('results.open_demo_benchmarks')}</span>
           </button>
           <button
             onClick={() => navigate('/analyze')}
-            className="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-sm cursor-pointer"
+            className="px-5 py-2.5 bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-200 rounded-xl font-semibold hover:bg-slate-200 dark:hover:bg-white/[0.1] transition-colors text-xs sm:text-sm cursor-pointer"
           >
             {t('results.upload_real_images')}
           </button>
           <button
             onClick={() => navigate('/history')}
-            className="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-sm cursor-pointer"
+            className="px-5 py-2.5 bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-200 rounded-xl font-semibold hover:bg-slate-200 dark:hover:bg-white/[0.1] transition-colors text-xs sm:text-sm cursor-pointer"
           >
             {t('results.view_history')}
           </button>
@@ -356,33 +357,38 @@ export default function Results() {
         }}
       />
 
-      {/* Demo Notice Banner */}
+      {/* Precomputed Demo Notice Banner */}
       {isDemo && (
-        <div className="bg-gradient-to-r from-amber-500/10 via-indigo-500/10 to-amber-500/10 dark:from-amber-950/30 dark:via-indigo-950/30 dark:to-amber-950/30 border border-amber-300/80 dark:border-amber-800/60 rounded-xl p-3 flex items-center justify-between gap-3 text-amber-950 dark:text-amber-200">
-          <div className="flex items-center gap-2.5">
-            <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+        <div className="bg-amber-500/10 dark:bg-amber-950/20 border border-amber-300/80 dark:border-amber-800/50 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-amber-950 dark:text-amber-200">
+          <div className="flex items-start sm:items-center gap-2.5">
+            <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5 sm:mt-0" />
             <div>
-              <span className="font-bold text-xs">{t('results.sih_demo_benchmark')}</span>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-200 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 uppercase tracking-wider ml-2">
-                {t('results.fixture_badge')}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-xs">PRECOMPUTED BENCHMARK DEMO</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-200 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 uppercase tracking-wider">
+                  Static Benchmark Fixture
+                </span>
+              </div>
+              <p className="text-xs text-amber-800/90 dark:text-amber-300/80 mt-0.5 leading-relaxed">
+                This scenario is a prepared demonstration benchmark for hackathon evaluation. No live OCR request was executed for this precomputed result.
+              </p>
             </div>
           </div>
           <button
             onClick={() => setShowDemoGuide(!showDemoGuide)}
-            className="inline-flex items-center gap-1 px-2.5 py-1 bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-700 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-amber-900 dark:text-amber-200 rounded-lg text-[11px] font-semibold transition-all shrink-0 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-[#101A2C] border border-amber-300/80 dark:border-amber-700/60 hover:bg-amber-50/80 dark:hover:bg-amber-950/40 text-amber-900 dark:text-amber-200 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer self-start sm:self-auto"
           >
-            <Info className="w-3 h-3" />
+            <Info className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
             <span>{showDemoGuide ? t('results.guide_btn_hide') : t('results.guide_btn_guide')}</span>
-            {showDemoGuide ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            {showDemoGuide ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
           </button>
         </div>
       )}
 
       {/* Collapsible Demo Guide */}
       {isDemo && showDemoGuide && (
-        <div className="bg-indigo-50/40 dark:bg-indigo-950/30 rounded-xl border border-indigo-100 dark:border-indigo-900/60 p-4">
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-[11px]">
+        <div className="bg-slate-50/80 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/10 p-4">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
             {[
               t('results.guide_step_1'),
               t('results.guide_step_2'),
@@ -390,8 +396,8 @@ export default function Results() {
               t('results.guide_step_4'),
               t('results.guide_step_5'),
             ].map(step => (
-              <div key={step} className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-indigo-100 dark:border-indigo-900/50">
-                <span className="font-bold text-indigo-900 dark:text-indigo-300">{step}</span>
+              <div key={step} className="bg-white dark:bg-[#101A2C] p-3 rounded-xl border border-slate-200/70 dark:border-white/10">
+                <span className="font-semibold text-slate-800 dark:text-slate-200">{step}</span>
               </div>
             ))}
           </div>
@@ -535,11 +541,11 @@ export default function Results() {
       </div>
 
       {/* ── Regulatory Screening Notice Banner ─────────────────────── */}
-      <div className="bg-slate-900 text-slate-200 rounded-xl p-4 border border-slate-800 flex items-start gap-3 text-[11px] leading-relaxed">
-        <ShieldCheck className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+      <div className="bg-[#101A2C] text-slate-200 rounded-2xl p-4 border border-white/10 flex items-start gap-3 text-xs leading-relaxed shadow-xs">
+        <ShieldCheck className="w-5 h-5 text-teal-400 shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <h4 className="text-xs font-semibold text-white">{t('results.screening_notice_title')}</h4>
-          <p className="text-slate-400">
+          <h4 className="text-xs font-bold text-white">{t('results.screening_notice_title')}</h4>
+          <p className="text-slate-400 text-xs">
             {t('results.screening_notice_desc')}
           </p>
         </div>
@@ -551,13 +557,13 @@ export default function Results() {
           role="dialog"
           aria-modal="true"
           aria-label={t('results.delete_modal_title')}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 dark:bg-slate-950/80 backdrop-blur-xs p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-xs p-4 animate-in fade-in duration-200"
         >
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4 border border-slate-200 dark:border-slate-800">
+          <div className="bg-white dark:bg-[#101A2C] rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200/90 dark:border-white/15">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-red-50 dark:bg-red-950/60 text-red-600 dark:text-red-400 rounded-xl">
-                  <AlertCircle className="w-6 h-6" />
+                <div className="p-2.5 bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 rounded-xl border border-rose-200/60 dark:border-rose-800/40">
+                  <AlertCircle className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">{t('results.delete_modal_title')}</h3>
@@ -566,15 +572,15 @@ export default function Results() {
               </div>
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
                 disabled={isDeleting}
                 aria-label="Close delete dialog"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/60 text-xs space-y-1.5">
+            <div className="p-3.5 bg-slate-50/80 dark:bg-white/[0.04] rounded-xl border border-slate-200/80 dark:border-white/10 text-xs space-y-1.5">
               <div className="flex justify-between">
                 <span className="text-slate-500 dark:text-slate-400 font-medium">{t('dashboard.table.product')}:</span>
                 <span className="text-slate-800 dark:text-slate-200 font-bold line-clamp-1">{data?.product_name || 'Unknown Product'}</span>
@@ -589,23 +595,23 @@ export default function Results() {
               </div>
             </div>
 
-            <p className="text-xs text-slate-600 dark:text-slate-400">
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
               {t('results.delete_modal_desc')}
             </p>
 
             {deleteError && (
-              <div className="p-3 bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-xs text-red-700 dark:text-red-300 flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+              <div className="p-3 bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2 rounded-xl">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
                 <span>{deleteError}</span>
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-3 pt-2">
+            <div className="flex items-center justify-end gap-2.5 pt-2">
               <button
                 type="button"
                 onClick={() => setShowDeleteModal(false)}
                 disabled={isDeleting}
-                className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold text-xs transition-colors cursor-pointer"
+                className="px-4 py-2.5 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] text-slate-700 dark:text-slate-200 rounded-xl font-semibold text-xs transition-colors cursor-pointer"
               >
                 {t('common.cancel') || 'Cancel'}
               </button>
@@ -613,7 +619,7 @@ export default function Results() {
                 type="button"
                 onClick={handleDeleteAnalysis}
                 disabled={isDeleting}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold text-xs shadow-sm transition-colors cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-semibold text-xs shadow-xs transition-colors cursor-pointer disabled:opacity-50"
               >
                 {isDeleting ? (
                   <>
@@ -638,44 +644,44 @@ export default function Results() {
           role="dialog"
           aria-modal="true"
           aria-label="Statutory Show-Cause Notice Draft"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-xs p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-xs p-4 animate-in fade-in duration-200"
         >
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-3xl w-full p-6 sm:p-8 space-y-5 border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-[#101A2C] rounded-2xl shadow-2xl max-w-3xl w-full p-6 sm:p-8 space-y-5 border border-slate-200/90 dark:border-white/15 max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="flex items-start justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+            <div className="flex items-start justify-between border-b border-slate-100 dark:border-white/10 pb-4">
               <div className="flex items-center gap-3">
                 <div className="p-3 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-2xl border border-amber-500/20">
-                  <Gavel className="w-6 h-6" />
+                  <Gavel className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Statutory Show-Cause Notice Draft</h3>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300">SECTION 36 / 38</span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-300/40 dark:border-amber-800/40">SECTION 36 / 38</span>
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Official legal notice generated by Enforcement Authority for non-compliant commodity</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Official legal notice generated by Enforcement Authority for non-compliant commodity</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setShowNoticeModal(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
                 aria-label="Close notice dialog"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Notice Printable Document Preview */}
-            <div id="printable-notice" className="p-6 rounded-2xl bg-amber-50/30 dark:bg-slate-950/60 border border-amber-200/80 dark:border-slate-800 space-y-4 font-serif text-slate-900 dark:text-slate-100 text-xs leading-relaxed">
+            <div id="printable-notice" className="p-6 rounded-2xl bg-amber-50/20 dark:bg-black/40 border border-amber-200/60 dark:border-white/10 space-y-4 font-serif text-slate-900 dark:text-slate-100 text-xs leading-relaxed">
               {/* Government Header */}
-              <div className="text-center space-y-1 pb-3 border-b border-slate-200 dark:border-slate-800">
+              <div className="text-center space-y-1 pb-3 border-b border-slate-200 dark:border-white/10">
                 <span className="text-[11px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 block font-sans">GOVERNMENT OF INDIA • ENFORCEMENT WING</span>
                 <h4 className="text-sm font-bold uppercase font-sans tracking-tight">DIRECTORATE OF LEGAL METROLOGY</h4>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 font-sans">{jurisdiction}</p>
               </div>
 
               {/* Notice Metadata */}
-              <div className="flex justify-between items-center text-[11px] font-mono border-b border-slate-100 dark:border-slate-800 pb-2">
+              <div className="flex justify-between items-center text-[11px] font-mono border-b border-slate-100 dark:border-white/10 pb-2">
                 <span><strong>Notice Ref:</strong> LM/ENF/2026/SCN-{(data?.id || '0000').substring(0, 8).toUpperCase()}</span>
                 <span><strong>Date:</strong> {new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
               </div>
@@ -688,12 +694,12 @@ export default function Results() {
               </div>
 
               {/* Subject */}
-              <div className="p-2.5 bg-amber-100/50 dark:bg-amber-950/40 rounded-lg border border-amber-300/80 dark:border-amber-800/60 font-sans font-bold text-xs text-amber-950 dark:text-amber-200">
+              <div className="p-2.5 bg-amber-100/50 dark:bg-amber-950/40 rounded-xl border border-amber-300/80 dark:border-amber-800/60 font-sans font-bold text-xs text-amber-950 dark:text-amber-200">
                 SUBJECT: STATUTORY NOTICE FOR CONTRAVENTION OF THE LEGAL METROLOGY ACT, 2009 READ WITH THE LEGAL METROLOGY (PACKAGED COMMODITIES) RULES, 2011.
               </div>
 
               {/* Notice Body */}
-              <div className="space-y-2 text-slate-800 dark:text-slate-200">
+              <div className="space-y-2 text-slate-800 dark:text-slate-200 font-sans">
                 <p>
                   WHEREAS an automated and evidence-linked statutory inspection of the packaged commodity <strong>"{data?.product_name}"</strong> was executed under the supervision of the authorized Enforcement Officer (ID: <code>{officerId}</code>);
                 </p>
@@ -704,7 +710,7 @@ export default function Results() {
                 {data?.compliance_result?.checks?.filter(c => c.status === 'FAIL').length ? (
                   data.compliance_result.checks.filter(c => c.status === 'FAIL').map((fc, i) => (
                     <div key={i} className="flex items-start gap-2 text-xs">
-                      <span className="font-mono font-bold text-red-600 dark:text-red-400 shrink-0">[{fc.rule_id}]:</span>
+                      <span className="font-mono font-bold text-rose-600 dark:text-rose-400 shrink-0">[{fc.rule_id}]:</span>
                       <span><strong>{fc.field_label}:</strong> {fc.reason || fc.explanation || 'Mandatory statutory declaration missing or non-compliant.'} (Ref: {fc.source_reference || 'Rule 6'})</span>
                     </div>
                   ))
@@ -718,7 +724,7 @@ export default function Results() {
                   NOW THEREFORE, under the powers conferred by <strong>Section 36 &amp; Section 38 of the Legal Metrology Act, 2009</strong>, you are hereby called upon to show cause within <strong>fifteen (15) working days</strong> from the receipt of this notice as to why penal proceedings should not be initiated against your enterprise.
                 </p>
 
-                <div className="p-3 bg-red-50 dark:bg-red-950/40 rounded-xl border border-red-200 dark:border-red-900/60 font-sans text-xs text-red-900 dark:text-red-200 space-y-1">
+                <div className="p-3.5 bg-rose-50 dark:bg-rose-950/40 rounded-xl border border-rose-200 dark:border-rose-900/60 font-sans text-xs text-rose-900 dark:text-rose-200 space-y-1">
                   <span className="font-bold block">STATUTORY PENALTY CLAUSES APPLICABLE:</span>
                   <p>• <strong>Section 36(1) First Offense:</strong> Fine extending up to <strong>₹25,000</strong> for non-standard packaging or missing declarations.</p>
                   <p>• <strong>Section 36(2) Subsequent Offense:</strong> Fine extending up to <strong>₹50,000</strong> and/or imprisonment for a term up to one year.</p>
@@ -726,7 +732,7 @@ export default function Results() {
               </div>
 
               {/* Signature Block */}
-              <div className="pt-4 flex justify-between items-end border-t border-slate-200 dark:border-slate-800 font-sans">
+              <div className="pt-4 flex justify-between items-end border-t border-slate-200 dark:border-white/10 font-sans">
                 <div className="text-[10px] text-slate-400">
                   <span>Digital Inspection ID: {data?.id}</span><br/>
                   <span>Compliance Screening Score: {Number(cr.score).toFixed(1)} / 100</span>
@@ -735,16 +741,16 @@ export default function Results() {
                   <div className="inline-block border-b border-slate-400 dark:border-slate-600 px-6 py-1 font-mono font-bold text-xs">
                     [Signed Electronically]
                   </div>
-                  <span className="block font-bold text-xs">Enforcement Officer (Legal Metrology)</span>
-                  <span className="block text-[11px] text-slate-500">Badge ID: {officerId}</span>
+                  <span className="block font-bold text-xs text-slate-800 dark:text-slate-200">Enforcement Officer (Legal Metrology)</span>
+                  <span className="block text-[11px] text-slate-500 dark:text-slate-400">Badge ID: {officerId}</span>
                 </div>
               </div>
             </div>
 
             {/* Modal Action Controls */}
             <div className="flex items-center justify-between gap-3 pt-2">
-              <span className="text-xs text-slate-500">
-                Officer: <strong>{officerId}</strong> ({roleInfo.label})
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                Officer: <strong className="text-slate-700 dark:text-slate-200">{officerId}</strong> ({roleInfo.label})
               </span>
               <div className="flex items-center gap-2.5">
                 <button
@@ -755,7 +761,7 @@ export default function Results() {
                     setNoticeCopied(true);
                     setTimeout(() => setNoticeCopied(false), 2500);
                   }}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-semibold text-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] text-slate-700 dark:text-slate-200 rounded-xl font-semibold text-xs transition-colors cursor-pointer"
                 >
                   {noticeCopied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{noticeCopied ? 'Notice Copied!' : 'Copy Notice Text'}</span>
@@ -763,7 +769,7 @@ export default function Results() {
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-xs shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#173B57] hover:bg-[#101A2C] dark:bg-teal-500 dark:hover:bg-teal-400 text-white dark:text-[#101A2C] rounded-xl font-semibold text-xs shadow-xs transition-all cursor-pointer"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Print / Save PDF Notice</span>

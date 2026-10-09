@@ -2,11 +2,15 @@ import os
 import sys
 import hashlib
 import aiosqlite
+import sqlite3
+import logging
 import json
 import uuid
 from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any, Tuple
 from config import settings, PROD_DATABASE_PATH
+
+logger = logging.getLogger(__name__)
 
 
 def _check_safety_guard():
@@ -1115,8 +1119,8 @@ async def create_user(username: str, password_hash: str, salt: str, role: str,
                     jurisdiction=jurisdiction or "National",
                     status="ACTIVE"
                 )
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.warning("Failed to auto-create default organization '%s' for user '%s': %s", resolved_org, username, exc)
 
     db = await get_db()
     try:
@@ -1128,7 +1132,19 @@ async def create_user(username: str, password_hash: str, salt: str, role: str,
               datetime.datetime.now().isoformat(timespec="seconds")))
         await db.commit()
         return True
-    except Exception:
+    except (sqlite3.IntegrityError, aiosqlite.IntegrityError) as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.debug("create_user duplicate constraint conflict for username '%s': %s", username, exc)
+        return False
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Unexpected database error in create_user for username '%s'", username)
         return False
     finally:
         await db.close()
@@ -1242,6 +1258,20 @@ async def update_user(username: str, full_name: str = None, jurisdiction: str = 
         )
         await db.commit()
         return cursor.rowcount > 0
+    except (sqlite3.IntegrityError, aiosqlite.IntegrityError) as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.debug("update_user constraint conflict for username '%s': %s", username, exc)
+        return False
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Unexpected database error in update_user for username '%s'", username)
+        return False
     finally:
         await db.close()
 
@@ -1278,7 +1308,19 @@ async def create_invited_user(username: str, email: str, role: str, full_name: s
         ))
         await db.commit()
         return True
-    except Exception:
+    except (sqlite3.IntegrityError, aiosqlite.IntegrityError) as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.debug("create_invited_user duplicate conflict for username '%s': %s", username, exc)
+        return False
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Unexpected database error in create_invited_user for username '%s'", username)
         return False
     finally:
         await db.close()
@@ -1317,6 +1359,13 @@ async def activate_user_account(username: str, password_hash: str, salt: str) ->
         ''', (password_hash, salt, now_iso, username))
         await db.commit()
         return cursor.rowcount > 0
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Unexpected database error activating user account for username '%s'", username)
+        return False
     finally:
         await db.close()
 
@@ -1334,6 +1383,13 @@ async def resend_invitation_record(username: str, token_hash: str, expires_at: s
         ''', (token_hash, expires_at, now_iso, username))
         await db.commit()
         return cursor.rowcount > 0
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Unexpected database error in resend_invitation_record for username '%s'", username)
+        return False
     finally:
         await db.close()
 
@@ -1349,6 +1405,13 @@ async def suspend_user(username: str) -> bool:
         ''', (username,))
         await db.commit()
         return cursor.rowcount > 0
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Unexpected database error in suspend_user for username '%s'", username)
+        return False
     finally:
         await db.close()
 
@@ -1364,6 +1427,13 @@ async def reactivate_user(username: str) -> bool:
         ''', (username,))
         await db.commit()
         return cursor.rowcount > 0
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Unexpected database error in reactivate_user for username '%s'", username)
+        return False
     finally:
         await db.close()
 
@@ -1379,6 +1449,13 @@ async def change_user_role(username: str, new_role: str) -> bool:
         ''', (new_role, username))
         await db.commit()
         return cursor.rowcount > 0
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Unexpected database error changing role to '%s' for username '%s'", new_role, username)
+        return False
     finally:
         await db.close()
 
@@ -1393,6 +1470,13 @@ async def revoke_invitation(username: str) -> bool:
         ''', (username,))
         await db.commit()
         return cursor.rowcount > 0
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Unexpected database error in revoke_invitation for username '%s'", username)
+        return False
     finally:
         await db.close()
 
@@ -1410,7 +1494,15 @@ async def log_account_audit_event(actor_username: str, target_username: str, eve
         ''', (actor_username, target_username, event_type, details, ip_address, now_iso))
         await db.commit()
         return True
-    except Exception:
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception(
+            "Failed to record account audit event '%s' for target '%s' by actor '%s'",
+            event_type, target_username, actor_username
+        )
         return False
     finally:
         await db.close()
@@ -1551,6 +1643,13 @@ async def approve_officer_access_request(request_id: str, admin_username: str, c
         ''', (now_iso, admin_username, created_user_id, request_id.strip()))
         await db.commit()
         return cursor.rowcount > 0
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Failed to approve officer access request '%s'", request_id)
+        return False
     finally:
         await db.close()
 
@@ -1568,6 +1667,13 @@ async def reject_officer_access_request(request_id: str, admin_username: str, re
         ''', (now_iso, admin_username, rejection_reason.strip(), request_id.strip()))
         await db.commit()
         return cursor.rowcount > 0
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Failed to reject officer access request '%s'", request_id)
+        return False
     finally:
         await db.close()
 
@@ -1579,6 +1685,13 @@ async def delete_user(username: str) -> bool:
         cursor = await db.execute("DELETE FROM users WHERE username = ?", (username,))
         await db.commit()
         return cursor.rowcount > 0
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Unexpected database error deleting user '%s'", username)
+        return False
     finally:
         await db.close()
 
@@ -1649,7 +1762,12 @@ async def create_password_reset_record(username: str, token_hash: str, expires_a
         ''', (username, token_hash, expires_at, now_iso))
         await db.commit()
         return True
-    except Exception:
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Failed to create password reset record for username '%s'", username)
         return False
     finally:
         await db.close()
@@ -1683,7 +1801,11 @@ async def apply_password_reset(username: str, reset_id: int, new_pw_hash: str, n
             (new_pw_hash, new_salt, username)
         )
         if cursor.rowcount == 0:
-            await db.rollback()
+            try:
+                await db.rollback()
+            except Exception:
+                pass
+            logger.warning("apply_password_reset failed: user '%s' not found or row not updated", username)
             return False
 
         # Mark reset token used
@@ -1693,8 +1815,12 @@ async def apply_password_reset(username: str, reset_id: int, new_pw_hash: str, n
         )
         await db.commit()
         return True
-    except Exception:
-        await db.rollback()
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception("Unexpected error in apply_password_reset for username '%s' (reset_id=%s)", username, reset_id)
         return False
     finally:
         await db.close()
@@ -2873,6 +2999,16 @@ async def log_security_event(
             "event_hash": event_hash,
             "created_at": now_iso
         }
+    except Exception as exc:
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        logger.exception(
+            "Failed to persist security audit event '%s' (actor='%s', resource='%s')",
+            event_type, actor_username, resource_id
+        )
+        raise exc
     finally:
         await db.close()
 

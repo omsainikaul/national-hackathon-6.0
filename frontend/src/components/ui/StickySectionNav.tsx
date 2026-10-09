@@ -239,11 +239,11 @@ export default function StickySectionNav({ sections, className = '', offset = 64
 
   return (
     <div
-      className={`sticky -top-4 sm:-top-6 lg:-top-8 z-20 pt-4 sm:pt-6 lg:pt-8 pb-2 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 bg-slate-50/95 dark:bg-slate-950/95 backdrop-blur-md transition-colors ${className}`}
+      className={`sticky -top-4 sm:-top-6 lg:-top-8 z-20 pt-4 sm:pt-6 lg:pt-8 pb-2 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 bg-slate-50/95 dark:bg-[#0A101D]/95 backdrop-blur-md transition-colors ${className}`}
     >
       <nav
         aria-label="Results sections navigation"
-        className="bg-slate-900 dark:bg-slate-900 border border-slate-800 rounded-xl shadow-md p-1 max-w-7xl mx-auto"
+        className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-xl shadow-md p-1 max-w-7xl mx-auto"
       >
         <div
           ref={navContainerRef}
@@ -254,7 +254,7 @@ export default function StickySectionNav({ sections, className = '', offset = 64
             <div key={group.name} className="flex items-center gap-1 shrink-0">
               {groupIdx > 0 && (
                 <div
-                  className="h-4 w-px bg-slate-800 mx-1 shrink-0"
+                  className="h-4 w-px bg-slate-200 dark:bg-white/10 mx-1 shrink-0"
                   aria-hidden="true"
                 />
               )}
@@ -271,15 +271,15 @@ export default function StickySectionNav({ sections, className = '', offset = 64
                     aria-selected={isActive}
                     aria-controls={section.id}
                     onClick={() => handleTabClick(section.id)}
-                    className={`h-9 px-3 sm:px-3.5 whitespace-nowrap text-xs sm:text-[13px] rounded-lg transition-all duration-150 inline-flex items-center gap-2 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
+                    className={`h-9 px-3 sm:px-3.5 whitespace-nowrap text-xs sm:text-[13px] rounded-lg transition-all duration-150 inline-flex items-center gap-2 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#35C6B0] ${
                       isActive
-                        ? 'bg-purple-950/50 text-purple-200 font-semibold border-b-2 border-purple-500 shadow-2xs'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border-b-2 border-transparent font-medium'
+                        ? 'bg-[#173B57]/10 dark:bg-[#173B57]/70 text-[#173B57] dark:text-[#5EEAD4] font-semibold border-b-2 border-[#173B57] dark:border-[#35C6B0] shadow-2xs'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-[#173B57]/40 border-b-2 border-transparent font-medium'
                     }`}
                   >
                     <Icon
                       className={`w-3.5 h-3.5 shrink-0 transition-colors ${
-                        isActive ? 'text-purple-400' : 'text-slate-400'
+                        isActive ? 'text-[#173B57] dark:text-[#35C6B0]' : 'text-slate-400'
                       }`}
                     />
                     <span>{section.label}</span>

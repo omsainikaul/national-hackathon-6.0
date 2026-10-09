@@ -13,10 +13,12 @@ async def health_check():
     """
     Health check endpoint. Returns live system status.
     - ocr_available: actual check against the OCR engine instance
+    - ocr_ready: whether the OCR engine is pre-warmed and ready for low-latency inference
     - database: lightweight real connectivity check (SELECT 1)
     - version: from version.py SYSTEM_VERSION (authoritative)
     """
     ocr_engine = get_ocr_engine()
+    ocr_ready = getattr(ocr_engine, "is_ready", lambda: False)()
 
     # Lightweight real database connectivity check
     db_status = "disconnected"
@@ -35,6 +37,7 @@ async def health_check():
     return {
         "status": "healthy" if db_status == "connected" else "degraded",
         "ocr_available": ocr_engine.is_available(),
+        "ocr_ready": ocr_ready,
         "ocr_engine": ocr_engine.__class__.__name__,
         "database": db_status,
         "version": SYSTEM_VERSION,

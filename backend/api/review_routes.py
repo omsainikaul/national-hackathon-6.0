@@ -362,7 +362,8 @@ async def correct_extracted_field(
             "field_name": req.field_name,
             "corrected_value": req.corrected_value,
             "human_score": human_res.get("score"),
-            "human_risk_level": human_res.get("risk_level")
+            "human_risk_level": human_res.get("risk_level"),
+            "recalculation_error": human_res.get("recalculation_error")
         }
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

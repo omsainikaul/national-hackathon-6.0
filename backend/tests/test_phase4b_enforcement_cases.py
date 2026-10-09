@@ -713,3 +713,201 @@ async def test_32_dashboard_metrics_aggregate():
     assert metrics["total_active_cases"] >= 1
     assert metrics["total_notices_served"] >= 1
     assert metrics["total_penalties_estimated_inr"] > 0
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+# DEF-P2-01: Violation Extraction Reliability & Validation Tests
+# ═════════════════════════════════════════════════════════════════════════════
+
+def test_violations_from_analysis_valid_extraction():
+    """DEF-P2-01 (1): Normal, valid compliance results produce the expected violation list."""
+    from api.enforcement import _violations_from_analysis
+    
+    data = {
+        "id": "ana_test_valid",
+        "compliance_result": {
+            "score": 40.0,
+            "status": "NON_COMPLIANT",
+            "checks": [
+                {
+                    "rule_id": "Rule 6(1)(e)",
+                    "field": "mrp",
+                    "field_label": "Maximum Retail Price",
+                    "status": "FAIL",
+                    "required": True,
+                    "reason": "Missing MRP declaration",
+                    "source_reference": "Rule 6(1)(e), LMPC Rules, 2011"
+                },
+                {
+                    "rule_id": "Rule 6(1)(a)",
+                    "field": "manufacturer",
+                    "field_label": "Manufacturer Name",
+                    "status": "PASS",
+                    "required": True,
+                    "reason": "Declared properly"
+                },
+                {
+                    "rule_id": "Rule 9",
+                    "field": "consumer_care",
+                    "field_label": "Consumer Care Details",
+                    "status": "NON_COMPLIANT",
+                    "required": False,
+                    "reason": "Incomplete contact details"
+                }
+            ]
+        },
+        "font_size_analysis": {
+            "rule_12_verdict": "FAIL",
+            "net_quantity_font_height_mm": 1.5,
+            "min_required_font_height_mm": 3.0
+        }
+    }
+    
+    violations = _violations_from_analysis(data)
+    assert len(violations) == 3
+    # Check MRP failure (high severity because required=True)
+    mrp_v = next(v for v in violations if v["rule_id"] == "Rule 6(1)(e)")
+    assert mrp_v["severity"] == "high"
+    assert "Maximum Retail Price" in mrp_v["what"]
+    assert mrp_v["source_reference"] == "Rule 6(1)(e), LMPC Rules, 2011"
+    
+    # Check Consumer care failure (medium severity because required=False)
+    cc_v = next(v for v in violations if v["rule_id"] == "Rule 9")
+    assert cc_v["severity"] == "medium"
+    
+    # Check Rule 12 font size violation
+    fs_v = next(v for v in violations if v["rule_id"] == "LM-012")
+    assert fs_v["severity"] == "medium"
+    assert "1.5mm" in fs_v["what"]
+    assert "3.0mm" in fs_v["what"]
+
+
+def test_violations_from_analysis_malformed_json_raises_valueerror(caplog):
+    """DEF-P2-01 (2): Malformed JSON compliance_result logs error and raises explicit ValueError."""
+    import logging
+    from api.enforcement import _violations_from_analysis
+    
+    data = {
+        "id": "ana_corrupted_json",
+        "compliance_result": '{"checks": [corrupted_json_content'
+    }
+    
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(ValueError) as exc_info:
+            _violations_from_analysis(data)
+    
+    assert "Malformed compliance_result JSON" in str(exc_info.value)
+    assert "ana_corrupted_json" in str(exc_info.value)
+    assert "ana_corrupted_json" in caplog.text
+
+
+def test_violations_from_analysis_invalid_type_raises_valueerror(caplog):
+    """DEF-P2-01 (2b): Non-dict, non-string compliance_result logs error and raises ValueError."""
+    import logging
+    from api.enforcement import _violations_from_analysis
+    
+    data = {
+        "id": "ana_bad_type",
+        "compliance_result": 12345
+    }
+    
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(ValueError) as exc_info:
+            _violations_from_analysis(data)
+            
+    assert "Invalid compliance_result data type" in str(exc_info.value)
+    assert "ana_bad_type" in str(exc_info.value)
+
+
+def test_violations_from_analysis_malformed_checks_list_raises_valueerror(caplog):
+    """DEF-P2-01 (2c): Checks attribute that is not a list raises ValueError."""
+    import logging
+    from api.enforcement import _violations_from_analysis
+    
+    data = {
+        "id": "ana_bad_checks_attr",
+        "compliance_result": {"checks": "not_a_list"}
+    }
+    
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(ValueError) as exc_info:
+            _violations_from_analysis(data)
+            
+    assert "Malformed 'checks' list" in str(exc_info.value)
+    assert "ana_bad_checks_attr" in str(exc_info.value)
+
+
+def test_violations_from_analysis_individual_malformed_check_isolated(caplog):
+    """DEF-P2-01 (3): A malformed individual check item logs a warning but does NOT discard valid violations."""
+    import logging
+    from api.enforcement import _violations_from_analysis
+    
+    data = {
+        "id": "ana_partial_malformed",
+        "compliance_result": {
+            "checks": [
+                {
+                    "rule_id": "Rule 6(1)(e)",
+                    "field": "mrp",
+                    "field_label": "Maximum Retail Price",
+                    "status": "FAIL",
+                    "required": True,
+                    "reason": "Missing MRP declaration"
+                },
+                None,  # Invalid check item
+                "string_instead_of_dict",  # Invalid check item
+                123,  # Invalid check item
+                {
+                    "rule_id": "Rule 11",
+                    "field": "net_quantity",
+                    "field_label": "Net Quantity",
+                    "status": "FAIL",
+                    "required": True,
+                    "reason": "Missing Net Quantity"
+                }
+            ]
+        }
+    }
+    
+    with caplog.at_level(logging.WARNING):
+        violations = _violations_from_analysis(data)
+        
+    assert len(violations) == 2
+    assert {v["rule_id"] for v in violations} == {"Rule 6(1)(e)", "Rule 11"}
+    assert "Skipping malformed check" in caplog.text
+    assert "ana_partial_malformed" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_corrupted_compliance_data_rejected_by_enforcement_endpoints():
+    """DEF-P2-01 (4 & 5): Entirely invalid compliance data is rejected with HTTP 400, not misrepresented as 0 violations."""
+    await _seed_enforcement_data()
+    client = TestClient(app)
+    headers = make_headers("enforcement_officer_1", ROLE_ENFORCEMENT)
+    
+    # Seed an analysis with corrupted JSON
+    await save_analysis({
+        "id": "ana_corrupt_endpoint_test",
+        "product_name": "Corrupted Analysis Product",
+        "owner_user_id": "enforcement_officer_1",
+        "organization_id": "org_ministry",
+        "score": 0.0,
+        "status": "FAIL",
+        "created_at": "2026-03-01T10:00:00Z",
+        "compliance_result": '{"checks": [INVALID_JSON_HERE'
+    })
+    
+    # 1. POST /api/enforcement/cases must return HTTP 400
+    r_case = client.post("/api/enforcement/cases", json={"analysis_id": "ana_corrupt_endpoint_test"}, headers=headers)
+    assert r_case.status_code == 400
+    assert "Invalid compliance data in analysis" in r_case.json()["detail"]
+    
+    # 2. POST /api/enforcement/penalty must return HTTP 400
+    r_pen = client.post("/api/enforcement/penalty", json={"analysis_id": "ana_corrupt_endpoint_test"}, headers=headers)
+    assert r_pen.status_code == 400
+    assert "Invalid compliance data" in r_pen.json()["detail"]
+    
+    # 3. POST /api/enforcement/notice must return HTTP 400 (not "No violations recorded")
+    r_not = client.post("/api/enforcement/notice", json={"analysis_id": "ana_corrupt_endpoint_test"}, headers=headers)
+    assert r_not.status_code == 400
+    assert "Invalid compliance data" in r_not.json()["detail"]

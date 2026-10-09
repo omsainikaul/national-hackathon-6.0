@@ -87,39 +87,39 @@ export default function ActivateAccount() {
   const isAudit = invitation?.role === 'AUDIT_OFFICER';
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between p-4 sm:p-6 selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-gradient-to-br from-[#101A2C] via-[#173B57]/50 to-[#101A2C] text-slate-100 flex flex-col justify-between p-4 sm:p-6 selection:bg-teal-500 selection:text-white">
       {/* Header Branding */}
       <div className="max-w-5xl w-full mx-auto flex items-center justify-between pt-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-sky-500 p-0.5 shadow-lg shadow-indigo-500/20">
-            <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-indigo-400" />
+          <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-teal-500 via-indigo-500 to-sky-500 p-0.5 shadow-lg shadow-teal-500/20">
+            <div className="w-full h-full bg-[#101A2C] rounded-[14px] flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-teal-400" />
             </div>
           </div>
           <div>
             <span className="font-black tracking-tight text-white text-base sm:text-lg">MetrCheck</span>
-            <span className="text-xs font-bold text-indigo-400 ml-1">AI</span>
+            <span className="text-xs font-bold text-teal-400 ml-1">AI</span>
           </div>
         </div>
 
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/80 text-[11px] font-semibold text-slate-300">
           <ShieldAlert className="w-3.5 h-3.5 text-amber-300" />
-          <span>Statutory Compliance Support</span>
+          <span>Statutory Officer Onboarding</span>
         </div>
       </div>
 
       {/* Main Content Card */}
       <div className="max-w-md w-full mx-auto my-8">
         {verifying ? (
-          <div className="rounded-3xl border border-slate-800 bg-slate-900/90 shadow-2xl p-8 text-center space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto animate-pulse">
+          <div className="rounded-3xl border border-slate-700/80 bg-[#101A2C]/90 shadow-2xl p-8 text-center space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center mx-auto animate-pulse">
               <RotateCcw className="w-6 h-6 animate-spin" />
             </div>
             <h2 className="text-lg font-bold text-white">Verifying Invitation Link</h2>
             <p className="text-xs text-slate-400">Please wait while we validate your secure invitation token...</p>
           </div>
         ) : verifyError ? (
-          <div className="rounded-3xl border border-rose-500/30 bg-slate-900/90 shadow-2xl p-6 sm:p-8 space-y-5 animate-in fade-in zoom-in-95 duration-200">
+          <div className="rounded-3xl border border-rose-500/30 bg-[#101A2C]/90 shadow-2xl p-6 sm:p-8 space-y-5 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-start gap-4">
               <div className="p-3 bg-rose-500/15 text-rose-400 rounded-2xl border border-rose-500/30 shrink-0">
                 <AlertTriangle className="w-7 h-7" />
@@ -147,7 +147,7 @@ export default function ActivateAccount() {
             </button>
           </div>
         ) : activated ? (
-          <div className="rounded-3xl border border-emerald-500/30 bg-slate-900/90 shadow-2xl p-6 sm:p-8 space-y-5 animate-in fade-in zoom-in-95 duration-200 text-center">
+          <div className="rounded-3xl border border-emerald-500/30 bg-[#101A2C]/90 shadow-2xl p-6 sm:p-8 space-y-5 animate-in fade-in zoom-in-95 duration-200 text-center">
             <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-8 h-8" />
             </div>
@@ -164,14 +164,14 @@ export default function ActivateAccount() {
             <button
               type="button"
               onClick={() => navigate('/login')}
-              className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-teal-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Proceed to Sign In</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         ) : (
-          <div className="rounded-3xl border border-slate-800 bg-slate-900/90 shadow-2xl p-6 sm:p-8 space-y-6 animate-in fade-in zoom-in-95 duration-200">
+          <div className="rounded-3xl border border-slate-700/80 bg-[#101A2C]/90 shadow-2xl p-6 sm:p-8 space-y-6 animate-in fade-in zoom-in-95 duration-200">
             {/* Header */}
             <div className="space-y-1">
               <div className="flex items-center gap-2">
@@ -240,12 +240,12 @@ export default function ActivateAccount() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your new password"
-                    className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-100 placeholder:text-slate-600 focus:outline-hidden focus:border-indigo-500 transition-colors"
+                    className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700 text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -268,12 +268,12 @@ export default function ActivateAccount() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm your password"
-                    className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-100 placeholder:text-slate-600 focus:outline-hidden focus:border-indigo-500 transition-colors"
+                    className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700 text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
                   >
                     {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -285,7 +285,7 @@ export default function ActivateAccount() {
                 disabled={!canSubmit}
                 className={`w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   canSubmit
-                    ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30'
+                    ? 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-600/30'
                     : 'bg-slate-800 text-slate-500 cursor-not-allowed opacity-70'
                 }`}
               >
@@ -307,8 +307,8 @@ export default function ActivateAccount() {
       </div>
 
       {/* Footer */}
-      <div className="max-w-5xl w-full mx-auto text-center text-xs text-slate-600">
-        SIH 2026 · Problem Statement 26034 · Directorate of Legal Metrology Compliance Support
+      <div className="max-w-5xl w-full mx-auto text-center text-xs text-slate-500">
+        MetrCheck AI Security Boundary · Directorate of Legal Metrology
       </div>
     </div>
   );

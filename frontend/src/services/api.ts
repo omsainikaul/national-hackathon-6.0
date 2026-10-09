@@ -47,7 +47,8 @@ import {
   type EnforcementCaseSummary,
   type EnforcementCaseDetail,
   type PenaltyCalculationRecord,
-  type EnforcementNotice
+  type EnforcementNotice,
+  type DemoLiveSample
 } from '../types';
 
 const API_HOST = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
@@ -962,6 +963,12 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ reopen_reason: reopenReason, comments }),
     }),
+
+  getDemoSamples: (): Promise<DemoLiveSample[]> =>
+    fetchJSON<DemoLiveSample[]>(`${BASE_URL}/demo/samples`),
+
+  getDemoSampleImageUrl: (filename: string): string =>
+    `${BASE_URL}/demo/sample-image/${encodeURIComponent(filename)}`,
 };
 
 export default api;

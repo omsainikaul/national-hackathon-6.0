@@ -44,15 +44,15 @@ const ConfidencePanel: React.FC<ConfidencePanelProps> = ({ productInfo = {} as a
   const remainingFields = confidenceData.slice(8);
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs mb-6 overflow-hidden">
+    <div className="bg-white dark:bg-[#101A2C] rounded-2xl border border-slate-200/90 dark:border-white/10 shadow-xs mb-6 overflow-hidden">
       {/* Header */}
-      <div className="bg-slate-50/70 dark:bg-slate-800/50 p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      <div className="bg-slate-50/80 dark:bg-white/[0.02] p-4 sm:p-5 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800/60 text-indigo-600 dark:text-indigo-400">
+          <div className="p-1.5 rounded-lg bg-teal-50 dark:bg-teal-950/40 border border-teal-200/60 dark:border-teal-800/60 text-teal-600 dark:text-teal-400">
             <Eye className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+            <h3 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white uppercase tracking-wider">
               {t('results.data_confidence')}
             </h3>
             <span className="text-[11px] text-slate-500 dark:text-slate-400">
@@ -60,7 +60,7 @@ const ConfidencePanel: React.FC<ConfidencePanelProps> = ({ productInfo = {} as a
             </span>
           </div>
         </div>
-        <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        <span className="text-xs font-mono text-slate-600 dark:text-slate-300 font-bold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.06] border border-slate-200/80 dark:border-white/10">
           {confidenceData.length}
         </span>
       </div>
@@ -78,7 +78,7 @@ const ConfidencePanel: React.FC<ConfidencePanelProps> = ({ productInfo = {} as a
           <button
             type="button"
             onClick={() => setExpanded(!expanded)}
-            className="w-full border-t border-slate-100 dark:border-slate-800/80 p-3 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none"
+            className="w-full border-t border-slate-100 dark:border-white/10 p-3 text-xs font-semibold text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 hover:bg-slate-50/80 dark:hover:bg-white/[0.02] flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none"
             aria-expanded={expanded}
           >
             <span>{expanded ? t('results.hide_confidence_details') : t('results.show_confidence_details')}</span>
@@ -86,7 +86,7 @@ const ConfidencePanel: React.FC<ConfidencePanelProps> = ({ productInfo = {} as a
           </button>
           
           {expanded && (
-            <div className="p-4 sm:p-5 pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/30 dark:bg-slate-800/10 animate-in fade-in duration-150">
+            <div className="p-4 sm:p-5 pt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 border-t border-slate-100 dark:border-white/10 bg-slate-50/30 dark:bg-white/[0.01]">
               {remainingFields.map((item) => (
                 <ConfidenceBar key={item.label} value={item.value} label={item.label} />
               ))}
@@ -95,7 +95,7 @@ const ConfidencePanel: React.FC<ConfidencePanelProps> = ({ productInfo = {} as a
         </>
       )}
 
-      <div className="p-3 bg-slate-50/50 dark:bg-slate-800/40 border-t border-slate-200/80 dark:border-slate-800 text-[11px] text-center text-slate-500 dark:text-slate-400">
+      <div className="p-3.5 bg-slate-50/50 dark:bg-white/[0.01] border-t border-slate-100 dark:border-white/10 text-[11px] text-center text-slate-500 dark:text-slate-400">
         {t('results.confidence_footer_note')}
       </div>
     </div>

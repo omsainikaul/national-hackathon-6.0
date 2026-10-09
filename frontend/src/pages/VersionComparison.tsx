@@ -101,18 +101,18 @@ export default function VersionComparison() {
   });
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-16">
+    <div className="space-y-6 max-w-7xl mx-auto pb-16 animate-in fade-in duration-300">
       {/* ── Header ── */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-slate-900/90 border border-slate-800 p-6 rounded-2xl shadow-xl backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-950/40">
-            <GitCompare className="w-6 h-6 text-white" />
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-gradient-to-r from-slate-900 via-[#173B57] to-[#101A2C] text-white p-6 rounded-2xl shadow-xl border border-slate-800">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-xl bg-teal-500/20 border border-teal-400/30 flex items-center justify-center shadow-lg shadow-teal-950/40 shrink-0">
+            <GitCompare className="w-6 h-6 text-teal-300" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-black text-white tracking-tight">{t('merchant.version_comparison.studio_title')}</h1>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-300 mt-0.5">
               {t('merchant.version_comparison.studio_desc')}
             </p>
           </div>
@@ -120,32 +120,32 @@ export default function VersionComparison() {
       </div>
 
       {error && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm flex items-center justify-between">
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 text-sm flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
+            <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0" />
             <span>{error}</span>
           </div>
-          <button onClick={() => setError(null)} className="text-rose-400 hover:text-white text-xs underline cursor-pointer">
+          <button onClick={() => setError(null)} className="text-rose-600 dark:text-rose-400 hover:underline text-xs cursor-pointer">
             {t('merchant.preprint.dismiss') || 'Dismiss'}
           </button>
         </div>
       )}
 
       {/* ── Version Selectors Bar ── */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">{t('merchant.version_comparison.select_versions')}</h2>
+      <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-5 shadow-xs space-y-4">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{t('merchant.version_comparison.select_versions')}</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
           {/* Version A Dropdown */}
           <div className="md:col-span-5 space-y-1.5">
-            <label className="block text-xs font-bold text-slate-300">
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
               {t('merchant.version_comparison.version_a')}
             </label>
             <select
               value={selectedVersionA}
               onChange={(e) => setSelectedVersionA(e.target.value)}
               disabled={loadingTargets}
-              className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white text-xs font-medium focus:border-indigo-500 focus:outline-none cursor-pointer disabled:opacity-50"
+              className="w-full bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:outline-none cursor-pointer disabled:opacity-50"
             >
               <option value="">-- Select Version A --</option>
               {targets.map((t) => (
@@ -158,21 +158,21 @@ export default function VersionComparison() {
 
           {/* Comparison Arrow Icon */}
           <div className="md:col-span-2 flex justify-center py-2 md:py-0">
-            <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
+            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-300">
               <ArrowRight className="w-4 h-4" />
             </div>
           </div>
 
           {/* Version B Dropdown */}
           <div className="md:col-span-5 space-y-1.5">
-            <label className="block text-xs font-bold text-slate-300">
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
               {t('merchant.version_comparison.version_b')}
             </label>
             <select
               value={selectedVersionB}
               onChange={(e) => setSelectedVersionB(e.target.value)}
               disabled={loadingTargets}
-              className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white text-xs font-medium focus:border-indigo-500 focus:outline-none cursor-pointer disabled:opacity-50"
+              className="w-full bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:outline-none cursor-pointer disabled:opacity-50"
             >
               <option value="">-- Select Version B --</option>
               {targets.map((t) => (
@@ -188,12 +188,12 @@ export default function VersionComparison() {
           <button
             onClick={() => handleCompare()}
             disabled={comparing || !selectedVersionA || !selectedVersionB}
-            className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-950/40 transition-all cursor-pointer flex items-center gap-2 disabled:opacity-50"
+            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 active:opacity-90 text-white font-bold text-xs shadow-md shadow-teal-950/20 transition-all cursor-pointer flex items-center gap-2 disabled:opacity-50"
           >
             {comparing ? (
-              <RefreshCw className="w-4 h-4 animate-spin" />
+              <RefreshCw className="w-4 h-4 animate-spin text-white" />
             ) : (
-              <GitCompare className="w-4 h-4" />
+              <GitCompare className="w-4 h-4 text-white" />
             )}
             <span>{comparing ? t('merchant.version_comparison.comparing') : t('merchant.version_comparison.run_comparison')}</span>
           </button>
@@ -207,26 +207,26 @@ export default function VersionComparison() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             
             {/* Score Delta Card */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase">
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-4 shadow-xs space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">
                 <span>Compliance Score</span>
                 {comparison.score_delta > 0 ? (
-                  <TrendingUp className="w-4 h-4 text-emerald-400" />
+                  <TrendingUp className="w-4 h-4 text-emerald-500" />
                 ) : comparison.score_delta < 0 ? (
-                  <TrendingDown className="w-4 h-4 text-rose-400" />
+                  <TrendingDown className="w-4 h-4 text-rose-500" />
                 ) : (
                   <Minus className="w-4 h-4 text-slate-400" />
                 )}
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-black text-white">{comparison.score_b}</span>
-                <span className="text-xs text-slate-400 font-mono">from {comparison.score_a}</span>
+                <span className="text-2xl font-black text-slate-900 dark:text-white">{comparison.score_b}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">from {comparison.score_a}</span>
                 <span className={`text-xs font-extrabold px-1.5 py-0.5 rounded ${
                   comparison.score_delta > 0
-                    ? 'bg-emerald-500/20 text-emerald-300'
+                    ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
                     : comparison.score_delta < 0
-                    ? 'bg-rose-500/20 text-rose-300'
-                    : 'bg-slate-800 text-slate-300'
+                    ? 'bg-rose-500/15 text-rose-700 dark:text-rose-300'
+                    : 'bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300'
                 }`}>
                   {comparison.score_delta > 0 ? `+${comparison.score_delta}` : comparison.score_delta} pts
                 </span>
@@ -234,40 +234,40 @@ export default function VersionComparison() {
             </div>
 
             {/* Risk Tier Migration */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase">
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-4 shadow-xs space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">
                 <span>Risk Level Shift</span>
-                <Activity className="w-4 h-4 text-sky-400" />
+                <Activity className="w-4 h-4 text-teal-500" />
               </div>
               <div className="flex items-center gap-2 text-sm font-black">
-                <span className="text-slate-400">{comparison.risk_level_a}</span>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-500" />
+                <span className="text-slate-500 dark:text-slate-400">{comparison.risk_level_a}</span>
+                <ArrowRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                 <span className={
                   comparison.risk_level_b === 'LOW'
-                    ? 'text-emerald-400'
+                    ? 'text-emerald-600 dark:text-emerald-400'
                     : comparison.risk_level_b === 'CRITICAL'
-                    ? 'text-rose-400'
-                    : 'text-amber-400'
+                    ? 'text-rose-600 dark:text-rose-400'
+                    : 'text-amber-600 dark:text-amber-400'
                 }>
                   {comparison.risk_level_b}
                 </span>
-                <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 ml-auto">
+                <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 ml-auto">
                   {comparison.risk_shift}
                 </span>
               </div>
             </div>
 
             {/* Issue Resolution Count */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase">
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-4 shadow-xs space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">
                 <span>Issues Resolved</span>
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-black text-emerald-400">{comparison.resolved_issues_count}</span>
-                <span className="text-xs text-slate-400">resolved</span>
+                <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">{comparison.resolved_issues_count}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">resolved</span>
                 {comparison.new_issues_count > 0 && (
-                  <span className="text-xs font-bold text-rose-400 font-mono">
+                  <span className="text-xs font-bold text-rose-600 dark:text-rose-400 font-mono">
                     (+{comparison.new_issues_count} new)
                   </span>
                 )}
@@ -275,15 +275,15 @@ export default function VersionComparison() {
             </div>
 
             {/* Missing Declarations Delta */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase">
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-4 shadow-xs space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">
                 <span>Missing Declarations</span>
-                <FileText className="w-4 h-4 text-amber-400" />
+                <FileText className="w-4 h-4 text-amber-500" />
               </div>
               <div className="flex items-baseline gap-2 text-sm font-black">
-                <span className="text-slate-400">{comparison.missing_declarations_a} in A</span>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-500" />
-                <span className={comparison.missing_declarations_b === 0 ? 'text-emerald-400' : 'text-amber-400'}>
+                <span className="text-slate-500 dark:text-slate-400">{comparison.missing_declarations_a} in A</span>
+                <ArrowRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+                <span className={comparison.missing_declarations_b === 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}>
                   {comparison.missing_declarations_b} in B
                 </span>
               </div>
@@ -292,123 +292,123 @@ export default function VersionComparison() {
           </div>
 
           {/* Verdict Banner */}
-          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
-            <Sparkles className="w-5 h-5 text-indigo-400 shrink-0" />
-            <p className="text-xs text-slate-200 font-semibold">{comparison.summary_verdict}</p>
+          <div className="bg-teal-50/80 dark:bg-[#173B57]/30 border border-teal-200 dark:border-teal-500/30 rounded-2xl p-4 flex items-center gap-3 shadow-xs">
+            <Sparkles className="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0" />
+            <p className="text-xs text-teal-950 dark:text-teal-100 font-semibold">{comparison.summary_verdict}</p>
           </div>
 
           {/* ── Specialized Field Comparison Cards Grid ── */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* 1. MRP Comparison Card */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-5 shadow-xs space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <DollarSign className="w-4 h-4 text-emerald-400" />
-                  <h3 className="text-sm font-bold text-white">MRP Price Shift</h3>
+                  <DollarSign className="w-4 h-4 text-emerald-500" />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">MRP Price Shift</h3>
                 </div>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
                   comparison.mrp_diff?.change_type === 'UNCHANGED'
-                    ? 'bg-slate-800 text-slate-300'
-                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                    ? 'bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300'
+                    : 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
                 }`}>
                   {comparison.mrp_diff?.change_type || 'NOT_DECLARED'}
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs">
+              <div className="grid grid-cols-2 gap-3 bg-slate-50 dark:bg-slate-950/60 p-3 rounded-xl border border-slate-200/80 dark:border-white/10 text-xs">
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase font-bold">Version A MRP</span>
-                  <span className="font-bold text-slate-300">{comparison.mrp_diff?.old_value || 'Not Declared'}</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-300">{comparison.mrp_diff?.old_value || 'Not Declared'}</span>
                 </div>
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase font-bold">Version B MRP</span>
-                  <span className="font-bold text-white">{comparison.mrp_diff?.new_value || 'Not Declared'}</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{comparison.mrp_diff?.new_value || 'Not Declared'}</span>
                 </div>
               </div>
-              <p className="text-xs text-slate-300 italic">{comparison.mrp_diff?.explanation}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300 italic">{comparison.mrp_diff?.explanation}</p>
             </div>
 
             {/* 2. Net Quantity Comparison Card */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-5 shadow-xs space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Scale className="w-4 h-4 text-sky-400" />
-                  <h3 className="text-sm font-bold text-white">Net Quantity Shift</h3>
+                  <Scale className="w-4 h-4 text-teal-500" />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">Net Quantity Shift</h3>
                 </div>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
                   comparison.quantity_diff?.change_type === 'UNCHANGED'
-                    ? 'bg-slate-800 text-slate-300'
-                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                    ? 'bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300'
+                    : 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
                 }`}>
                   {comparison.quantity_diff?.change_type || 'NOT_DECLARED'}
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs">
+              <div className="grid grid-cols-2 gap-3 bg-slate-50 dark:bg-slate-950/60 p-3 rounded-xl border border-slate-200/80 dark:border-white/10 text-xs">
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase font-bold">Version A Quantity</span>
-                  <span className="font-bold text-slate-300">{comparison.quantity_diff?.old_value || 'Not Declared'}</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-300">{comparison.quantity_diff?.old_value || 'Not Declared'}</span>
                 </div>
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase font-bold">Version B Quantity</span>
-                  <span className="font-bold text-white">{comparison.quantity_diff?.new_value || 'Not Declared'}</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{comparison.quantity_diff?.new_value || 'Not Declared'}</span>
                 </div>
               </div>
-              <p className="text-xs text-slate-300 italic">{comparison.quantity_diff?.explanation}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300 italic">{comparison.quantity_diff?.explanation}</p>
             </div>
 
             {/* 3. Manufacturer & Importer Entity Card */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-5 shadow-xs space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-indigo-400" />
-                  <h3 className="text-sm font-bold text-white">Manufacturer & Packer Entity</h3>
+                  <Building2 className="w-4 h-4 text-teal-500" />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">Manufacturer & Packer Entity</h3>
                 </div>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
                   comparison.manufacturer_diff?.change_type === 'UNCHANGED'
-                    ? 'bg-slate-800 text-slate-300'
-                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                    ? 'bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300'
+                    : 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
                 }`}>
                   {comparison.manufacturer_diff?.change_type || 'NOT_DECLARED'}
                 </span>
               </div>
-              <div className="space-y-2 bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs">
+              <div className="space-y-2 bg-slate-50 dark:bg-slate-950/60 p-3 rounded-xl border border-slate-200/80 dark:border-white/10 text-xs">
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase font-bold">Version A</span>
-                  <span className="text-slate-300">{comparison.manufacturer_diff?.old_value || 'Not Declared'}</span>
+                  <span className="text-slate-700 dark:text-slate-300">{comparison.manufacturer_diff?.old_value || 'Not Declared'}</span>
                 </div>
-                <div className="pt-1 border-t border-slate-800">
+                <div className="pt-1 border-t border-slate-200 dark:border-slate-800">
                   <span className="text-slate-500 block text-[10px] uppercase font-bold">Version B</span>
-                  <span className="text-white font-medium">{comparison.manufacturer_diff?.new_value || 'Not Declared'}</span>
+                  <span className="text-slate-900 dark:text-white font-medium">{comparison.manufacturer_diff?.new_value || 'Not Declared'}</span>
                 </div>
               </div>
             </div>
 
             {/* 4. FSSAI License Number Card */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-5 shadow-xs space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-amber-400" />
-                  <h3 className="text-sm font-bold text-white">FSSAI 14-Digit License</h3>
+                  <Award className="w-4 h-4 text-amber-500" />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">FSSAI 14-Digit License</h3>
                 </div>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
                   comparison.fssai_diff?.change_type === 'UNCHANGED'
-                    ? 'bg-slate-800 text-slate-300'
-                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                    ? 'bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300'
+                    : 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
                 }`}>
                   {comparison.fssai_diff?.change_type || 'NOT_DECLARED'}
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs">
+              <div className="grid grid-cols-2 gap-3 bg-slate-50 dark:bg-slate-950/60 p-3 rounded-xl border border-slate-200/80 dark:border-white/10 text-xs">
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase font-bold">Version A License</span>
-                  <span className="font-mono text-slate-300">{comparison.fssai_diff?.old_value || 'None'}</span>
+                  <span className="font-mono text-slate-700 dark:text-slate-300">{comparison.fssai_diff?.old_value || 'None'}</span>
                 </div>
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase font-bold">Version B License</span>
-                  <span className="font-mono text-white font-bold">{comparison.fssai_diff?.new_value || 'None'}</span>
+                  <span className="font-mono text-slate-900 dark:text-white font-bold">{comparison.fssai_diff?.new_value || 'None'}</span>
                 </div>
               </div>
-              <p className="text-xs text-slate-300 italic">{comparison.fssai_diff?.explanation}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300 italic">{comparison.fssai_diff?.explanation}</p>
             </div>
 
           </div>
@@ -417,18 +417,18 @@ export default function VersionComparison() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Ingredients Diff */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-5 shadow-xs space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Utensils className="w-4 h-4 text-emerald-400" />
-                  <h3 className="text-sm font-bold text-white">Ingredients Composition Diff</h3>
+                  <Utensils className="w-4 h-4 text-emerald-500" />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">Ingredients Composition Diff</h3>
                 </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10">
                   {comparison.ingredients_diff?.status}
                 </span>
               </div>
 
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 {comparison.ingredients_diff?.raw_diff_summary || 'No ingredients changes detected.'}
               </p>
 
@@ -438,10 +438,10 @@ export default function VersionComparison() {
                     key={idx}
                     className={`flex items-center justify-between p-2 rounded-lg text-xs ${
                       item.status === 'ADDED'
-                        ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20'
+                        ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20'
                         : item.status === 'REMOVED'
-                        ? 'bg-rose-500/10 text-rose-300 border border-rose-500/20'
-                        : 'bg-slate-950 text-slate-300 border border-slate-800'
+                        ? 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/20'
+                        : 'bg-slate-50 dark:bg-slate-950/60 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800'
                     }`}
                   >
                     <span>{item.name}</span>
@@ -452,13 +452,13 @@ export default function VersionComparison() {
             </div>
 
             {/* Nutrition Facts Table Diff */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-5 shadow-xs space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-indigo-400" />
-                  <h3 className="text-sm font-bold text-white">Nutrition Values Comparison</h3>
+                  <Activity className="w-4 h-4 text-teal-500" />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">Nutrition Values Comparison</h3>
                 </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10">
                   {comparison.nutrition_diff?.status}
                 </span>
               </div>
@@ -468,20 +468,20 @@ export default function VersionComparison() {
                   comparison.nutrition_diff.nutrients.map((nutr, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800 text-xs"
+                      className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 text-xs"
                     >
-                      <span className="font-semibold text-slate-300">{nutr.nutrient_name}</span>
+                      <span className="font-semibold text-slate-800 dark:text-slate-300">{nutr.nutrient_name}</span>
                       <div className="flex items-center gap-2 text-xs font-mono">
-                        <span className="text-slate-400">{nutr.old_value || '-'}</span>
-                        <ArrowRight className="w-3 h-3 text-slate-600" />
-                        <span className="text-white font-bold">{nutr.new_value || '-'}</span>
+                        <span className="text-slate-500 dark:text-slate-400">{nutr.old_value || '-'}</span>
+                        <ArrowRight className="w-3 h-3 text-slate-400 dark:text-slate-600" />
+                        <span className="text-slate-900 dark:text-white font-bold">{nutr.new_value || '-'}</span>
                         {nutr.amount_delta !== null && nutr.amount_delta !== undefined && (
                           <span className={`text-[10px] px-1 py-0.2 rounded font-bold ${
                             nutr.amount_delta > 0
-                              ? 'bg-emerald-500/20 text-emerald-300'
+                              ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
                               : nutr.amount_delta < 0
-                              ? 'bg-rose-500/20 text-rose-300'
-                              : 'bg-slate-800 text-slate-400'
+                              ? 'bg-rose-500/15 text-rose-700 dark:text-rose-300'
+                              : 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-400'
                           }`}>
                             {nutr.amount_delta > 0 ? `+${nutr.amount_delta}` : nutr.amount_delta}
                           </span>
@@ -490,7 +490,7 @@ export default function VersionComparison() {
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-6 text-slate-500 text-xs">
+                  <div className="text-center py-6 text-slate-400 dark:text-slate-500 text-xs">
                     No nutrient table values detected.
                   </div>
                 )}
@@ -500,20 +500,20 @@ export default function VersionComparison() {
           </div>
 
           {/* ── Declaration Changes Grid ── */}
-          <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
+          <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-5 shadow-xs space-y-4">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <h3 className="text-sm font-bold text-white">Full Statutory Declaration Diff</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Full Statutory Declaration Diff</h3>
               
               {/* Filter Tabs */}
-              <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+              <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-950 p-1 rounded-xl border border-slate-200 dark:border-white/10 text-xs">
                 {(['ALL', 'ADDED', 'REMOVED', 'CHANGED', 'UNCHANGED'] as const).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`px-3 py-1 rounded-lg font-bold text-[11px] transition-all cursor-pointer ${
                       activeTab === tab
-                        ? 'bg-indigo-600 text-white shadow'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'bg-teal-600 dark:bg-teal-500 text-white shadow-xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     {tab}
@@ -526,27 +526,27 @@ export default function VersionComparison() {
               {filteredDiffs.map((diff, idx) => (
                 <div
                   key={idx}
-                  className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5 text-xs"
+                  className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-white/10 space-y-1.5 text-xs"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-white">{diff.field_label}</span>
+                    <span className="font-bold text-slate-900 dark:text-white">{diff.field_label}</span>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
                       diff.change_type === 'ADDED'
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                        ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
                         : diff.change_type === 'REMOVED'
-                        ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                        ? 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30'
                         : diff.change_type === 'CHANGED'
-                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                        : 'bg-slate-800 text-slate-400'
+                        ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
+                        : 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-400'
                     }`}>
                       {diff.change_type}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-400">{diff.explanation}</p>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400">{diff.explanation}</p>
                   {(diff.old_value || diff.new_value) && (
-                    <div className="text-[11px] pt-1 border-t border-slate-800/80 flex items-center justify-between text-slate-400 font-mono">
+                    <div className="text-[11px] pt-1 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-slate-500 dark:text-slate-400 font-mono">
                       <span className="truncate max-w-[180px]">A: {diff.old_value || 'None'}</span>
-                      <span className="truncate max-w-[180px] text-white font-medium">B: {diff.new_value || 'None'}</span>
+                      <span className="truncate max-w-[180px] text-slate-900 dark:text-white font-medium">B: {diff.new_value || 'None'}</span>
                     </div>
                   )}
                 </div>
@@ -558,23 +558,23 @@ export default function VersionComparison() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Rule State Transitions */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-3">
-              <h3 className="text-sm font-bold text-white">Statutory Rule Transitions</h3>
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-5 shadow-xs space-y-3">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Statutory Rule Transitions</h3>
               <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
                 {comparison.rule_diffs.map((rd) => (
                   <div
                     key={rd.rule_id}
-                    className="flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs"
+                    className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 text-xs"
                   >
                     <div>
-                      <span className="font-bold text-white">{rd.rule_id}: {rd.rule_name}</span>
-                      <span className="text-[10px] text-slate-500 block">{rd.explanation}</span>
+                      <span className="font-bold text-slate-900 dark:text-white">{rd.rule_id}: {rd.rule_name}</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 block">{rd.explanation}</span>
                     </div>
                     <div className="flex items-center gap-1.5 font-mono text-xs">
-                      <span className="text-slate-400">{rd.old_status}</span>
-                      <ArrowRight className="w-3 h-3 text-slate-600" />
+                      <span className="text-slate-500 dark:text-slate-400">{rd.old_status}</span>
+                      <ArrowRight className="w-3 h-3 text-slate-400 dark:text-slate-600" />
                       <span className={`font-bold ${
-                        rd.new_status === 'PASS' ? 'text-emerald-400' : 'text-rose-400'
+                        rd.new_status === 'PASS' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
                       }`}>
                         {rd.new_status}
                       </span>
@@ -585,8 +585,8 @@ export default function VersionComparison() {
             </div>
 
             {/* Issue Resolution Tracking */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-3">
-              <h3 className="text-sm font-bold text-white">Issue Resolution Matrix</h3>
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-5 shadow-xs space-y-3">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Issue Resolution Matrix</h3>
               <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
                 {comparison.issue_resolutions && comparison.issue_resolutions.length > 0 ? (
                   comparison.issue_resolutions.map((iss) => (
@@ -594,23 +594,23 @@ export default function VersionComparison() {
                       key={iss.issue_id}
                       className={`p-2.5 rounded-xl border text-xs space-y-1 ${
                         iss.resolution_status === 'RESOLVED'
-                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300'
                           : iss.resolution_status === 'NEW_ISSUE'
-                          ? 'bg-rose-500/10 border-rose-500/30 text-rose-300'
-                          : 'bg-slate-950 border-slate-800 text-slate-300'
+                          ? 'bg-rose-500/10 border-rose-500/30 text-rose-700 dark:text-rose-300'
+                          : 'bg-slate-50 dark:bg-slate-950/60 border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300'
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-bold">{iss.rule_id || iss.field || 'Violation'}</span>
-                        <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700">
+                        <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
                           {iss.resolution_status}
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-300">{iss.explanation}</p>
+                      <p className="text-[11px] text-slate-600 dark:text-slate-300">{iss.explanation}</p>
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-8 text-slate-500 text-xs">
+                  <div className="text-center py-8 text-slate-400 dark:text-slate-500 text-xs">
                     No compliance violations detected between these versions.
                   </div>
                 )}
@@ -621,23 +621,23 @@ export default function VersionComparison() {
 
           {/* ── Version Timeline ── */}
           {timeline.length > 0 && (
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
+            <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-5 shadow-xs space-y-4">
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-indigo-400" />
-                <h3 className="text-sm font-bold text-white">Audit Version Timeline</h3>
+                <Clock className="w-4 h-4 text-teal-500" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Audit Version Timeline</h3>
               </div>
 
-              <div className="relative border-l-2 border-slate-800 ml-3 pl-4 space-y-4">
+              <div className="relative border-l-2 border-slate-200 dark:border-slate-800 ml-3 pl-4 space-y-4">
                 {timeline.map((evt, idx) => (
                   <div key={idx} className="relative group">
-                    <div className="absolute -left-[23px] top-1 w-3.5 h-3.5 rounded-full bg-indigo-600 border-2 border-slate-900 group-hover:scale-125 transition-transform" />
+                    <div className="absolute -left-[23px] top-1 w-3.5 h-3.5 rounded-full bg-teal-500 border-2 border-white dark:border-[#101A2C] group-hover:scale-125 transition-transform" />
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-white">{evt.title}</span>
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">{evt.title}</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                         {evt.timestamp ? new Date(evt.timestamp).toLocaleString() : ''}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-400 mt-0.5">{evt.description}</p>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">{evt.description}</p>
                   </div>
                 ))}
               </div>
@@ -646,14 +646,14 @@ export default function VersionComparison() {
 
         </div>
       ) : comparing ? (
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-12 text-center space-y-3">
-          <RefreshCw className="w-8 h-8 text-indigo-400 animate-spin mx-auto" />
-          <p className="text-sm text-slate-300 font-semibold">Running deterministic version comparison...</p>
+        <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-12 text-center space-y-3 shadow-xs">
+          <RefreshCw className="w-8 h-8 text-teal-500 animate-spin mx-auto" />
+          <p className="text-sm text-slate-800 dark:text-slate-300 font-semibold">Running deterministic version comparison...</p>
         </div>
       ) : (
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-16 text-center space-y-4">
-          <GitCompare className="w-12 h-12 text-slate-600 mx-auto" />
-          <h2 className="text-base font-bold text-slate-300">Select Version A and Version B to Compare</h2>
+        <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl p-16 text-center space-y-4 shadow-xs">
+          <GitCompare className="w-12 h-12 text-slate-400 dark:text-slate-600 mx-auto" />
+          <h2 className="text-base font-bold text-slate-800 dark:text-slate-300">Select Version A and Version B to Compare</h2>
           <p className="text-xs text-slate-500 max-w-md mx-auto">
             Choose two packaging screenings or artwork iterations from the dropdowns above to analyze differences, score deltas, and issue resolutions.
           </p>

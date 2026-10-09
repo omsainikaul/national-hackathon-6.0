@@ -118,21 +118,21 @@ export default function ProductEdit() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
+      <div className="max-w-4xl mx-auto space-y-6 pb-12 animate-in fade-in duration-300">
         <LoadingSkeleton variant="page" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
+    <div className="max-w-4xl mx-auto space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => navigate(productId ? `/products/${productId}` : '/products')}
-            className="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+            className="p-2.5 rounded-xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 transition-colors shadow-xs cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
@@ -157,10 +157,10 @@ export default function ProductEdit() {
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Section 1: Core Product Identity */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div className="p-6 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10">
             <div className="flex items-center gap-2">
-              <Tag className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+              <Tag className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
                 {t('merchant.product_new.sec_identity')}
               </h2>
@@ -169,7 +169,7 @@ export default function ProductEdit() {
               <select
                 value={formData.status}
                 onChange={(e) => handleChange('status', e.target.value)}
-                className="px-3 py-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 cursor-pointer"
+                className="px-3 py-1.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 cursor-pointer"
               >
                 <option value="ACTIVE">{t('merchant.status.active')}</option>
                 <option value="ARCHIVED">{t('merchant.status.archived')}</option>
@@ -187,7 +187,7 @@ export default function ProductEdit() {
                 required
                 value={formData.product_name}
                 onChange={(e) => handleChange('product_name', e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
               />
             </div>
 
@@ -199,7 +199,7 @@ export default function ProductEdit() {
                 type="text"
                 value={formData.brand_name}
                 onChange={(e) => handleChange('brand_name', e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
               />
             </div>
 
@@ -210,7 +210,7 @@ export default function ProductEdit() {
               <select
                 value={formData.category}
                 onChange={(e) => handleChange('category', e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all cursor-pointer"
               >
                 <option value="GENERAL">{t('merchant.categories.GENERAL')}</option>
                 <option value="FOOD_BEVERAGES">{t('merchant.categories.FOOD_BEVERAGES')}</option>
@@ -227,12 +227,12 @@ export default function ProductEdit() {
                 {t('merchant.product_new.field_gtin')}
               </label>
               <div className="relative">
-                <Barcode className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Barcode className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   value={formData.gtin_barcode}
                   onChange={(e) => handleChange('gtin_barcode', e.target.value)}
-                  className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                  className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-sm font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
                 />
               </div>
               {isDuplicateGtin && (
@@ -248,12 +248,12 @@ export default function ProductEdit() {
                 {t('merchant.product_new.field_origin')}
               </label>
               <div className="relative">
-                <Globe className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Globe className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   value={formData.country_of_origin}
                   onChange={(e) => handleChange('country_of_origin', e.target.value)}
-                  className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                  className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
                 />
               </div>
             </div>
@@ -261,9 +261,9 @@ export default function ProductEdit() {
         </div>
 
         {/* Section 2: Statutory Metrology Declarations */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-          <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-            <Scale className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+        <div className="p-6 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 shadow-xs space-y-4">
+          <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-white/10">
+            <Scale className="w-4 h-4 text-teal-600 dark:text-teal-400" />
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
               {t('merchant.product_new.sec_declarations')}
             </h2>
@@ -278,7 +278,7 @@ export default function ProductEdit() {
                 type="text"
                 value={formData.net_quantity_declared}
                 onChange={(e) => handleChange('net_quantity_declared', e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
               />
             </div>
 
@@ -287,14 +287,14 @@ export default function ProductEdit() {
                 {t('merchant.product_new.field_mrp')}
               </label>
               <div className="relative">
-                <span className="text-slate-400 font-bold absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-sm">₹</span>
+                <span className="text-slate-400 font-bold absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-sm">₹</span>
                 <input
                   type="number"
                   step="0.01"
                   min="0"
                   value={formData.mrp_declared ?? ''}
                   onChange={(e) => handleChange('mrp_declared', parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                  className="w-full pl-8 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-sm font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
                 />
               </div>
             </div>
@@ -307,16 +307,16 @@ export default function ProductEdit() {
                 type="text"
                 value={formData.unit_sale_price_declared}
                 onChange={(e) => handleChange('unit_sale_price_declared', e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
               />
             </div>
           </div>
         </div>
 
         {/* Section 3: Manufacturer & Regulatory Licenses */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-          <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-            <Building2 className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+        <div className="p-6 rounded-2xl bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 shadow-xs space-y-4">
+          <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-white/10">
+            <Building2 className="w-4 h-4 text-teal-600 dark:text-teal-400" />
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
               {t('merchant.product_new.sec_licensure')}
             </h2>
@@ -331,7 +331,7 @@ export default function ProductEdit() {
                 rows={2}
                 value={formData.manufacturer_name}
                 onChange={(e) => handleChange('manufacturer_name', e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all resize-none"
               />
             </div>
 
@@ -340,13 +340,13 @@ export default function ProductEdit() {
                 {t('merchant.product_new.field_fssai')}
               </label>
               <div className="relative">
-                <ShieldCheck className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ShieldCheck className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   maxLength={14}
                   value={formData.fssai_license}
                   onChange={(e) => handleChange('fssai_license', e.target.value)}
-                  className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                  className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-sm font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
                 />
               </div>
             </div>
@@ -356,12 +356,12 @@ export default function ProductEdit() {
                 {t('merchant.product_new.field_lm_license')}
               </label>
               <div className="relative">
-                <FileCheck className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <FileCheck className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   value={formData.legal_metrology_license}
                   onChange={(e) => handleChange('legal_metrology_license', e.target.value)}
-                  className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                  className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 rounded-xl text-sm font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
                 />
               </div>
             </div>
@@ -373,14 +373,14 @@ export default function ProductEdit() {
           <button
             type="button"
             onClick={() => navigate(productId ? `/products/${productId}` : '/products')}
-            className="px-5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+            className="px-5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl transition-colors cursor-pointer"
           >
             {t('common.cancel') || 'Cancel'}
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center gap-2 px-6 py-2.5 bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow-md cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#173B57] to-slate-900 dark:from-teal-600 dark:to-teal-700 hover:opacity-95 active:scale-95 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
           >
             <Save className="w-4 h-4" />
             <span>{saving ? t('merchant.product_edit.btn_saving') : t('merchant.product_edit.btn_update')}</span>
@@ -390,3 +390,4 @@ export default function ProductEdit() {
     </div>
   );
 }
+

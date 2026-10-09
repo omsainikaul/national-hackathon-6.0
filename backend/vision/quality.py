@@ -246,7 +246,10 @@ class ImageQualityGate:
 
             angles = []
             for line in lines[:50]:
-                x1, y1, x2, y2 = line[0]
+                line_coords = line.reshape(-1)
+                if line_coords.size < 4:
+                    continue
+                x1, y1, x2, y2 = int(line_coords[0]), int(line_coords[1]), int(line_coords[2]), int(line_coords[3])
                 if x2 - x1 == 0:
                     continue
                 angle = np.degrees(np.arctan2(y2 - y1, x2 - x1))

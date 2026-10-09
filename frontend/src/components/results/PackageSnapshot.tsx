@@ -10,9 +10,9 @@ interface PackageSnapshotProps {
 const DataField: React.FC<{ label: string, value: string | null | undefined, truncate?: boolean }> = ({ label, value, truncate }) => {
   if (!value) return null;
   return (
-    <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-100 dark:border-slate-800">
-      <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 uppercase tracking-wider">{label}</div>
-      <div className={`text-sm font-medium text-slate-900 dark:text-slate-100 ${truncate ? 'truncate' : 'break-words'}`} title={truncate ? value : undefined}>
+    <div className="bg-slate-50/80 dark:bg-white/[0.02] p-3 sm:p-3.5 rounded-xl border border-slate-100 dark:border-white/5 transition-colors">
+      <div className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase tracking-wider">{label}</div>
+      <div className={`text-sm font-semibold text-slate-900 dark:text-slate-100 ${truncate ? 'truncate' : 'break-words'}`} title={truncate ? value : undefined}>
         {value}
       </div>
     </div>
@@ -30,15 +30,19 @@ const PackageSnapshot: React.FC<PackageSnapshotProps> = ({ productInfo = {} as a
     .join(' | ');
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs mb-6 overflow-hidden">
-      <div className="bg-slate-50 dark:bg-slate-800/50 p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2">
-        <FileSearch className="w-5 h-5 text-indigo-500" />
-        <span className="font-semibold text-slate-900 dark:text-slate-100">
-          {t('results.package_snapshot', { defaultValue: 'PACKAGE SNAPSHOT' })}
-        </span>
+    <div className="bg-white dark:bg-[#101A2C] rounded-2xl border border-slate-200/90 dark:border-white/10 shadow-xs mb-6 overflow-hidden">
+      <div className="bg-slate-50/80 dark:bg-white/[0.02] p-4 sm:p-5 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="p-1.5 rounded-lg bg-teal-50 dark:bg-teal-950/40 border border-teal-200/60 dark:border-teal-800/60 text-teal-600 dark:text-teal-400">
+            <FileSearch className="w-4 h-4" />
+          </div>
+          <span className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white uppercase tracking-wider">
+            {t('results.package_snapshot', { defaultValue: 'PACKAGE SNAPSHOT' })}
+          </span>
+        </div>
       </div>
       
-      <div className="p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+      <div className="p-4 sm:p-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         <DataField label={t('results.fields.brand', { defaultValue: 'Brand' })} value={info.brand} />
         <DataField label={t('results.fields.product_name', { defaultValue: 'Product Name' })} value={info.product_name} truncate />
         <DataField label={t('results.fields.net_quantity', { defaultValue: 'Net Quantity' })} value={info.net_quantity} />
@@ -51,7 +55,7 @@ const PackageSnapshot: React.FC<PackageSnapshotProps> = ({ productInfo = {} as a
 
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full border-t border-slate-100 dark:border-slate-800 p-3 text-xs font-medium text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/30 flex items-center justify-center gap-1 transition-colors cursor-pointer"
+        className="w-full border-t border-slate-100 dark:border-white/10 p-3 text-xs font-semibold text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 hover:bg-slate-50/80 dark:hover:bg-white/[0.02] flex items-center justify-center gap-1.5 transition-colors cursor-pointer select-none"
       >
         {expanded ? (
           <><ChevronUp className="w-4 h-4" /> {t('results.hide_additional_fields', { defaultValue: 'Hide Additional Fields' })}</>
@@ -61,7 +65,7 @@ const PackageSnapshot: React.FC<PackageSnapshotProps> = ({ productInfo = {} as a
       </button>
 
       {expanded && (
-        <div className="p-4 pt-0 grid grid-cols-1 md:grid-cols-2 gap-3 border-t border-slate-100 dark:border-slate-800">
+        <div className="p-4 sm:p-5 pt-3 grid grid-cols-1 md:grid-cols-2 gap-3 border-t border-slate-100 dark:border-white/10 bg-slate-50/30 dark:bg-white/[0.01]">
           <DataField label={t('results.fields.country_of_origin', { defaultValue: 'Country of Origin' })} value={info.country_of_origin} />
           <DataField label={t('results.fields.marketed_by', { defaultValue: 'Marketed By' })} value={info.marketed_by} />
           <DataField label={t('results.fields.customer_care', { defaultValue: 'Customer Care' })} value={consumerCare || undefined} />

@@ -569,3 +569,313 @@ async def test_api_error_handling_and_guards():
         headers=officer_headers
     )
     assert assign_resp.status_code in (400, 404)
+
+
+@pytest.mark.asyncio
+async def test_correct_field_recalculation_success_updates_timestamp_and_clears_error():
+    """Verify that successful recalculation updates score, status, last_recalculated_at and clears recalculation_error."""
+    from database.db import save_analysis
+    from services.review_service import correct_field, get_or_create_review, parse_review_db_record
+
+    analysis = sample_analysis_payload("analysis-recalc-success")
+    await save_analysis(analysis)
+    raw_review = await get_or_create_review(analysis["id"])
+    review = parse_review_db_record(raw_review)
+
+    # Artificially set an old recalculation_error to verify it gets cleared
+    h_res = review.get("human_verified_result") or {}
+    h_res["recalculation_error"] = "Previous temporary error"
+    from database.db import save_review
+    await save_review(review)
+
+    officer_user = {"username": "officer_test", "role": ROLE_ENFORCEMENT}
+    req = CorrectFieldRequest(
+        field_name="mrp",
+        field_label="Maximum Retail Price (MRP)",
+        corrected_value="Rs. 99.00 (Rs. 0.99 / g)",
+        reason="Updated statutory MRP"
+    )
+
+    updated = await correct_field(
+        review_id=review["id"],
+        actor_user=officer_user,
+        req=req
+    )
+
+    assert updated is not None
+    human_res = updated["human_verified_result"]
+    assert human_res["extracted_data"]["mrp"] == "Rs. 99.00 (Rs. 0.99 / g)"
+    assert human_res["recalculation_error"] is None
+    assert human_res["last_recalculated_at"] is not None
+    assert human_res["score"] is not None
+    assert updated["history"][-1]["action"] == "FIELD_CORRECTED"
+    assert updated["history"][-1]["metadata"]["recalculation_status"] == "SUCCESS"
+
+
+@pytest.mark.asyncio
+async def test_correct_field_recalculation_failure_preserves_data_and_flags_error(monkeypatch):
+    """Verify that when engine.check() fails, the corrected value and audit history are preserved,
+    recalculation_error is set, and last_recalculated_at is NOT updated to indicate fresh calculation."""
+    from database.db import save_analysis
+    from services.review_service import correct_field, get_or_create_review, parse_review_db_record
+    from compliance.engine import ComplianceEngine
+
+    analysis = sample_analysis_payload("analysis-recalc-fail")
+    await save_analysis(analysis)
+    raw_review = await get_or_create_review(analysis["id"])
+    review = parse_review_db_record(raw_review)
+
+    initial_recalc_time = review["human_verified_result"].get("last_recalculated_at")
+    initial_score = review["human_verified_result"].get("score")
+
+    # Mock ComplianceEngine.check to raise a simulation error
+    def mock_check_raise(self, product_info, *args, **kwargs):
+        raise ValueError("Simulated statutory compliance rule engine failure")
+
+    monkeypatch.setattr(ComplianceEngine, "check", mock_check_raise)
+    monkeypatch.setattr(ComplianceEngine, "evaluate", mock_check_raise)
+
+    officer_user = {"username": "officer_test", "role": ROLE_ENFORCEMENT}
+    req = CorrectFieldRequest(
+        field_name="manufacturer",
+        field_label="Manufacturer",
+        corrected_value="ABC Foods Private Limited, Industrial Area, Sector 5",
+        reason="Full manufacturer address provided"
+    )
+
+    updated = await correct_field(
+        review_id=review["id"],
+        actor_user=officer_user,
+        req=req
+    )
+
+    assert updated is not None
+    human_res = updated["human_verified_result"]
+    
+    # 1. Corrected input is preserved
+    assert human_res["extracted_data"]["manufacturer"] == "ABC Foods Private Limited, Industrial Area, Sector 5"
+    
+    # 2. Score is NOT falsely recalculated or presented as new
+    assert human_res["score"] == initial_score
+    
+    # 3. Recalculation error is explicitly flagged
+    assert "Simulated statutory compliance rule engine failure" in (human_res.get("recalculation_error") or "")
+    
+    # 4. last_recalculated_at is not updated to a new time
+    assert human_res.get("last_recalculated_at") == initial_recalc_time
+
+    # 5. Field correction item and history are preserved
+    assert len(updated["field_corrections"]) == 1
+    assert updated["field_corrections"][0]["field_name"] == "manufacturer"
+    assert updated["history"][-1]["action"] == "FIELD_CORRECTED"
+    assert updated["history"][-1]["metadata"]["recalculation_status"] == "FAILED"
+
+
+@pytest.mark.asyncio
+async def test_api_correct_field_endpoint_recalculation_failure_response(monkeypatch):
+    """Verify HTTP response when recalculation fails during field correction via API."""
+    from database.db import save_analysis
+    from services.review_service import get_or_create_review
+    from compliance.engine import ComplianceEngine
+
+    analysis = sample_analysis_payload("analysis-recalc-api-fail")
+    await save_analysis(analysis)
+    review = await get_or_create_review(analysis["id"])
+
+    # Mock ComplianceEngine.check to raise
+    def mock_check_raise(self, product_info, *args, **kwargs):
+        raise RuntimeError("Engine evaluation runtime error")
+
+    monkeypatch.setattr(ComplianceEngine, "check", mock_check_raise)
+    monkeypatch.setattr(ComplianceEngine, "evaluate", mock_check_raise)
+
+    officer_headers = make_auth_header("officer", ROLE_ENFORCEMENT)
+    resp = client.post(
+        f"/api/reviews/{review['id']}/correct-field",
+        json={
+            "field_name": "net_quantity",
+            "field_label": "Net Quantity",
+            "corrected_value": "500 g",
+            "reason": "Officer verified net weight stamp"
+        },
+        headers=officer_headers
+    )
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["status"] == "success"
+    assert data["field_name"] == "net_quantity"
+    assert data["corrected_value"] == "500 g"
+    assert "Engine evaluation runtime error" in (data.get("recalculation_error") or "")
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+# DEF-P1-01: Escalation Persistence & Enforcement Linkage Regression Tests
+# ═════════════════════════════════════════════════════════════════════════════
+
+@pytest.mark.asyncio
+async def test_escalate_review_success_creates_and_links_enforcement_case():
+    """Verify successful escalation persists enforcement case and links it to the review."""
+    from database.db import save_analysis, get_enforcement_case_by_analysis_id, get_review
+    from services.review_service import get_or_create_review, escalate_review, parse_review_db_record
+    from models.review_schemas import EscalateReviewRequest, ReviewStatus
+
+    analysis = sample_analysis_payload("analysis-esc-success-test")
+    await save_analysis(analysis)
+    review = await get_or_create_review(analysis["id"])
+
+    officer_user = {"username": "officer_esc_1", "role": ROLE_ENFORCEMENT, "state": "Delhi", "district_jurisdiction": "Central"}
+    esc_req = EscalateReviewRequest(
+        escalation_reason="MANDATORY_DECLARATIONS_MISSING",
+        comments="Missing MRP and Net Quantity.",
+        escalation_target="ADMIN"
+    )
+
+    esc = await escalate_review(
+        review_id=review["id"],
+        actor_user=officer_user,
+        req=esc_req
+    )
+
+    assert esc["status"] == ReviewStatus.ESCALATED
+    assert esc.get("enforcement_case_id") is not None
+    assert esc.get("enforcement_case_reference") is not None
+    assert esc["enforcement_case_reference"].startswith("MC-ENF-")
+
+    # Verify enforcement case was actually persisted in database
+    case = await get_enforcement_case_by_analysis_id(analysis["id"])
+    assert case is not None
+    assert case["id"] == esc["enforcement_case_id"]
+    assert case["case_reference"] == esc["enforcement_case_reference"]
+    assert case["status"] == "OPEN"
+    assert case["review_id"] == review["id"]
+    assert case["analysis_id"] == analysis["id"]
+
+    # Verify review in database matches
+    raw_rev = await get_review(review["id"])
+    db_rev = parse_review_db_record(raw_rev)
+    assert db_rev["status"] == ReviewStatus.ESCALATED
+    assert len(db_rev["comments"]) >= 1
+    assert db_rev["comments"][-1]["comment_type"] == "ESCALATION"
+
+
+@pytest.mark.asyncio
+async def test_escalate_review_enforcement_db_failure_raises_and_preserves_review(monkeypatch):
+    """Verify that if save_enforcement_case fails, an explicit error is raised and the review is NOT marked ESCALATED in DB."""
+    import database.db as db_mod
+    from database.db import save_analysis, get_review
+    from services.review_service import get_or_create_review, escalate_review
+    from models.review_schemas import EscalateReviewRequest, ReviewStatus
+
+    analysis = sample_analysis_payload("analysis-esc-db-fail-test")
+    await save_analysis(analysis)
+    review = await get_or_create_review(analysis["id"])
+    initial_status = review["status"]
+
+    # Mock save_enforcement_case to simulate database disk/lock failure
+    async def mock_save_case_fail(case_dict):
+        raise RuntimeError("Simulated SQLite disk write failure on enforcement_cases table")
+
+    monkeypatch.setattr(db_mod, "save_enforcement_case", mock_save_case_fail)
+
+    officer_user = {"username": "officer_esc_fail", "role": ROLE_ENFORCEMENT}
+    esc_req = EscalateReviewRequest(
+        escalation_reason="COUNTERFEIT_SUSPICION",
+        comments="Critical packaging violation."
+    )
+
+    with pytest.raises(RuntimeError) as exc_info:
+        await escalate_review(
+            review_id=review["id"],
+            actor_user=officer_user,
+            req=esc_req
+        )
+
+    assert "Failed to persist enforcement escalation" in str(exc_info.value)
+    assert "Simulated SQLite disk write failure" in str(exc_info.value)
+
+    # Verify review in database was NOT modified to ESCALATED with broken linkage
+    db_rev = await get_review(review["id"])
+    assert db_rev["status"] == initial_status
+
+
+@pytest.mark.asyncio
+async def test_escalate_review_linkage_save_failure_raises(monkeypatch):
+    """Verify that if save_review fails after case creation, an explicit error is raised."""
+    import services.review_service as rev_svc
+    from database.db import save_analysis
+    from services.review_service import get_or_create_review, escalate_review
+    from models.review_schemas import EscalateReviewRequest
+
+    analysis = sample_analysis_payload("analysis-esc-rev-fail-test")
+    await save_analysis(analysis)
+    review = await get_or_create_review(analysis["id"])
+
+    # Mock save_review in review_service to fail on escalation save
+    original_save_review = rev_svc.save_review
+    async def mock_save_review_fail(rev_dict):
+        if rev_dict.get("status") == "ESCALATED":
+            raise RuntimeError("Simulated SQLite lock error on officer_reviews table")
+        return await original_save_review(rev_dict)
+
+    monkeypatch.setattr(rev_svc, "save_review", mock_save_review_fail)
+
+    officer_user = {"username": "officer_esc_fail_2", "role": ROLE_ENFORCEMENT}
+    esc_req = EscalateReviewRequest(
+        escalation_reason="SERIOUS_RULE_VIOLATION"
+    )
+
+    with pytest.raises(RuntimeError) as exc_info:
+        await escalate_review(
+            review_id=review["id"],
+            actor_user=officer_user,
+            req=esc_req
+        )
+
+    assert "Failed to persist enforcement escalation" in str(exc_info.value)
+    assert "Simulated SQLite lock error" in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+async def test_escalate_review_idempotency_and_closed_case_handling():
+    """Verify that re-escalating reuses existing OPEN cases without duplicates, and creates new cases for CLOSED ones."""
+    from database.db import save_analysis, get_enforcement_case_by_analysis_id, save_enforcement_case, get_review
+    from services.review_service import get_or_create_review, escalate_review, reopen_review
+    from models.review_schemas import EscalateReviewRequest, ReopenReviewRequest, ReviewStatus
+
+    analysis = sample_analysis_payload("analysis-esc-idemp-test")
+    await save_analysis(analysis)
+    review = await get_or_create_review(analysis["id"])
+
+    officer_user = {"username": "officer_idemp", "role": ROLE_ENFORCEMENT}
+    esc_req = EscalateReviewRequest(escalation_reason="FIRST_ESCALATION")
+
+    # 1. First escalation creates Case 1
+    esc1 = await escalate_review(review["id"], officer_user, esc_req)
+    case1_id = esc1["enforcement_case_id"]
+    case1_ref = esc1["enforcement_case_reference"]
+
+    # 2. Reopen review
+    admin_user = {"username": "admin_user", "role": ROLE_ADMIN}
+    await reopen_review(review["id"], admin_user, ReopenReviewRequest(reopen_reason="Re-assessing"))
+
+    # 3. Second escalation while Case 1 is still OPEN must REUSE Case 1 without duplicating
+    esc2 = await escalate_review(review["id"], officer_user, EscalateReviewRequest(escalation_reason="SECOND_ESCALATION"))
+    assert esc2["enforcement_case_id"] == case1_id
+    assert esc2["enforcement_case_reference"] == case1_ref
+
+    # 4. Close Case 1
+    case1 = await get_enforcement_case_by_analysis_id(analysis["id"])
+    case1["status"] = "CLOSED"
+    await save_enforcement_case(case1)
+
+    # 5. Reopen review again
+    await reopen_review(review["id"], admin_user, ReopenReviewRequest(reopen_reason="Re-escalating after case resolution"))
+
+    # 6. Third escalation with closed past case must create a fresh Case 2
+    esc3 = await escalate_review(review["id"], officer_user, EscalateReviewRequest(escalation_reason="NEW_INFRACTION"))
+    assert esc3["enforcement_case_id"] != case1_id
+    assert esc3["enforcement_case_id"].startswith("case-")
+    assert esc3["enforcement_case_reference"].startswith("MC-ENF-")
+
+

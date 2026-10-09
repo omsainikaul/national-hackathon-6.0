@@ -475,3 +475,243 @@ async def test_version_comparison_report_exports(client):
     assert "VERSION COMPARISON AUDIT REPORT" in csv_text
     assert "Premium Tea" in csv_text
     assert "SIGNIFICANT_IMPROVEMENT" in csv_text
+
+
+def test_placeholder_image_warning_suppression(caplog):
+    """DEF-002: Verify synthetic placeholder URIs do not emit missing-file warnings."""
+    import logging
+    from services.report_service import _load_image, _is_synthetic_placeholder
+
+    assert _is_synthetic_placeholder("/placeholder.png") is True
+    assert _is_synthetic_placeholder("placeholder.png") is True
+    assert _is_synthetic_placeholder("/api/images/placeholder.png") is True
+    assert _is_synthetic_placeholder("placeholder.jpg") is True
+    assert _is_synthetic_placeholder("/uploads/real_sample.png") is False
+
+    with caplog.at_level(logging.WARNING):
+        # 1. Synthetic placeholder should return None without emitting any warning
+        caplog.clear()
+        img_placeholder = _load_image("/placeholder.png", max_width=100, max_height=100)
+        assert img_placeholder is None
+        assert not any("Image file not found" in record.message for record in caplog.records)
+
+        # 2. Empty string or None should return None without emitting any warning
+        caplog.clear()
+        assert _load_image("", max_width=100, max_height=100) is None
+        assert _load_image(None, max_width=100, max_height=100) is None
+        assert not any("Image file not found" in record.message for record in caplog.records)
+
+
+def test_real_image_loading_and_genuine_missing_warning(caplog, tmp_path):
+    """DEF-002: Verify real images load successfully while genuine missing non-placeholder images log a warning."""
+    import logging
+    import os
+    from PIL import Image as PILImage
+    from services.report_service import _load_image
+    from config import settings
+
+    # 1. Test real image loading
+    test_img_filename = "test_audit_evidence.png"
+    test_img_path = os.path.join(settings.UPLOAD_DIR, test_img_filename)
+    
+    os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+    img = PILImage.new("RGB", (100, 100), color="blue")
+    img.save(test_img_path)
+
+    try:
+        loaded = _load_image(f"/api/images/{test_img_filename}", max_width=200, max_height=200)
+        assert loaded is not None
+        assert loaded.drawWidth > 0
+        assert loaded.drawHeight > 0
+    finally:
+        if os.path.exists(test_img_path):
+            os.remove(test_img_path)
+
+    # 2. Test genuinely missing image logs a warning
+    with caplog.at_level(logging.WARNING):
+        caplog.clear()
+        missing_res = _load_image("/uploads/genuine_missing_artwork_9999.png", max_width=100, max_height=100)
+        assert missing_res is None
+        assert any("Image file not found" in record.message for record in caplog.records)
+
+
+def test_pdf_report_generation_with_placeholders_emits_no_warnings(caplog):
+    """DEF-002: Verify full PDF generation for demo case with placeholder images produces zero missing-image warnings."""
+    import logging
+    from api.demo import build_demo_response
+    from services.report_service import generate_pdf_report
+
+    demo_analysis = build_demo_response("1")
+    assert demo_analysis.images and any(img.image_url == "/placeholder.png" for img in demo_analysis.images)
+
+    with caplog.at_level(logging.WARNING):
+        caplog.clear()
+        pdf_bytes = generate_pdf_report(demo_analysis, lang="en")
+        assert pdf_bytes.startswith(b"%PDF-")
+        assert len(pdf_bytes) > 2000
+        assert not any("Image file not found" in record.message for record in caplog.records)
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+# DEF-P2-02: Report Evidence & Review Metadata Reliability Tests
+# ═════════════════════════════════════════════════════════════════════════════
+
+@pytest.mark.asyncio
+async def test_report_preserves_multi_image_evidence_with_partial_malformed(caplog):
+    """DEF-P2-02 (1, 4): Multi-image evidence preserves valid images even if one item is malformed and logs warning."""
+    import logging
+    from api.report import _get_full_analysis_object
+    from database.db import save_analysis
+    
+    analysis_data = {
+        "id": "ana_multi_img_test",
+        "product_name": "Multi-Panel Tea Box",
+        "owner_user_id": "test_user",
+        "organization_id": "org_test",
+        "score": 85.0,
+        "status": "COMPLIANT",
+        "created_at": "2026-03-01T10:00:00Z",
+        "image_filename": "primary_front.jpg",
+        "images": json.dumps([
+            {"filename": "panel_1.jpg", "image_url": "/api/images/panel_1.jpg", "label": "Front Panel", "ocr_text": "Tea 250g"},
+            None,  # Malformed item
+            "not_a_dict",  # Malformed item
+            {"filename": "panel_2.jpg", "image_url": "/api/images/panel_2.jpg", "label": "Back Panel", "ocr_text": "MRP Rs 150"}
+        ]),
+        "compliance_result": json.dumps({
+            "score": 85.0,
+            "status": "COMPLIANT",
+            "checks": []
+        }),
+        "extracted_data": json.dumps({"product_name": "Multi-Panel Tea Box"})
+    }
+    await save_analysis(analysis_data)
+    user = {"username": "test_user", "role": ROLE_ADMIN}
+    
+    with caplog.at_level(logging.WARNING):
+        analysis_obj = await _get_full_analysis_object("ana_multi_img_test", user)
+        
+    assert len(analysis_obj.images) == 2
+    assert analysis_obj.images[0].label == "Front Panel"
+    assert analysis_obj.images[1].label == "Back Panel"
+    assert "Skipping non-dict image evidence item" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_report_includes_officer_review_metadata_and_comments():
+    """DEF-P2-02 (2): Report includes officer review status, comments list, and human verified score."""
+    from api.report import _get_full_analysis_object
+    from database.db import save_analysis, save_review
+    
+    analysis_data = {
+        "id": "ana_review_meta_test",
+        "product_name": "Audit Sample Product",
+        "owner_user_id": "test_user",
+        "organization_id": "org_test",
+        "score": 60.0,
+        "status": "NON_COMPLIANT",
+        "created_at": "2026-03-01T10:00:00Z",
+        "compliance_result": json.dumps({"score": 60.0, "status": "NON_COMPLIANT", "checks": []}),
+        "extracted_data": json.dumps({"product_name": "Audit Sample Product"})
+    }
+    await save_analysis(analysis_data)
+    
+    review_data = {
+        "id": "rev_meta_test",
+        "analysis_id": "ana_review_meta_test",
+        "status": "APPROVED",
+        "assigned_officer": "officer_rajesh",
+        "verified_by": "officer_rajesh",
+        "verified_at": "2026-03-02T12:00:00Z",
+        "final_human_status": "COMPLIANT",
+        "comments": json.dumps([
+            {"comment_id": "cmt-1", "comment_type": "APPROVAL", "text": "Net quantity physically verified.", "officer_username": "officer_rajesh", "timestamp": "2026-03-02T12:00:00Z"}
+        ]),
+        "human_verified_result": json.dumps({"score": 95.0, "status": "COMPLIANT"}),
+        "history": json.dumps([
+            {"event_id": "evt-1", "action": "APPROVED", "actor_username": "officer_rajesh", "timestamp": "2026-03-02T12:00:00Z"}
+        ])
+    }
+    await save_review(review_data)
+    
+    user = {"username": "test_user", "role": ROLE_ADMIN}
+    analysis_obj = await _get_full_analysis_object("ana_review_meta_test", user)
+    
+    assert analysis_obj.officer_review is not None
+    assert analysis_obj.officer_review["status"] == "APPROVED"
+    assert analysis_obj.officer_review["assigned_officer"] == "officer_rajesh"
+    assert analysis_obj.officer_review["human_score"] == 95.0
+    assert len(analysis_obj.officer_review["comments"]) == 1
+    assert analysis_obj.officer_review["comments"][0]["text"] == "Net quantity physically verified."
+
+
+@pytest.mark.asyncio
+async def test_report_handles_non_json_comments_gracefully(caplog):
+    """DEF-P2-02 (5): Non-JSON plain text comments are gracefully wrapped and logged without breaking."""
+    import logging
+    from api.report import _get_full_analysis_object
+    from database.db import save_analysis, save_review
+    
+    analysis_data = {
+        "id": "ana_raw_comment_test",
+        "product_name": "Sample Product Plain Comment",
+        "owner_user_id": "test_user",
+        "organization_id": "org_test",
+        "score": 70.0,
+        "status": "NON_COMPLIANT",
+        "created_at": "2026-03-01T10:00:00Z",
+        "compliance_result": json.dumps({"score": 70.0, "status": "NON_COMPLIANT", "checks": []}),
+        "extracted_data": json.dumps({"product_name": "Sample Product Plain Comment"})
+    }
+    await save_analysis(analysis_data)
+    
+    review_data = {
+        "id": "rev_raw_comment_test",
+        "analysis_id": "ana_raw_comment_test",
+        "status": "IN_REVIEW",
+        "assigned_officer": "officer_sunil",
+        "comments": "Plain string comment without JSON formatting.",
+        "human_verified_result": None
+    }
+    await save_review(review_data)
+    
+    user = {"username": "test_user", "role": ROLE_ADMIN}
+    with caplog.at_level(logging.WARNING):
+        analysis_obj = await _get_full_analysis_object("ana_raw_comment_test", user)
+        
+    assert analysis_obj.officer_review is not None
+    assert len(analysis_obj.officer_review["comments"]) == 1
+    assert analysis_obj.officer_review["comments"][0]["text"] == "Plain string comment without JSON formatting."
+    assert "Non-JSON comments string" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_report_corrupted_compliance_result_raises_500(caplog):
+    """DEF-P2-02 (4): Corrupted compliance_result JSON fails with HTTP 500 rather than producing misleading blank report."""
+    import logging
+    from fastapi import HTTPException
+    from api.report import _get_full_analysis_object
+    from database.db import save_analysis
+    
+    analysis_data = {
+        "id": "ana_corrupt_comp_test",
+        "product_name": "Corrupted Result Product",
+        "owner_user_id": "test_user",
+        "organization_id": "org_test",
+        "score": 0.0,
+        "status": "FAIL",
+        "created_at": "2026-03-01T10:00:00Z",
+        "compliance_result": '{"checks": [INVALID_JSON_HERE',
+        "extracted_data": json.dumps({"product_name": "Corrupted Result Product"})
+    }
+    await save_analysis(analysis_data)
+    user = {"username": "test_user", "role": ROLE_ADMIN}
+    
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(HTTPException) as exc_info:
+            await _get_full_analysis_object("ana_corrupt_comp_test", user)
+            
+    assert exc_info.value.status_code == 500
+    assert "Corrupted compliance result" in exc_info.value.detail
+    assert "ana_corrupt_comp_test" in caplog.text
+

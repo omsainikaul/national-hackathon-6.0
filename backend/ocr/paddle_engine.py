@@ -38,11 +38,14 @@ os.environ.setdefault("FLAGS_use_mkldnn", "0")
 os.environ.setdefault("PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT", "0")
 
 import threading
+import numpy as np
 
 # Global cached PaddleOCR instances by language, initialization lock & inference lock
 _PADDLE_OCR_INSTANCES: Dict[str, Any] = {}
 _PADDLE_OCR_LOCK = threading.Lock()
 _PADDLE_INFERENCE_LOCK = threading.Lock()
+_WARMUP_LOCK = threading.Lock()
+_WARMED_LANGUAGES: set = set()
 
 # Image-level content hash cache & model load stats
 _OCR_RESULT_CACHE: Dict[str, Tuple[List[str], List[OCRWord], List[float], int]] = {}
@@ -790,6 +793,73 @@ def _sync_paddle_extract_multiscale(image_path: str, lang: str = "en") -> Tuple[
     return merged_lines, accepted_words, merged_confs, 2
 
 
+def is_ocr_warmed_up(lang: str = "en") -> bool:
+    """Returns True if the PaddleOCR model for the specified language is loaded and warmed up."""
+    norm_lang = _normalize_lang_code(lang)
+    return norm_lang in _WARMED_LANGUAGES and norm_lang in _PADDLE_OCR_INSTANCES
+
+
+def warmup_ocr(lang: str = "en") -> bool:
+    """
+    Safely and synchronously pre-warms the PaddleOCR singleton for low-latency live demo inference.
+    - Thread-safe and idempotent (runs once per language).
+    - Reuses the existing _init_paddle_ocr singleton.
+    - Uses a tiny in-memory synthetic image to compile DBNet and SVTR inference graphs.
+    - Does NOT write to the database or persist synthetic results.
+    - Catches and logs all errors gracefully without crashing the application.
+    """
+    global _WARMED_LANGUAGES
+    norm_lang = _normalize_lang_code(lang)
+
+    if is_ocr_warmed_up(norm_lang):
+        return True
+
+    if not _is_paddle_available():
+        logger.warning(f"[OCR] PaddleOCR is unavailable in this environment; skipping warmup for lang '{norm_lang}'.")
+        return False
+
+    with _WARMUP_LOCK:
+        if is_ocr_warmed_up(norm_lang):
+            return True
+
+        t_start = time.perf_counter()
+        logger.info(f"[OCR] Starting safe startup warmup for language '{norm_lang}'...")
+
+        try:
+            import cv2
+            import tempfile
+
+            # 1. Initialize or get singleton instance
+            inst = _init_paddle_ocr(lang=norm_lang)
+            _PADDLE_OCR_INSTANCES[norm_lang] = inst
+
+            # 2. Run a single tiny 64x180 synthetic image extraction to compile C++ execution paths
+            tmp_fd, tmp_path = tempfile.mkstemp(suffix="_ocr_warmup.png")
+            try:
+                img = np.full((64, 180, 3), 255, dtype=np.uint8)
+                cv2.putText(img, "METRCHECK", (10, 42), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 0), 2)
+                cv2.imwrite(tmp_path, img)
+                os.close(tmp_fd)
+
+                # Execute extraction (exercises both DBNet detection and SVTR recognition)
+                _sync_paddle_extract(tmp_path, lang=norm_lang)
+            finally:
+                if os.path.exists(tmp_path):
+                    try:
+                        os.remove(tmp_path)
+                    except Exception:
+                        pass
+
+            _WARMED_LANGUAGES.add(norm_lang)
+            duration_ms = (time.perf_counter() - t_start) * 1000
+            logger.info(f"[OCR] PaddleOCR startup warmup completed in {duration_ms:.1f}ms for lang '{norm_lang}'.")
+            return True
+
+        except Exception as err:
+            logger.error(f"[OCR] PaddleOCR warmup failed for lang '{norm_lang}': {err}", exc_info=True)
+            return False
+
+
 class PaddleOCREngine(OCREngine):
     """
     PaddleOCR Deep Learning Engine (PP-OCRv4).
@@ -806,6 +876,14 @@ class PaddleOCREngine(OCREngine):
 
     def is_available(self) -> bool:
         return _is_paddle_available()
+
+    def is_ready(self) -> bool:
+        """Returns True if the underlying OCR model has been loaded and warmed up."""
+        return is_ocr_warmed_up(self.lang)
+
+    def warmup(self) -> bool:
+        """Explicitly warm up this engine instance."""
+        return warmup_ocr(self.lang)
 
     async def extract(self, image_path: str) -> OCRResult:
         start_time = time.time()

@@ -237,6 +237,18 @@
     "backPanel": "Back Panel (Information Panel)",
     "sidePanel": "Side Panel",
     "sampleFixtures": "Sample Test Fixtures",
+    "demo_samples": {
+      "title": "Quick-Load Live Demo Packaging Samples",
+      "subtitle": "Select a verified sample to populate image slots and run real live AI compliance screening",
+      "load_sample": "Load Sample Images",
+      "loading": "Loading Sample...",
+      "loaded_badge": "Loaded in Slots",
+      "live_ai_notice": "Populates upload slots with genuine product photos. Click 'Run Live AI Analysis' to execute real OCR & statutory evaluation.",
+      "alpino_title": "Alpino Super Oats (400g)",
+      "alpino_type": "Compliant Reference Package",
+      "takatak_title": "Tak-a-Tak / Kurkure Snacks",
+      "takatak_type": "Deficient Declarations (Action Required)"
+    },
     "slots": {
       "front_label": "Front",
       "front_desc": "Upload the front label",
@@ -255,6 +267,12 @@
       "side2_hints": "Additional declarations, bar code & certifications"
     },
     "ai_badge": "AI-Assisted Compliance Screening",
+    "mode_live_ai": "LIVE AI ANALYSIS",
+    "mode_live_ai_desc": "PaddleOCR & Statutory Engine Run",
+    "mode_precomputed_demo": "PRECOMPUTED DEMO",
+    "mode_precomputed_demo_desc": "Prepared Benchmark Fixture",
+    "mode_ready_to_analyze": "READY TO ANALYZE",
+    "mode_live_scanner": "LIVE AI SCANNER",
     "analyze_package": "Analyze Package",
     "banner_upload_guide": "Upload 1–4 images of the same package.",
     "banner_front_required": "Front — Required",

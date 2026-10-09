@@ -363,18 +363,26 @@ export default function Login() {
   const targetDef = activeWorkspace ? WORKSPACE_DEFINITIONS[activeWorkspace] : null;
 
   return (
-    <div className="min-h-screen w-full flex flex-col justify-between py-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+    <div className="min-h-screen w-full flex flex-col justify-between py-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#101A2C] via-[#173B57]/30 to-[#101A2C] text-slate-100 selection:bg-teal-500/30 selection:text-teal-200">
       {/* Top Brand Nav */}
-      <div className="max-w-5xl w-full mx-auto flex items-center">
+      <div className="max-w-5xl w-full mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/30">
-            <ShieldCheck className="w-6 h-6 text-indigo-400" />
+          <div className="p-2.5 rounded-2xl bg-teal-500/15 border border-teal-500/30 shadow-lg shadow-teal-500/10">
+            <ShieldCheck className="w-6 h-6 text-teal-400" />
           </div>
           <div>
             <span className="text-base font-extrabold tracking-tight text-white block">MetrCheck AI</span>
-            <span className="text-xs text-slate-400">AI-Assisted Statutory Compliance</span>
+            <span className="text-xs text-slate-400 font-medium">Statutory Legal Metrology Compliance Intelligence</span>
           </div>
         </div>
+
+        <Link
+          to="/admin/login"
+          className="text-xs font-semibold text-slate-400 hover:text-teal-300 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-teal-500/30"
+        >
+          <Lock className="w-3.5 h-3.5 text-teal-400" />
+          <span className="hidden sm:inline">Admin Portal</span>
+        </Link>
       </div>
 
       {/* Main Content Area */}
@@ -383,23 +391,23 @@ export default function Login() {
         {/* STATE 1: ACCESS DENIED SCREEN (Role not authorized for workspace)    */}
         {/* ==================================================================== */}
         {accessDeniedUser && targetDef ? (
-          <div className="max-w-lg mx-auto rounded-3xl border border-amber-500/30 bg-slate-900/90 backdrop-blur-md shadow-2xl p-6 sm:p-8 space-y-6 animate-in fade-in zoom-in-95 duration-200">
+          <div className="max-w-lg mx-auto rounded-3xl border border-amber-500/30 bg-slate-900/95 backdrop-blur-md shadow-2xl p-6 sm:p-8 space-y-6 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-start gap-4">
               <div className="p-3 bg-amber-500/15 text-amber-400 rounded-2xl border border-amber-500/30 shrink-0">
                 <ShieldAlert className="w-8 h-8" />
               </div>
               <div className="space-y-1">
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-400">Access Control Boundary</span>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">Access Control Boundary</span>
                 <h2 className="text-xl font-black text-white tracking-tight">Workspace Access Restricted</h2>
               </div>
             </div>
 
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               The <strong className="text-white">{targetDef.label}</strong> is restricted. Your authenticated account does not have permission to access this operational workspace.
             </p>
 
             {/* Account & Permission Summary Card */}
-            <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-2.5 text-xs font-mono">
+            <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-2.5 text-xs font-mono">
               <div className="flex justify-between items-center text-slate-400 border-b border-slate-800/80 pb-2">
                 <span>Authenticated Account:</span>
                 <span className="font-bold text-slate-200">{accessDeniedUser.username}</span>
@@ -418,7 +426,7 @@ export default function Login() {
               </div>
               <div className="flex justify-between items-center text-slate-400 pt-0.5">
                 <span>Authorized Workspace:</span>
-                <span className="font-bold text-emerald-400">
+                <span className="font-bold text-teal-400">
                   {getAllowedWorkspacesForRole(accessDeniedUser.role)[0]} Workspace
                 </span>
               </div>
@@ -429,7 +437,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={handleAccessDeniedContinueAllowed}
-                className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+                className="w-full py-3 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-teal-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
               >
                 <span>Continue to Authorized Workspace</span>
                 <ArrowRight className="w-4 h-4" />
@@ -453,10 +461,10 @@ export default function Login() {
             {/* Title & Introduction */}
             <div className="text-center space-y-2 max-w-2xl mx-auto">
               <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-                Choose your access
+                Choose your access portal
               </h1>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                Select how you want to use MetrCheck AI.
+                Select your operational role to access purpose-built compliance workflows.
               </p>
             </div>
 
@@ -465,47 +473,49 @@ export default function Login() {
               {/* CARD 1: NORMAL USER */}
               <div 
                 onClick={() => handleSelectCategory('USER')}
-                className="rounded-3xl border border-slate-800 bg-slate-900/70 hover:border-cyan-500/60 hover:bg-slate-900/90 transition-all duration-200 p-6 flex flex-col justify-between group cursor-pointer shadow-xl relative overflow-hidden"
+                className="rounded-3xl border border-slate-800/80 bg-slate-900/80 hover:border-teal-500/50 hover:bg-slate-900/95 transition-all duration-200 p-6 flex flex-col justify-between group cursor-pointer shadow-xl relative overflow-hidden focus:outline-hidden focus:ring-2 focus:ring-teal-500/40"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSelectCategory('USER'); }}
               >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <div className="w-12 h-12 rounded-2xl bg-teal-500/10 border border-teal-500/30 text-teal-400 flex items-center justify-center group-hover:scale-105 transition-transform shadow-inner">
                       <UserIcon className="w-6 h-6" />
                     </div>
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 uppercase">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider bg-teal-500/20 text-teal-300 border border-teal-400/30 uppercase">
                       CHECK
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
+                    <h3 className="text-lg font-bold text-white group-hover:text-teal-300 transition-colors">
                       Normal User
                     </h3>
-                    <p className="text-xs text-cyan-400/90 font-medium mt-0.5">
-                      For consumers and users who want to check packaged products.
+                    <p className="text-xs text-teal-400/90 font-medium mt-0.5">
+                      For consumers and shoppers checking pre-packaged goods.
                     </p>
                   </div>
 
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Check product information, review detected declarations, and understand MetrCheck AI compliance findings.
+                    Scan packaging labels, verify declared statutory details (MRP, net weight, packer), and understand MetrCheck AI findings.
                   </p>
 
-                  <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 space-y-1">
+                  <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-1">
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Primary Goal:</span>
-                    <p className="text-xs text-slate-200 font-medium">Check and understand product information.</p>
+                    <p className="text-xs text-slate-200 font-medium">Verify consumer packaging declarations instantly.</p>
                   </div>
                 </div>
 
                 <div className="pt-5 mt-4 border-t border-slate-800/80 flex items-center justify-between">
-                  <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+                  <span className="text-[11px] text-teal-400 font-semibold flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Open Access</span>
                   </span>
                   <button
                     type="button"
-                    className="px-3.5 py-1.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow-md shadow-cyan-600/30 transition-all flex items-center gap-1.5 cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-md shadow-teal-600/30 transition-all flex items-center gap-1.5 cursor-pointer"
                   >
-                    <span>Continue as Normal User</span>
+                    <span>Enter Portal</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -514,11 +524,13 @@ export default function Login() {
               {/* CARD 2: MERCHANT */}
               <div 
                 onClick={() => handleSelectCategory('MERCHANT')}
-                className="rounded-3xl border border-slate-800 bg-slate-900/70 hover:border-sky-500/60 hover:bg-slate-900/90 transition-all duration-200 p-6 flex flex-col justify-between group cursor-pointer shadow-xl relative overflow-hidden"
+                className="rounded-3xl border border-slate-800/80 bg-slate-900/80 hover:border-sky-500/50 hover:bg-slate-900/95 transition-all duration-200 p-6 flex flex-col justify-between group cursor-pointer shadow-xl relative overflow-hidden focus:outline-hidden focus:ring-2 focus:ring-sky-500/40"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSelectCategory('MERCHANT'); }}
               >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-sky-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-sky-400 flex items-center justify-center group-hover:scale-105 transition-transform shadow-inner">
                       <Store className="w-6 h-6" />
                     </div>
                     <span className="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider bg-sky-500/20 text-sky-300 border border-sky-400/30 uppercase">
@@ -531,17 +543,17 @@ export default function Login() {
                       Merchant
                     </h3>
                     <p className="text-xs text-sky-400/90 font-medium mt-0.5">
-                      For manufacturers, brands, packers, importers and retailers.
+                      For manufacturers, packers, importers, and brand owners.
                     </p>
                   </div>
 
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Check products before release, maintain product records, and review compliance findings.
+                    Perform pre-print label audits, manage SKU catalogs, compare artwork revisions, and ensure zero statutory compliance gaps.
                   </p>
 
-                  <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 space-y-1">
+                  <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-1">
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Primary Goal:</span>
-                    <p className="text-xs text-slate-200 font-medium">Verify and improve product packaging compliance.</p>
+                    <p className="text-xs text-slate-200 font-medium">Verify packaging compliance prior to commercial printing.</p>
                   </div>
                 </div>
 
@@ -554,7 +566,7 @@ export default function Login() {
                     type="button"
                     className="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-600/30 transition-all flex items-center gap-1.5 cursor-pointer"
                   >
-                    <span>Continue as Merchant</span>
+                    <span>Enter Portal</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -563,11 +575,13 @@ export default function Login() {
               {/* CARD 3: OFFICER */}
               <div 
                 onClick={() => handleSelectCategory('OFFICER')}
-                className="rounded-3xl border border-slate-800 bg-slate-900/70 hover:border-amber-500/60 hover:bg-slate-900/90 transition-all duration-200 p-6 flex flex-col justify-between group cursor-pointer shadow-xl relative overflow-hidden"
+                className="rounded-3xl border border-slate-800/80 bg-slate-900/80 hover:border-amber-500/50 hover:bg-slate-900/95 transition-all duration-200 p-6 flex flex-col justify-between group cursor-pointer shadow-xl relative overflow-hidden focus:outline-hidden focus:ring-2 focus:ring-amber-500/40"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSelectCategory('OFFICER'); }}
               >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform shadow-inner">
                       <ShieldAlert className="w-6 h-6" />
                     </div>
                     <span className="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/30 uppercase">
@@ -580,30 +594,30 @@ export default function Login() {
                       Officer
                     </h3>
                     <p className="text-xs text-amber-400/90 font-medium mt-0.5">
-                      For authorized Legal Metrology officers.
+                      For authorized Audit &amp; Legal Metrology Enforcement Officers.
                     </p>
                   </div>
 
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Access authorized audit, compliance verification, investigation, and enforcement workflows.
+                    Access high-assurance evidence review queues, statutory inspection reports, and official enforcement notice workflows.
                   </p>
 
-                  <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 space-y-1">
+                  <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-1">
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Primary Goal:</span>
-                    <p className="text-xs text-slate-200 font-medium">Verify compliance and perform authorized regulatory workflows.</p>
+                    <p className="text-xs text-slate-200 font-medium">Review findings and execute statutory enforcement actions.</p>
                   </div>
                 </div>
 
                 <div className="pt-5 mt-4 border-t border-slate-800/80 flex items-center justify-between">
                   <span className="text-[11px] text-amber-400 font-semibold flex items-center gap-1">
                     <Lock className="w-3.5 h-3.5" />
-                    <span>Official Access / Restricted</span>
+                    <span>Restricted Access</span>
                   </span>
                   <button
                     type="button"
                     className="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-md shadow-amber-600/30 transition-all flex items-center gap-1.5 cursor-pointer"
                   >
-                    <span>Continue as Officer</span>
+                    <span>Select Officer Type</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -622,10 +636,10 @@ export default function Login() {
                 <span>Authorized Regulatory Access</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                Officer Access
+                Select Officer Workspace
               </h1>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                Select your authorized officer workspace.
+                Choose your specific authority level to authenticate into the corresponding console.
               </p>
             </div>
 
@@ -634,11 +648,13 @@ export default function Login() {
               {/* 1. Audit Officer */}
               <div 
                 onClick={() => handleSelectOfficerSubtype('AUDIT')}
-                className="rounded-3xl border border-slate-800 bg-slate-900/70 hover:border-indigo-500/60 hover:bg-slate-900/90 transition-all duration-200 p-6 flex flex-col justify-between group cursor-pointer shadow-xl relative overflow-hidden"
+                className="rounded-3xl border border-slate-800/80 bg-slate-900/80 hover:border-indigo-500/50 hover:bg-slate-900/95 transition-all duration-200 p-6 flex flex-col justify-between group cursor-pointer shadow-xl relative overflow-hidden focus:outline-hidden focus:ring-2 focus:ring-indigo-500/40"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSelectOfficerSubtype('AUDIT'); }}
               >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 flex items-center justify-center group-hover:scale-105 transition-transform shadow-inner">
                       <SearchCheck className="w-6 h-6" />
                     </div>
                     <span className="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 uppercase">
@@ -651,24 +667,24 @@ export default function Login() {
                       Audit Officer
                     </h3>
                     <p className="text-xs text-indigo-400/90 font-medium mt-0.5">
-                      For quality, compliance and audit users
+                      Quality assurance, compliance audit, and verification users.
                     </p>
                   </div>
 
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Perform compliance verification, review evidence, and maintain audit records.
+                    Perform deep compliance audits, inspect detected text coordinates, verify rule adherence, and maintain audit logs.
                   </p>
 
-                  <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 space-y-1">
+                  <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-1">
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Primary Goal:</span>
-                    <p className="text-xs text-slate-200 font-medium">Verify what was detected and why.</p>
+                    <p className="text-xs text-slate-200 font-medium">Verify what was detected and evaluate statutory compliance.</p>
                   </div>
                 </div>
 
                 <div className="pt-5 mt-4 border-t border-slate-800/80 flex items-center justify-between">
                   <span className="text-[11px] text-indigo-400 font-semibold flex items-center gap-1">
                     <BadgeCheck className="w-3.5 h-3.5" />
-                    <span>Officer / QA Auth</span>
+                    <span>Audit Authority</span>
                   </span>
                   <button
                     type="button"
@@ -683,11 +699,13 @@ export default function Login() {
               {/* 2. Enforcement Officer */}
               <div 
                 onClick={() => handleSelectOfficerSubtype('ENFORCEMENT')}
-                className="rounded-3xl border border-slate-800 bg-slate-900/70 hover:border-amber-500/60 hover:bg-slate-900/90 transition-all duration-200 p-6 flex flex-col justify-between group cursor-pointer shadow-xl relative overflow-hidden"
+                className="rounded-3xl border border-slate-800/80 bg-slate-900/80 hover:border-amber-500/50 hover:bg-slate-900/95 transition-all duration-200 p-6 flex flex-col justify-between group cursor-pointer shadow-xl relative overflow-hidden focus:outline-hidden focus:ring-2 focus:ring-amber-500/40"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleSelectOfficerSubtype('ENFORCEMENT'); }}
               >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform shadow-inner">
                       <ShieldAlert className="w-6 h-6" />
                     </div>
                     <span className="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/30 uppercase">
@@ -700,24 +718,24 @@ export default function Login() {
                       Enforcement Officer
                     </h3>
                     <p className="text-xs text-amber-400/90 font-medium mt-0.5">
-                      For authorized Legal Metrology enforcement officials
+                      Statutory Legal Metrology inspectors &amp; regulatory authorities.
                     </p>
                   </div>
 
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Access authorized investigation and enforcement workflows.
+                    Investigate violations, prepare statutory inspection notices, manage enforcement cases, and coordinate legal actions.
                   </p>
 
-                  <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 space-y-1">
+                  <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-1">
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Primary Goal:</span>
-                    <p className="text-xs text-slate-200 font-medium">Review findings and support regulatory action.</p>
+                    <p className="text-xs text-slate-200 font-medium">Issue statutory notices and conduct formal investigations.</p>
                   </div>
                 </div>
 
                 <div className="pt-5 mt-4 border-t border-slate-800/80 flex items-center justify-between">
                   <span className="text-[11px] text-amber-400 font-semibold flex items-center gap-1">
                     <Lock className="w-3.5 h-3.5" />
-                    <span>Official Auth</span>
+                    <span>Enforcement Authority</span>
                   </span>
                   <button
                     type="button"
@@ -735,7 +753,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={handleBackToTopLevel}
-                className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-teal-300 transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>← Change access type</span>
@@ -751,7 +769,7 @@ export default function Login() {
             <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900 border border-slate-800 shadow-md">
               <div className="flex items-center gap-2.5 min-w-0">
                 <div className={`p-2 rounded-xl shrink-0 ${
-                  activeWorkspace === 'USER' ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30' :
+                  activeWorkspace === 'USER' ? 'bg-teal-500/15 text-teal-400 border border-teal-500/30' :
                   activeWorkspace === 'MERCHANT' ? 'bg-sky-500/15 text-sky-400 border border-sky-500/30' :
                   activeWorkspace === 'AUDIT' ? 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30' :
                   'bg-amber-500/15 text-amber-400 border border-amber-500/30'
@@ -766,7 +784,7 @@ export default function Login() {
                     {mode === 'login' ? 'Signing in to' : 'Registering for'}
                   </span>
                   <p className="text-xs font-bold text-white truncate">
-                    {targetDef?.label} • <span className="font-mono text-indigo-300">{targetDef?.coreAction}</span>
+                    {targetDef?.label} • <span className="font-mono text-teal-300">{targetDef?.coreAction}</span>
                   </p>
                 </div>
               </div>
@@ -774,14 +792,14 @@ export default function Login() {
               <button
                 type="button"
                 onClick={selectedCategory === 'OFFICER' ? handleBackToOfficerSelection : handleBackToTopLevel}
-                className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 hover:underline px-2.5 py-1 rounded-lg hover:bg-slate-800 transition-colors shrink-0 cursor-pointer"
+                className="text-xs font-semibold text-teal-400 hover:text-teal-300 hover:underline px-2.5 py-1 rounded-lg hover:bg-slate-800 transition-colors shrink-0 cursor-pointer"
               >
                 {selectedCategory === 'OFFICER' ? '← Change officer type' : '← Change access type'}
               </button>
             </div>
 
             {/* Login / Registration Card */}
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/80 backdrop-blur-md shadow-2xl overflow-hidden">
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 backdrop-blur-md shadow-2xl overflow-hidden">
               {/* Mode Header / Tabs: Normal User & Merchant get Sign In + Register tabs; Officers get Sign In header */}
               {selectedCategory === 'USER' ? (
                 <div className="p-2 border-b border-slate-800 bg-slate-950/40">
@@ -793,7 +811,7 @@ export default function Login() {
                         onClick={() => { setMode(m); setError(null); }}
                         className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                           mode === m
-                            ? 'bg-cyan-600 text-white shadow-sm'
+                            ? 'bg-teal-600 text-white shadow-sm'
                             : 'text-slate-400 hover:text-slate-200'
                         }`}
                       >
@@ -842,7 +860,7 @@ export default function Login() {
                 {/* ── NORMAL USER REGISTRATION FORM ── */}
                 {selectedCategory === 'USER' && mode === 'register' && (
                   <div className="space-y-4">
-                    <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-xs text-cyan-300 leading-relaxed">
+                    <div className="p-3 rounded-xl bg-teal-500/10 border border-teal-500/20 text-xs text-teal-300 leading-relaxed">
                       Create a personal account to inspect packaged products and review detected compliance findings.
                     </div>
 
@@ -857,7 +875,7 @@ export default function Login() {
                           onChange={(e) => setFullName(e.target.value)}
                           placeholder="e.g. Rahul Sharma"
                           required
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-cyan-500 outline-none text-sm text-white placeholder:text-slate-500"
+                          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                         />
                       </div>
                     </div>
@@ -874,7 +892,7 @@ export default function Login() {
                           placeholder="Choose a username"
                           autoComplete="username"
                           required
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-cyan-500 outline-none text-sm text-white placeholder:text-slate-500"
+                          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                         />
                       </div>
                     </div>
@@ -892,7 +910,7 @@ export default function Login() {
                           placeholder="user@example.com"
                           autoComplete="email"
                           required
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-cyan-500 outline-none text-sm text-white placeholder:text-slate-500"
+                          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                         />
                       </div>
                     </div>
@@ -908,7 +926,7 @@ export default function Login() {
                           value={mobileNumber}
                           onChange={(e) => setMobileNumber(e.target.value)}
                           placeholder="+91 98765 43210"
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-cyan-500 outline-none text-sm text-white placeholder:text-slate-500"
+                          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                         />
                       </div>
                     </div>
@@ -927,12 +945,13 @@ export default function Login() {
                           autoComplete="new-password"
                           required
                           minLength={8}
-                          className="w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-cyan-500 outline-none text-sm text-white placeholder:text-slate-500"
+                          className="w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPw(!showPw)}
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer"
+                          aria-label={showPw ? "Hide password" : "Show password"}
                         >
                           {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
@@ -953,12 +972,13 @@ export default function Login() {
                           autoComplete="new-password"
                           required
                           minLength={8}
-                          className="w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-cyan-500 outline-none text-sm text-white placeholder:text-slate-500"
+                          className="w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                         />
                         <button
                           type="button"
                           onClick={() => setShowConfirmPw(!showConfirmPw)}
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer"
+                          aria-label={showConfirmPw ? "Hide password" : "Show password"}
                         >
                           {showConfirmPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
@@ -987,9 +1007,9 @@ export default function Login() {
                           <input
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
-                            placeholder="e.g. Anand Mahindra"
+                            placeholder="e.g. Anand Sharma"
                             required
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1003,7 +1023,7 @@ export default function Login() {
                             placeholder="Choose username"
                             autoComplete="username"
                             required
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1018,7 +1038,7 @@ export default function Login() {
                             placeholder="compliance@brand.com"
                             autoComplete="email"
                             required
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1031,7 +1051,7 @@ export default function Login() {
                             value={mobileNumber}
                             onChange={(e) => setMobileNumber(e.target.value)}
                             placeholder="+91 98765 43210"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1047,7 +1067,7 @@ export default function Login() {
                             autoComplete="new-password"
                             required
                             minLength={8}
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1063,7 +1083,7 @@ export default function Login() {
                             autoComplete="new-password"
                             required
                             minLength={8}
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
                       </div>
@@ -1088,7 +1108,7 @@ export default function Login() {
                             onChange={(e) => setBusinessName(e.target.value)}
                             placeholder="e.g. Acme Organic Foods Private Limited"
                             required
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1099,7 +1119,7 @@ export default function Login() {
                           <select
                             value={businessType}
                             onChange={(e) => setBusinessType(e.target.value)}
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white cursor-pointer"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white cursor-pointer transition-all"
                           >
                             <option value="Manufacturer">Manufacturer</option>
                             <option value="Packer">Packer</option>
@@ -1119,7 +1139,7 @@ export default function Login() {
                             value={tradeName}
                             onChange={(e) => setTradeName(e.target.value)}
                             placeholder="e.g. Acme Naturals"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
                       </div>
@@ -1144,7 +1164,7 @@ export default function Login() {
                             onChange={(e) => setAddressLine1(e.target.value)}
                             placeholder="Plot / Building / Street Address"
                             required
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1156,7 +1176,7 @@ export default function Login() {
                             value={addressLine2}
                             onChange={(e) => setAddressLine2(e.target.value)}
                             placeholder="Industrial Area / Landmark"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1169,7 +1189,7 @@ export default function Login() {
                             onChange={(e) => setCity(e.target.value)}
                             placeholder="e.g. Mumbai"
                             required
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1182,7 +1202,7 @@ export default function Login() {
                             onChange={(e) => setStateName(e.target.value)}
                             placeholder="e.g. Maharashtra"
                             required
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1195,7 +1215,7 @@ export default function Login() {
                             onChange={(e) => setPincode(e.target.value)}
                             placeholder="400001"
                             required
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1230,7 +1250,7 @@ export default function Login() {
                             value={gstin}
                             onChange={(e) => setGstin(e.target.value.toUpperCase())}
                             placeholder="27AAAAA0000A1Z5"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white font-mono placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white font-mono placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1242,7 +1262,7 @@ export default function Login() {
                             value={fssaiLicense}
                             onChange={(e) => setFssaiLicense(e.target.value)}
                             placeholder="100XXXXXXXXXXX"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white font-mono placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white font-mono placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1254,7 +1274,7 @@ export default function Login() {
                             value={legalMetrologyLicense}
                             onChange={(e) => setLegalMetrologyLicense(e.target.value)}
                             placeholder="e.g. LM-REG-2024-XXXX"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
 
@@ -1266,7 +1286,7 @@ export default function Login() {
                             value={otherIdentifier}
                             onChange={(e) => setOtherIdentifier(e.target.value)}
                             placeholder="IEC / CIN / MSME"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 outline-none text-sm text-white placeholder:text-slate-500"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                           />
                         </div>
                       </div>
@@ -1291,7 +1311,7 @@ export default function Login() {
                           placeholder="Enter username or email"
                           autoComplete="username"
                           required
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-indigo-500 outline-none text-sm text-white placeholder:text-slate-500"
+                          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                         />
                       </div>
                     </div>
@@ -1301,7 +1321,7 @@ export default function Login() {
                         <label className="block text-xs font-medium text-slate-400">Password</label>
                         <Link
                           to="/forgot-password"
-                          className="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+                          className="text-[11px] font-semibold text-teal-400 hover:text-teal-300 transition-colors"
                         >
                           Forgot password?
                         </Link>
@@ -1315,12 +1335,13 @@ export default function Login() {
                           placeholder="••••••••"
                           autoComplete="current-password"
                           required
-                          className="w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-indigo-500 outline-none text-sm text-white placeholder:text-slate-500"
+                          className="w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-800/70 border border-slate-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none text-sm text-white placeholder:text-slate-500 transition-all"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPw(!showPw)}
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer"
+                          aria-label={showPw ? "Hide password" : "Show password"}
                         >
                           {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
@@ -1330,8 +1351,9 @@ export default function Login() {
                 )}
 
                 {error && (
-                  <div className="px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-400">
-                    {error}
+                  <div className="px-4 py-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs text-rose-400 flex items-center gap-2">
+                    <ShieldAlert className="w-4 h-4 shrink-0" />
+                    <span>{error}</span>
                   </div>
                 )}
 
@@ -1345,7 +1367,7 @@ export default function Login() {
                       ? 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-900/40'
                       : activeWorkspace === 'MERCHANT'
                       ? 'bg-sky-600 hover:bg-sky-500 shadow-sky-900/40'
-                      : 'bg-cyan-600 hover:bg-cyan-500 shadow-cyan-900/40'
+                      : 'bg-teal-600 hover:bg-teal-500 shadow-teal-900/40'
                   }`}
                 >
                   {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <KeyRound className="w-4 h-4" />}
@@ -1413,7 +1435,7 @@ export default function Login() {
               {/* Development-Only Demo Accounts Section (Gated strictly by VITE_METRCHECK_DEMO_MODE) */}
               {import.meta.env.VITE_METRCHECK_DEMO_MODE === 'true' && (
                 <div className="px-6 pb-6 pt-1">
-                  <div className="rounded-2xl bg-slate-950/60 border border-slate-800/90 p-4 space-y-3">
+                  <div className="rounded-2xl bg-slate-950/70 border border-slate-800/90 p-4 space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                         <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Development Demo Credentials
@@ -1427,14 +1449,14 @@ export default function Login() {
                         <div>
                           <div className="flex items-center gap-1.5">
                             <span className="font-bold text-slate-200">NORMAL USER</span>
-                            <span className="text-[10px] text-cyan-400 font-mono">user / user123</span>
+                            <span className="text-[10px] text-teal-400 font-mono">user / user123</span>
                           </div>
                           <p className="text-[10px] text-slate-500">Consumer check workspace access</p>
                         </div>
                         <button
                           type="button"
                           onClick={() => handlePopulateCredentials('user', 'user123', 'USER')}
-                          className="px-2.5 py-1 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 text-[10px] font-bold transition-colors cursor-pointer"
+                          className="px-2.5 py-1 rounded-lg bg-teal-600/20 hover:bg-teal-600/30 text-teal-300 border border-teal-500/30 text-[10px] font-bold transition-colors cursor-pointer"
                         >
                           Use Account
                         </button>
@@ -1481,14 +1503,14 @@ export default function Login() {
                         <div>
                           <div className="flex items-center gap-1.5">
                             <span className="font-bold text-slate-200">ENFORCEMENT OFFICER</span>
-                            <span className="text-[10px] text-emerald-400 font-mono">officer / officer123</span>
+                            <span className="text-[10px] text-amber-400 font-mono">officer / officer123</span>
                           </div>
                           <p className="text-[10px] text-slate-500">Enforcement, Audit &amp; Merchant access</p>
                         </div>
                         <button
                           type="button"
                           onClick={() => handlePopulateCredentials('officer', 'officer123', 'OFFICER', 'ENFORCEMENT')}
-                          className="px-2.5 py-1 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold transition-colors cursor-pointer"
+                          className="px-2.5 py-1 rounded-lg bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 text-[10px] font-bold transition-colors cursor-pointer"
                         >
                           Use Account
                         </button>
@@ -1504,7 +1526,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={selectedCategory === 'OFFICER' ? handleBackToOfficerSelection : handleBackToTopLevel}
-                className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-teal-300 transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>{selectedCategory === 'OFFICER' ? 'Return to Officer Selection' : 'Return to Access Selection'}</span>
@@ -1521,7 +1543,7 @@ export default function Login() {
             {officerRequestSuccess ? (
               /* Success Confirmation View */
               <div className="space-y-6 text-center">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
+                <div className="w-16 h-16 rounded-2xl bg-teal-500/15 border border-teal-500/30 text-teal-400 flex items-center justify-center mx-auto shadow-lg shadow-teal-500/10">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
 
@@ -1541,7 +1563,7 @@ export default function Login() {
                   <div className="flex items-center justify-between pb-3 border-b border-slate-800">
                     <span className="text-xs text-slate-400">Request Tracking ID</span>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs font-bold text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20">
+                      <span className="font-mono text-xs font-bold text-teal-400 bg-teal-500/10 px-2.5 py-1 rounded-lg border border-teal-500/20">
                         {officerRequestSuccess.request_id}
                       </span>
                       <button
@@ -1550,7 +1572,7 @@ export default function Login() {
                         className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
                         title="Copy Request ID"
                       >
-                        {copiedRequestId ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                        {copiedRequestId ? <Check className="w-3.5 h-3.5 text-teal-400" /> : <Copy className="w-3.5 h-3.5" />}
                       </button>
                     </div>
                   </div>
@@ -1589,7 +1611,7 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={handleCloseOfficerRequest}
-                    className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-lg shadow-indigo-600/20 cursor-pointer"
+                    className="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition-all shadow-lg shadow-teal-600/20 cursor-pointer"
                   >
                     Back to Officer Login
                   </button>
@@ -1637,7 +1659,7 @@ export default function Login() {
 
                 {/* Error Banner */}
                 {officerRequestError && (
-                  <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2.5 animate-in fade-in duration-150">
+                  <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2.5 animate-in fade-in duration-150">
                     <ShieldAlert className="w-4 h-4 shrink-0" />
                     <span>{officerRequestError}</span>
                   </div>
@@ -1648,7 +1670,7 @@ export default function Login() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Full Name <span className="text-red-400">*</span>
+                        Full Name <span className="text-rose-400">*</span>
                       </label>
                       <input
                         type="text"
@@ -1656,13 +1678,13 @@ export default function Login() {
                         value={officerFullName}
                         onChange={(e) => setOfficerFullName(e.target.value)}
                         placeholder="e.g., Rajesh Sharma"
-                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Official Email <span className="text-red-400">*</span>
+                        Official Email <span className="text-rose-400">*</span>
                       </label>
                       <input
                         type="email"
@@ -1670,7 +1692,7 @@ export default function Login() {
                         value={officerOfficialEmail}
                         onChange={(e) => setOfficerOfficialEmail(e.target.value)}
                         placeholder="e.g., rajesh.sharma@gov.in"
-                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
                       />
                     </div>
                   </div>
@@ -1678,7 +1700,7 @@ export default function Login() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Mobile Number <span className="text-red-400">*</span>
+                        Mobile Number <span className="text-rose-400">*</span>
                       </label>
                       <input
                         type="tel"
@@ -1686,13 +1708,13 @@ export default function Login() {
                         value={officerMobileNumber}
                         onChange={(e) => setOfficerMobileNumber(e.target.value)}
                         placeholder="+91 98765 43210"
-                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Employee / Officer ID <span className="text-red-400">*</span>
+                        Employee / Officer ID <span className="text-rose-400">*</span>
                       </label>
                       <input
                         type="text"
@@ -1700,7 +1722,7 @@ export default function Login() {
                         value={officerEmployeeId}
                         onChange={(e) => setOfficerEmployeeId(e.target.value)}
                         placeholder="e.g., LMO-DL-2024-889"
-                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
                       />
                     </div>
                   </div>
@@ -1708,7 +1730,7 @@ export default function Login() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Designation <span className="text-red-400">*</span>
+                        Designation <span className="text-rose-400">*</span>
                       </label>
                       <input
                         type="text"
@@ -1716,13 +1738,13 @@ export default function Login() {
                         value={officerDesignation}
                         onChange={(e) => setOfficerDesignation(e.target.value)}
                         placeholder="e.g., Assistant Controller / Senior Inspector"
-                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Department / Organization <span className="text-red-400">*</span>
+                        Department / Organization <span className="text-rose-400">*</span>
                       </label>
                       <input
                         type="text"
@@ -1730,7 +1752,7 @@ export default function Login() {
                         value={officerDepartment}
                         onChange={(e) => setOfficerDepartment(e.target.value)}
                         placeholder="e.g., Department of Legal Metrology"
-                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
                       />
                     </div>
                   </div>
@@ -1738,7 +1760,7 @@ export default function Login() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        State / UT <span className="text-red-400">*</span>
+                        State / UT <span className="text-rose-400">*</span>
                       </label>
                       <input
                         type="text"
@@ -1746,13 +1768,13 @@ export default function Login() {
                         value={officerState}
                         onChange={(e) => setOfficerState(e.target.value)}
                         placeholder="e.g., Delhi"
-                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        District / Jurisdiction <span className="text-red-400">*</span>
+                        District / Jurisdiction <span className="text-rose-400">*</span>
                       </label>
                       <input
                         type="text"
@@ -1760,14 +1782,14 @@ export default function Login() {
                         value={officerDistrict}
                         onChange={(e) => setOfficerDistrict(e.target.value)}
                         placeholder="e.g., New Delhi Zone-1"
-                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                        className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
                       />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Reason for Access / Statutory Purpose <span className="text-red-400">*</span>
+                      Reason for Access / Statutory Purpose <span className="text-rose-400">*</span>
                     </label>
                     <textarea
                       required
@@ -1775,7 +1797,7 @@ export default function Login() {
                       value={officerReason}
                       onChange={(e) => setOfficerReason(e.target.value)}
                       placeholder="Specify the regulatory jurisdiction, inspection duties, or audit verification scope..."
-                      className="w-full px-3.5 py-2 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
+                      className="w-full px-3.5 py-2 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all resize-none"
                     />
                   </div>
 
@@ -1788,7 +1810,7 @@ export default function Login() {
                       value={officerOfficeAddress}
                       onChange={(e) => setOfficerOfficeAddress(e.target.value)}
                       placeholder="Official chamber or departmental office address"
-                      className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                      className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
                     />
                   </div>
 
@@ -1801,7 +1823,7 @@ export default function Login() {
                       value={officerAdditionalInfo}
                       onChange={(e) => setOfficerAdditionalInfo(e.target.value)}
                       placeholder="Any reference number, supervising officer details, or specific remarks..."
-                      className="w-full px-3.5 py-2 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
+                      className="w-full px-3.5 py-2 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all resize-none"
                     />
                   </div>
                 </div>
@@ -1844,12 +1866,14 @@ export default function Login() {
       )}
 
       {/* Footer */}
-      <div className="max-w-5xl w-full mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-600">
+      <div className="max-w-5xl w-full mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 pt-6">
         <span>Problem Statement 26034 · Directorate of Legal Metrology Compliance Support</span>
-        <Link to="/admin/login" className="text-slate-500 hover:text-slate-400 transition-colors text-[11px] flex items-center gap-1">
-          <Lock className="w-3 h-3" />
-          <span>Administrator Portal</span>
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link to="/admin/login" className="text-slate-400 hover:text-teal-300 transition-colors text-[11px] flex items-center gap-1">
+            <Lock className="w-3 h-3" />
+            <span>Administrator Portal</span>
+          </Link>
+        </div>
       </div>
     </div>
   );

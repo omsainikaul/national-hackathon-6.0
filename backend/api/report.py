@@ -31,11 +31,14 @@ from auth.security import (
 from utils.datetime_utils import format_ist_datetime, get_current_ist_datetime
 from config import settings
 import json
+import logging
 import io
 import csv
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -126,21 +129,39 @@ async def _get_full_analysis_object(id: str, user: dict) -> AnalysisResponse:
             demo_resp = await get_demo_case(clean_id)
             if demo_resp:
                 return demo_resp
-        except Exception:
-            pass
+        except Exception as demo_err:
+            logger.warning(f"[ReportAPI] Failed to retrieve demo case '{clean_id}': {demo_err}")
     if not data:
         raise HTTPException(status_code=404, detail="Analysis not found")
 
     _check_report_access(user, data)
 
+    # ── Image Evidence Extraction (Per-Item Isolation) ──
     images_list = []
     if 'images' in data and data['images']:
-        try:
-            raw_imgs = json.loads(data['images']) if isinstance(data['images'], str) else data['images']
-            images_list = [ProductImageEvidence(**im) for im in raw_imgs]
-        except Exception:
-            images_list = []
+        raw_imgs = None
+        if isinstance(data['images'], str):
+            try:
+                raw_imgs = json.loads(data['images'])
+            except json.JSONDecodeError as img_json_err:
+                logger.warning(f"[ReportAPI] Corrupted images JSON for analysis '{id}': {img_json_err}")
+                raw_imgs = None
+        elif isinstance(data['images'], list):
+            raw_imgs = data['images']
 
+        if isinstance(raw_imgs, list):
+            for idx, im in enumerate(raw_imgs):
+                if isinstance(im, ProductImageEvidence):
+                    images_list.append(im)
+                elif isinstance(im, dict):
+                    try:
+                        images_list.append(ProductImageEvidence(**im))
+                    except Exception as im_err:
+                        logger.warning(f"[ReportAPI] Malformed image evidence at index {idx} in analysis '{id}': {im_err}")
+                else:
+                    logger.warning(f"[ReportAPI] Skipping non-dict image evidence item at index {idx} in analysis '{id}': {type(im).__name__}")
+
+    # Fallback to single primary image if no valid multi-panel image evidence
     if not images_list:
         images_list = [
             ProductImageEvidence(
@@ -151,8 +172,29 @@ async def _get_full_analysis_object(id: str, user: dict) -> AnalysisResponse:
             )
         ]
 
-    comp_dict = json.loads(data['compliance_result']) if isinstance(data['compliance_result'], str) else (data['compliance_result'] or {})
-    checks_raw = comp_dict.get('checks', [])
+    # ── Compliance Result Parsing ──
+    raw_comp = data.get('compliance_result')
+    comp_dict = {}
+    if raw_comp:
+        if isinstance(raw_comp, str):
+            try:
+                comp_dict = json.loads(raw_comp)
+            except json.JSONDecodeError as comp_err:
+                logger.error(f"[ReportAPI] Corrupted compliance_result JSON for analysis '{id}': {comp_err}")
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Report generation failed: Corrupted compliance result in analysis '{id}'."
+                ) from comp_err
+        elif isinstance(raw_comp, dict):
+            comp_dict = raw_comp
+        else:
+            logger.error(f"[ReportAPI] Unexpected compliance_result type for analysis '{id}': {type(raw_comp).__name__}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Report generation failed: Invalid compliance result type in analysis '{id}'."
+            )
+
+    checks_raw = comp_dict.get('checks', []) if isinstance(comp_dict, dict) else []
     if 'total_rules' not in comp_dict:
         comp_dict['total_rules'] = len(checks_raw)
     if 'passed_rules' not in comp_dict:
@@ -172,7 +214,22 @@ async def _get_full_analysis_object(id: str, user: dict) -> AnalysisResponse:
 
     compliance_res = ComplianceResult(**comp_dict)
     
-    product_info_dict = json.loads(data['extracted_data']) if isinstance(data['extracted_data'], str) else data['extracted_data']
+    # ── Extracted Product Info ──
+    raw_ext = data.get('extracted_data')
+    if isinstance(raw_ext, str):
+        try:
+            product_info_dict = json.loads(raw_ext)
+        except json.JSONDecodeError as ext_err:
+            logger.error(f"[ReportAPI] Corrupted extracted_data JSON for analysis '{id}': {ext_err}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Report generation failed: Corrupted extracted data in analysis '{id}'."
+            ) from ext_err
+    elif isinstance(raw_ext, dict):
+        product_info_dict = raw_ext
+    else:
+        product_info_dict = {}
+
     product_info = ProductInfo(**product_info_dict)
     
     from compliance.rules.legal_metrology import compute_font_size_and_readability
@@ -182,34 +239,67 @@ async def _get_full_analysis_object(id: str, user: dict) -> AnalysisResponse:
         checks=compliance_res.checks
     )
 
-    # Fetch linked officer review if available
+    # ── Officer Review Metadata Enrichment ──
     officer_rev_dict = None
     try:
         officer_rev_record = await get_review_by_analysis_id(data['id'])
         if officer_rev_record:
             officer_rev_dict = dict(officer_rev_record)
-            if 'comments' in officer_rev_dict and isinstance(officer_rev_dict['comments'], str):
-                try:
-                    officer_rev_dict['comments'] = json.loads(officer_rev_dict['comments'])
-                except Exception:
-                    pass
+
+            # Comments parsing
+            if 'comments' in officer_rev_dict and officer_rev_dict['comments']:
+                if isinstance(officer_rev_dict['comments'], str):
+                    try:
+                        officer_rev_dict['comments'] = json.loads(officer_rev_dict['comments'])
+                    except json.JSONDecodeError as c_err:
+                        logger.warning(f"[ReportAPI] Non-JSON comments string for analysis '{id}': {c_err}")
+                        officer_rev_dict['comments'] = [{
+                            "comment_id": "cmt-raw",
+                            "text": officer_rev_dict['comments'],
+                            "officer_username": officer_rev_dict.get("assigned_officer") or "officer",
+                            "timestamp": officer_rev_dict.get("updated_at") or ""
+                        }]
+                elif not isinstance(officer_rev_dict['comments'], list):
+                    officer_rev_dict['comments'] = []
+            else:
+                officer_rev_dict['comments'] = []
+
+            # History parsing
+            if 'history' in officer_rev_dict and officer_rev_dict['history']:
+                if isinstance(officer_rev_dict['history'], str):
+                    try:
+                        officer_rev_dict['history'] = json.loads(officer_rev_dict['history'])
+                    except json.JSONDecodeError as h_err:
+                        logger.warning(f"[ReportAPI] Non-JSON history string for analysis '{id}': {h_err}")
+                        officer_rev_dict['history'] = []
+                elif not isinstance(officer_rev_dict['history'], list):
+                    officer_rev_dict['history'] = []
+
+            # Human verified result & score
             if 'human_verified_result' in officer_rev_dict and officer_rev_dict['human_verified_result']:
                 try:
                     hvr = json.loads(officer_rev_dict['human_verified_result']) if isinstance(officer_rev_dict['human_verified_result'], str) else officer_rev_dict['human_verified_result']
                     if isinstance(hvr, dict) and 'score' in hvr and officer_rev_dict.get('human_score') is None:
                         officer_rev_dict['human_score'] = hvr.get('score')
-                except Exception:
-                    pass
-    except Exception:
+                except Exception as hvr_err:
+                    logger.warning(f"[ReportAPI] Malformed human_verified_result JSON for analysis '{id}': {hvr_err}")
+    except Exception as e:
+        logger.warning(f"[ReportAPI] Unexpected failure retrieving officer review for analysis '{id}': {e}", exc_info=True)
         officer_rev_dict = None
 
-    # Load external verification if present
+    # ── External Verification (Section 13) ──
     ext_ver = None
     if 'external_verification' in data and data['external_verification']:
         try:
             raw_ev = json.loads(data['external_verification']) if isinstance(data['external_verification'], str) else data['external_verification']
-            ext_ver = ExternalVerificationSummary(**raw_ev)
-        except Exception:
+            if isinstance(raw_ev, dict):
+                ext_ver = ExternalVerificationSummary(**raw_ev)
+            elif isinstance(raw_ev, ExternalVerificationSummary):
+                ext_ver = raw_ev
+            else:
+                logger.warning(f"[ReportAPI] Unexpected external_verification type for analysis '{id}': {type(raw_ev).__name__}")
+        except Exception as ev_err:
+            logger.warning(f"[ReportAPI] Failed to parse external_verification for analysis '{id}': {ev_err}")
             ext_ver = None
 
     integrity_hash = data.get('integrity_hash') or "SHA256-AUTHENTICATED-RECORD"
@@ -220,7 +310,7 @@ async def _get_full_analysis_object(id: str, user: dict) -> AnalysisResponse:
     return AnalysisResponse(
         id=data['id'],
         product_name=data['product_name'],
-        image_url=f"/api/images/{data['image_filename']}",
+        image_url=f"/api/images/{data.get('image_filename', 'placeholder.png')}",
         images=images_list,
         ocr_result=OCRResult(
             full_text=data.get('ocr_text', '') or '',

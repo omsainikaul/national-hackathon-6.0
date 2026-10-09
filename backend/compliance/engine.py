@@ -1,9 +1,13 @@
 import time
+import logging
+import re
 from typing import List, Dict, Any, Optional
 from models.schemas import ProductInfo, ComplianceCheck, ComplianceIssue, ProductImageEvidence, RuleTestResponse
 from compliance.rules.registry import registry
 from compliance.rules.applicability import PackageContext
 from compliance.rules.models import ComplianceStatus, RuleDomain, RuleExecutionTrace, RuleConflictItem
+
+logger = logging.getLogger(__name__)
 from compliance.rules.legal_metrology import (
     evaluate_lm_001, evaluate_lm_002, evaluate_lm_003, evaluate_lm_004,
     evaluate_lm_005, evaluate_lm_006, evaluate_lm_007, evaluate_lm_008,
@@ -248,7 +252,30 @@ class ComplianceEngine:
             ))
 
         # 3. Detect Rule & Evidence Conflicts
-        conflicts = self.detect_rule_conflicts(product_info=product_info, checks=checks, context=context)
+        try:
+            conflicts = self._detect_cross_rule_conflicts(product_info=product_info, checks=checks, context=context)
+        except Exception as exc:
+            logger.exception("Fatal unexpected error in _detect_cross_rule_conflicts during compliance evaluation: %s", exc)
+            conflicts = [
+                RuleConflictItem(
+                    conflict_id="CONF-EVAL-ERROR",
+                    conflict_type="ANALYSIS_INCOMPLETE",
+                    rule_ids=["LM-001", "LM-004", "LM-008"],
+                    description="Cross-rule conflict detection could not complete due to an unexpected evaluation error. Manual verification required.",
+                    severity="HIGH",
+                    resolution_hint="Manually inspect date stamps, pricing declarations, and statutory declarations for inconsistencies."
+                )
+            ]
+            needs_review_count += 1
+            issues.append(ComplianceIssue(
+                what="Cross-rule conflict evaluation error",
+                expected="Complete cross-rule statutory consistency verification",
+                why=f"Unexpected internal exception during conflict detection: {type(exc).__name__}",
+                action="Manual officer verification required for cross-rule consistency.",
+                severity="medium",
+                field="cross_rule_conflicts",
+                domain="LEGAL_METROLOGY"
+            ))
 
         # 4. Calculate score using explainable weighting
         score_data = calculate_score(checks, product_info=product_info, conflicts=conflicts)
@@ -277,7 +304,7 @@ class ComplianceEngine:
             "scoring_version": score_data.get('scoring_version', "2026.1"),
         }
 
-    def detect_rule_conflicts(self, product_info: ProductInfo, checks: List[ComplianceCheck], context: PackageContext) -> List[RuleConflictItem]:
+    def _detect_cross_rule_conflicts(self, product_info: ProductInfo, checks: List[ComplianceCheck], context: PackageContext) -> List[RuleConflictItem]:
         """
         Deterministic Rule and Evidence Conflict Detector.
         Identifies logical contradictions, conflicting field candidates, cross-rule mismatches,
@@ -286,11 +313,10 @@ class ComplianceEngine:
         conflicts: List[RuleConflictItem] = []
 
         # 1. Date chronological conflict: Date of Mfg (LM-008) vs Date of Expiry / Best Before (FS-005)
-        mfg_date = getattr(product_info, 'manufacturing_date', None) or getattr(product_info, 'manufacture_date', None) or getattr(product_info, 'packaging_date', None) or getattr(product_info, 'date_of_manufacture', None)
-        exp_date = getattr(product_info, 'best_before', None) or getattr(product_info, 'expiry_date', None) or getattr(product_info, 'use_by_date', None)
-        if mfg_date and exp_date:
-            try:
-                import re
+        try:
+            mfg_date = getattr(product_info, 'manufacturing_date', None) or getattr(product_info, 'manufacture_date', None) or getattr(product_info, 'packaging_date', None) or getattr(product_info, 'date_of_manufacture', None)
+            exp_date = getattr(product_info, 'best_before', None) or getattr(product_info, 'expiry_date', None) or getattr(product_info, 'use_by_date', None)
+            if mfg_date and exp_date:
                 mfg_years = re.findall(r'(?:20|19)\d{2}', str(mfg_date))
                 exp_years = re.findall(r'(?:20|19)\d{2}', str(exp_date))
                 if mfg_years and exp_years:
@@ -305,16 +331,15 @@ class ComplianceEngine:
                             severity="HIGH",
                             resolution_hint="Verify date stamps on primary package to confirm valid shelf life."
                         ))
-            except Exception:
-                pass
+        except Exception as exc:
+            logger.exception("Diagnostic error in cross-rule chronological conflict evaluation (LM-008 vs FS-005): %s", exc)
 
         # 2. Unit Sale Price vs Net Quantity / MRP conflict (LM-004 vs LM-007)
-        mrp = getattr(product_info, 'mrp', None)
-        usp = getattr(product_info, 'unit_sale_price', None)
-        net_qty = getattr(product_info, 'net_quantity', None)
-        if mrp and usp:
-            try:
-                import re
+        try:
+            mrp = getattr(product_info, 'mrp', None)
+            usp = getattr(product_info, 'unit_sale_price', None)
+            net_qty = getattr(product_info, 'net_quantity', None)
+            if mrp and usp:
                 mrp_nums = re.findall(r'\d+(?:\.\d+)?', str(mrp))
                 usp_nums = re.findall(r'\d+(?:\.\d+)?', str(usp))
                 if mrp_nums and usp_nums:
@@ -329,45 +354,60 @@ class ComplianceEngine:
                             severity="MEDIUM",
                             resolution_hint="Confirm whether Unit Sale Price is computed per gram/ml versus standard 100g/1kg base."
                         ))
-            except Exception:
-                pass
+        except Exception as exc:
+            logger.exception("Diagnostic error in cross-rule USP vs MRP conflict evaluation (LM-004 vs LM-007): %s", exc)
 
         # 3. Country of Origin vs Importation / Manufacturer status (LM-001 vs LM-006)
-        is_imported = getattr(context, 'is_imported', False) or getattr(product_info, 'is_imported', False)
-        origin = getattr(product_info, 'country_of_origin', None)
-        importer = getattr(product_info, 'importer_name', None) or getattr(product_info, 'importer_address', None)
-        if origin:
-            is_india = "india" in str(origin).lower() or "bharat" in str(origin).lower()
-            if not is_india and not is_imported and not importer:
-                conflicts.append(RuleConflictItem(
-                    conflict_id="CONF-IMP-01",
-                    conflict_type="IMPORT_DECLARATION_MISMATCH",
-                    rule_ids=["LM-001", "LM-006"],
-                    description=f"Package declared origin as '{origin}' but lacks mandatory Importer declaration under Rule 6(1)(a).",
-                    severity="HIGH",
-                    resolution_hint="For imported goods, both Country of Origin and Name/Address of Importer are mandatory."
-                ))
+        try:
+            is_imported = getattr(context, 'is_imported', False) or getattr(product_info, 'is_imported', False)
+            origin = getattr(product_info, 'country_of_origin', None)
+            importer = getattr(product_info, 'importer_name', None) or getattr(product_info, 'importer_address', None)
+            if origin:
+                is_india = "india" in str(origin).lower() or "bharat" in str(origin).lower()
+                if not is_india and not is_imported and not importer:
+                    conflicts.append(RuleConflictItem(
+                        conflict_id="CONF-IMP-01",
+                        conflict_type="IMPORT_DECLARATION_MISMATCH",
+                        rule_ids=["LM-001", "LM-006"],
+                        description=f"Package declared origin as '{origin}' but lacks mandatory Importer declaration under Rule 6(1)(a).",
+                        severity="HIGH",
+                        resolution_hint="For imported goods, both Country of Origin and Name/Address of Importer are mandatory."
+                    ))
+        except Exception as exc:
+            logger.exception("Diagnostic error in cross-rule origin vs importer conflict evaluation (LM-001 vs LM-006): %s", exc)
 
         # 4. Field candidate conflicts extracted in Section 4
-        if hasattr(product_info, 'conflicts') and product_info.conflicts:
-            for c in product_info.conflicts:
-                field_name = c.get("field", "unknown") if isinstance(c, dict) else getattr(c, "field", "unknown")
-                c_type = c.get("conflict_type", "OCR_VALUE_DISCREPANCY") if isinstance(c, dict) else getattr(c, "conflict_type", "OCR_VALUE_DISCREPANCY")
-                c_desc = c.get("description", "") if isinstance(c, dict) else getattr(c, "description", "")
-                
-                # Map field to rules
-                matching_rules = [r.id for r in registry.get_all_rules() if field_name in r.evidence_fields]
-                if matching_rules:
-                    conflicts.append(RuleConflictItem(
-                        conflict_id=f"CONF-CAND-{field_name}",
-                        conflict_type=c_type,
-                        rule_ids=matching_rules,
-                        description=f"Discrepancy in extracted evidence for {field_name}: {c_desc}",
-                        severity="MEDIUM",
-                        resolution_hint=f"Review candidate readings for {field_name} in the Evidence tab."
-                    ))
+        try:
+            if hasattr(product_info, 'conflicts') and product_info.conflicts:
+                for idx, c in enumerate(product_info.conflicts):
+                    try:
+                        field_name = c.get("field", "unknown") if isinstance(c, dict) else getattr(c, "field", "unknown")
+                        c_type = c.get("conflict_type", "OCR_VALUE_DISCREPANCY") if isinstance(c, dict) else getattr(c, "conflict_type", "OCR_VALUE_DISCREPANCY")
+                        c_desc = c.get("description", "") if isinstance(c, dict) else getattr(c, "description", "")
+                        
+                        # Map field to rules
+                        matching_rules = [r.id for r in registry.get_all_rules() if field_name in r.evidence_fields]
+                        if matching_rules:
+                            conflicts.append(RuleConflictItem(
+                                conflict_id=f"CONF-CAND-{field_name}",
+                                conflict_type=c_type,
+                                rule_ids=matching_rules,
+                                description=f"Discrepancy in extracted evidence for {field_name}: {c_desc}",
+                                severity="MEDIUM",
+                                resolution_hint=f"Review candidate readings for {field_name} in the Evidence tab."
+                            ))
+                    except Exception as item_exc:
+                        try:
+                            field_hint = c.get('field', 'unknown') if isinstance(c, dict) else getattr(c, 'field', 'unknown')
+                        except Exception:
+                            field_hint = 'unparseable'
+                        logger.exception("Diagnostic error processing candidate conflict item %d for field '%s': %s", idx, field_hint, item_exc)
+        except Exception as exc:
+            logger.exception("Diagnostic error iterating candidate conflicts: %s", exc)
 
         return conflicts
+
+    detect_rule_conflicts = _detect_cross_rule_conflicts
 
     def test_single_rule(self, rule_id: str, product_info: ProductInfo, ocr_text: str = "", context_override: Optional[Dict[str, Any]] = None) -> RuleTestResponse:
         """
@@ -445,6 +485,8 @@ class ComplianceEngine:
             execution_trace=exec_trace.model_dump() if hasattr(exec_trace, 'model_dump') else exec_trace.dict(),
             is_simulation=True
         )
+
+    evaluate = check
 
 
 engine = ComplianceEngine()

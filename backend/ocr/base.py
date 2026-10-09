@@ -9,3 +9,6 @@ class OCREngine(ABC):
     @abstractmethod
     def is_available(self) -> bool:
         pass
+
+    def is_ready(self) -> bool:
+        return self.is_available()

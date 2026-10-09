@@ -4,6 +4,7 @@ import json
 import base64
 import hmac
 import hashlib
+from datetime import datetime, timezone, timedelta
 from fastapi.testclient import TestClient
 from main import app
 from database.db import (
@@ -49,6 +50,14 @@ async def _ensure_seed_data():
     global _data_seeded
     if _data_seeded:
         return
+
+    now = datetime.now(timezone.utc)
+    ts_alpha_a1 = (now - timedelta(days=2, hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    ts_alpha_a2 = (now - timedelta(days=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    ts_beta = (now - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    ts_rev_alpha = (now - timedelta(days=2, minutes=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    ts_rev_beta = (now - timedelta(days=1, minutes=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+
     # 1. Create Organizations
     await create_organization({
         "id": "org_sec08_alpha",
@@ -104,7 +113,7 @@ async def _ensure_seed_data():
             "status": "COMPLIANT" if i < 3 else "NON_COMPLIANT",
             "owner_user_id": "sec08_merchant_a1",
             "organization_id": "org_sec08_alpha",
-            "created_at": "2026-09-18T10:00:00Z",
+            "created_at": ts_alpha_a1,
             "compliance_result": {
                 "score": 95.0 if i < 3 else 45.0,
                 "status": "COMPLIANT" if i < 3 else "NON_COMPLIANT",
@@ -123,7 +132,7 @@ async def _ensure_seed_data():
             "status": "COMPLIANT" if i < 4 else "NON_COMPLIANT",
             "owner_user_id": "sec08_merchant_a2",
             "organization_id": "org_sec08_alpha",
-            "created_at": "2026-09-18T11:00:00Z",
+            "created_at": ts_alpha_a2,
             "compliance_result": {
                 "score": 92.0 if i < 4 else 50.0,
                 "status": "COMPLIANT" if i < 4 else "NON_COMPLIANT",
@@ -143,7 +152,7 @@ async def _ensure_seed_data():
             "status": "COMPLIANT" if i < 18 else "NON_COMPLIANT",
             "owner_user_id": "sec08_merchant_b",
             "organization_id": "org_sec08_beta",
-            "created_at": "2026-09-18T12:00:00Z",
+            "created_at": ts_beta,
             "compliance_result": {
                 "score": 98.0 if i < 18 else 40.0,
                 "status": "COMPLIANT" if i < 18 else "NON_COMPLIANT",
@@ -169,7 +178,7 @@ async def _ensure_seed_data():
             "ai_risk_level": "HIGH",
             "ai_status": "FAIL",
             "organization_id": "org_sec08_alpha",
-            "created_at": "2026-09-18T10:30:00Z"
+            "created_at": ts_rev_alpha
         })
 
     # Beta Reviews: 5 pending reviews assigned to Officer Beta
@@ -186,7 +195,7 @@ async def _ensure_seed_data():
             "ai_risk_level": "CRITICAL",
             "ai_status": "FAIL",
             "organization_id": "org_sec08_beta",
-            "created_at": "2026-09-18T12:30:00Z"
+            "created_at": ts_rev_beta
         })
     _data_seeded = True
 

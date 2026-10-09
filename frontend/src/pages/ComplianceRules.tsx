@@ -115,7 +115,7 @@ export default function ComplianceRules() {
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-xl">
+          <div className="p-2 bg-teal-50 dark:bg-[#101A2C] text-teal-600 dark:text-[#35C6B0] border border-teal-200/50 dark:border-white/10 rounded-xl">
             <ShieldCheck className="w-6 h-6" />
           </div>
           <div>
@@ -126,7 +126,7 @@ export default function ComplianceRules() {
 
         <button
           onClick={() => openSimModal()}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-sm transition-all cursor-pointer"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-sm font-semibold shadow-sm shadow-teal-950/30 transition-all cursor-pointer"
         >
           <FlaskConical className="w-4 h-4" />
           <span>Simulate / Test Rule</span>
@@ -145,7 +145,7 @@ export default function ComplianceRules() {
                 placeholder={t('rules.search_rules')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                className="w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
               />
             </div>
             
@@ -157,7 +157,7 @@ export default function ComplianceRules() {
                     onClick={() => setDomainFilter(d as any)}
                     className={`px-3 py-1.5 text-xs font-semibold rounded-lg whitespace-nowrap transition-colors cursor-pointer ${
                       domainFilter === d 
-                        ? 'bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300' 
+                        ? 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-[#35C6B0] border border-teal-200/60 dark:border-teal-800/60' 
                         : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
                     }`}
                   >
@@ -196,14 +196,14 @@ export default function ComplianceRules() {
                 return (
                   <div 
                     key={ruleId}
-                    className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm hover:border-indigo-300 dark:hover:border-indigo-700/50 transition-colors"
+                    className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm hover:border-teal-300 dark:hover:border-[#35C6B0]/50 transition-colors"
                   >
                     <div 
                       className="p-3 sm:p-4 flex items-center justify-between cursor-pointer select-none"
                       onClick={() => setExpandedRule(isExpanded ? null : ruleId)}
                     >
                       <div className="flex flex-wrap items-center gap-2.5 w-full pr-4">
-                        <span className="font-mono text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded border border-indigo-100 dark:border-indigo-800/60 shrink-0">
+                        <span className="font-mono text-xs font-bold text-teal-700 dark:text-[#35C6B0] bg-teal-50 dark:bg-[#101A2C] px-2 py-0.5 rounded border border-teal-200/60 dark:border-teal-800/60 shrink-0">
                           {ruleId}
                         </span>
                         <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm truncate max-w-[180px] sm:max-w-xs">{label}</h3>
@@ -242,7 +242,7 @@ export default function ComplianceRules() {
                             e.stopPropagation();
                             openSimModal(ruleId);
                           }}
-                          className="px-2.5 py-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 rounded-lg border border-indigo-200 dark:border-indigo-800 flex items-center gap-1 transition-colors cursor-pointer"
+                          className="px-2.5 py-1 text-xs font-semibold text-teal-600 dark:text-[#35C6B0] bg-teal-50 dark:bg-[#101A2C] hover:bg-teal-100 dark:hover:bg-white/5 rounded-lg border border-teal-200/60 dark:border-white/10 flex items-center gap-1 transition-colors cursor-pointer"
                         >
                           <Play className="w-3 h-3 fill-current" />
                           <span>Simulate</span>
@@ -328,10 +328,10 @@ export default function ComplianceRules() {
       {/* Rule Tester / Simulation Modal */}
       {isTestModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col">
-            <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur z-10">
+          <div className="bg-white dark:bg-[#101A2C] border border-slate-200/90 dark:border-white/10 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col">
+            <div className="p-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between sticky top-0 bg-white/95 dark:bg-[#101A2C]/95 backdrop-blur z-10">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-lg">
+                <div className="p-1.5 bg-teal-50 dark:bg-white/5 text-teal-600 dark:text-[#35C6B0] rounded-lg">
                   <FlaskConical className="w-5 h-5" />
                 </div>
                 <div>
@@ -353,7 +353,7 @@ export default function ComplianceRules() {
                 <select
                   value={selectedTestRule}
                   onChange={(e) => setSelectedTestRule(e.target.value)}
-                  className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-mono text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-mono text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
                 >
                   {rules.map((r: any) => (
                     <option key={r.rule_id || r.id} value={r.rule_id || r.id}>
@@ -369,7 +369,7 @@ export default function ComplianceRules() {
                     type="checkbox"
                     checked={testIsFood}
                     onChange={(e) => setTestIsFood(e.target.checked)}
-                    className="rounded text-indigo-600"
+                    className="rounded text-teal-600 focus:ring-teal-500"
                   />
                   <span>Is Food Product (FSSAI Scope)</span>
                 </label>
@@ -379,7 +379,7 @@ export default function ComplianceRules() {
                     type="checkbox"
                     checked={testIsImported}
                     onChange={(e) => setTestIsImported(e.target.checked)}
-                    className="rounded text-indigo-600"
+                    className="rounded text-teal-600 focus:ring-teal-500"
                   />
                   <span>Is Imported Product</span>
                 </label>
@@ -419,7 +419,7 @@ export default function ComplianceRules() {
               <button
                 onClick={runSimulation}
                 disabled={simulating}
-                className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="w-full py-2.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-sm font-semibold shadow-sm shadow-teal-950/30 flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
               >
                 {simulating ? (
                   <span>Evaluating In-Memory...</span>
@@ -449,7 +449,7 @@ export default function ComplianceRules() {
                         Result: {simResult.status}
                       </span>
                     </div>
-                    <span className="text-[10px] font-mono bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded">
+                    <span className="text-[10px] font-mono bg-teal-100 dark:bg-teal-950/50 text-teal-800 dark:text-[#35C6B0] px-2 py-0.5 rounded">
                       {simResult.execution_trace?.execution_ms}ms
                     </span>
                   </div>

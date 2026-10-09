@@ -12,28 +12,28 @@ export default function StatusBadge({ status, size = 'md', showIcon = true, clas
   const { t } = useLanguage();
   const rawStatus = (status || 'UNKNOWN').toUpperCase().replace(/-/g, '_');
   
-  let colorClass = 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700';
+  let colorClass = 'bg-slate-100 dark:bg-white/[0.05] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 font-medium';
   let displayText = rawStatus.replace(/_/g, ' ');
   let Icon = HelpCircle;
 
   if (rawStatus === 'COMPLIANT' || rawStatus === 'PASS') {
-    colorClass = 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/80 font-semibold';
+    colorClass = 'bg-teal-50 dark:bg-[#35C6B0]/15 text-teal-800 dark:text-[#5EEAD4] border-teal-200/80 dark:border-[#35C6B0]/30 font-semibold';
     displayText = rawStatus === 'COMPLIANT' ? t('status.compliant') : t('status.pass');
     Icon = CheckCircle2;
   } else if (rawStatus === 'REVIEW_REQUIRED' || rawStatus === 'NEEDS_REVIEW') {
-    colorClass = 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-300/80 dark:border-amber-800/80 font-semibold';
+    colorClass = 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-300/80 dark:border-amber-700/60 font-semibold';
     displayText = rawStatus === 'REVIEW_REQUIRED' ? t('status.review_required') : t('status.needs_review');
     Icon = AlertTriangle;
   } else if (rawStatus === 'WARNING') {
-    colorClass = 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-300/80 dark:border-amber-800/80 font-semibold';
+    colorClass = 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-300/80 dark:border-amber-700/60 font-semibold';
     displayText = t('status.warning');
     Icon = AlertTriangle;
   } else if (rawStatus === 'NOT_APPLICABLE' || rawStatus === 'N/A') {
-    colorClass = 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 font-medium';
+    colorClass = 'bg-slate-100 dark:bg-white/[0.05] text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/10 font-medium';
     displayText = t('status.na');
     Icon = MinusCircle;
   } else if (rawStatus.includes('NON_COMPLIANCE') || rawStatus === 'FAIL') {
-    colorClass = 'bg-red-50 dark:bg-red-950/60 text-red-800 dark:text-red-300 border-red-200 dark:border-red-800/80 font-semibold';
+    colorClass = 'bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-200/80 dark:border-rose-800/60 font-semibold';
     displayText = rawStatus === 'FAIL' ? t('status.fail') : t('status.non_compliant');
     Icon = XCircle;
   }

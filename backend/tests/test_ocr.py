@@ -120,3 +120,53 @@ def test_clean_ocr_text_preserves_statutory_symbols():
     assert "₹" in cleaned
     assert "299.00" in cleaned
     assert "FSSAI" in cleaned
+
+
+def test_paddle_engine_warmup_and_readiness():
+    """Verify warmup_ocr initializes model and is_ready returns True."""
+    from ocr.paddle_engine import warmup_ocr, is_ocr_warmed_up
+    engine = PaddleOCREngine()
+
+    with patch("ocr.paddle_engine._is_paddle_available", return_value=True), \
+         patch("ocr.paddle_engine._init_paddle_ocr") as mock_init, \
+         patch("ocr.paddle_engine._sync_paddle_extract") as mock_extract:
+        mock_init.return_value = MagicMock()
+        mock_extract.return_value = (["METRCHECK"], [OCRWord(text="METRCHECK", confidence=99.0, bbox=[0, 0, 10, 10])], [99.0])
+
+        success = warmup_ocr("en")
+        assert success is True
+        assert is_ocr_warmed_up("en") is True
+        assert engine.is_ready() is True
+
+
+def test_paddle_engine_warmup_unavailable_graceful():
+    """Verify warmup_ocr handles missing paddle dependencies gracefully without crashing."""
+    from ocr.paddle_engine import warmup_ocr
+
+    with patch("ocr.paddle_engine._is_paddle_available", return_value=False), \
+         patch("ocr.paddle_engine.is_ocr_warmed_up", return_value=False):
+        success = warmup_ocr("en")
+        assert success is False
+
+
+def test_paddle_engine_warmup_exception_resilience():
+    """Verify warmup_ocr catches exceptions, logs warnings, and returns False without raising."""
+    from ocr.paddle_engine import warmup_ocr
+
+    with patch("ocr.paddle_engine._is_paddle_available", return_value=True), \
+         patch("ocr.paddle_engine.is_ocr_warmed_up", return_value=False), \
+         patch("ocr.paddle_engine._init_paddle_ocr", side_effect=RuntimeError("GPU OOM / Memory fault")):
+        success = warmup_ocr("en")
+        assert success is False
+
+
+@pytest.mark.asyncio
+async def test_health_check_reports_ocr_ready():
+    """Verify /api/health endpoint includes ocr_ready status alongside ocr_available."""
+    from api.health import health_check
+    res = await health_check()
+    assert "ocr_available" in res
+    assert "ocr_ready" in res
+    assert "database" in res
+    assert "version" in res
+    assert isinstance(res["ocr_ready"], bool)

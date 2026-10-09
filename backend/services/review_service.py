@@ -6,9 +6,12 @@ statutory field corrections, evidence management, and workload tracking.
 """
 
 import json
+import logging
 import uuid
 from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional, Tuple
+
+logger = logging.getLogger(__name__)
 
 from models.schemas import (
     ProductInfo,
@@ -519,23 +522,61 @@ async def correct_field(
     human_res["extracted_data"] = ext_data
 
     # Re-run deterministic compliance & scoring on corrected values
+    recalc_error: Optional[str] = None
     try:
         p_info = ProductInfo(**ext_data)
         engine = ComplianceEngine()
-        new_comp_res = engine.evaluate(p_info)
+        new_comp_res = engine.check(p_info)
         
-        human_res["compliance_result"] = new_comp_res.model_dump()
-        human_res["score"] = new_comp_res.score
-        human_res["status"] = new_comp_res.status
-        if new_comp_res.risk_assessment:
-            human_res["risk_level"] = new_comp_res.risk_assessment.risk_level
-        else:
-            human_res["risk_level"] = "LOW" if new_comp_res.score >= 90 else ("CRITICAL" if new_comp_res.score < 60 else "MEDIUM")
-    except Exception:
-        # Fallback if engine fails on partial data
-        pass
+        def _serialize_item(item):
+            if hasattr(item, "model_dump"):
+                return _serialize_item(item.model_dump())
+            elif hasattr(item, "dict") and callable(item.dict):
+                return _serialize_item(item.dict())
+            elif isinstance(item, dict):
+                return {k: _serialize_item(v) for k, v in item.items()}
+            elif isinstance(item, list):
+                return [_serialize_item(i) for i in item]
+            elif isinstance(item, tuple):
+                return [_serialize_item(i) for i in item]
+            return item
 
-    human_res["last_recalculated_at"] = now
+        if isinstance(new_comp_res, dict):
+            serialized_comp = _serialize_item(new_comp_res)
+            score_val = float(new_comp_res.get("score", 100.0))
+            status_val = str(new_comp_res.get("status", "COMPLIANT"))
+            risk_ass = new_comp_res.get("risk_assessment")
+            risk_level_val = getattr(risk_ass, "risk_level", None) or (
+                risk_ass.get("risk_level") if isinstance(risk_ass, dict) else (
+                    "LOW" if score_val >= 90 else ("CRITICAL" if score_val < 60 else "MEDIUM")
+                )
+            )
+        elif hasattr(new_comp_res, "model_dump"):
+            serialized_comp = _serialize_item(new_comp_res.model_dump())
+            score_val = float(new_comp_res.score)
+            status_val = str(new_comp_res.status)
+            risk_ass = getattr(new_comp_res, "risk_assessment", None)
+            risk_level_val = getattr(risk_ass, "risk_level", None) or (
+                "LOW" if score_val >= 90 else ("CRITICAL" if score_val < 60 else "MEDIUM")
+            )
+        else:
+            raise ValueError(f"Unexpected compliance engine result type: {type(new_comp_res)}")
+
+        human_res["compliance_result"] = serialized_comp
+        human_res["score"] = score_val
+        human_res["status"] = status_val
+        human_res["risk_level"] = risk_level_val
+        human_res["last_recalculated_at"] = now
+        human_res["recalculation_error"] = None
+    except Exception as e:
+        recalc_error = str(e)
+        logger.warning(
+            f"[ReviewService] Compliance recalculation failed for review '{review_id}' "
+            f"on field '{req.field_name}': {e}"
+        )
+        human_res["recalculation_error"] = f"Recalculation failed: {recalc_error}"
+        # Preserve existing score/status and do NOT update last_recalculated_at to prevent masking failure
+
     rev["human_verified_result"] = human_res
 
     # Transition to IN_REVIEW if PENDING or ASSIGNED
@@ -568,7 +609,8 @@ async def correct_field(
         "metadata": {
             "field_name": req.field_name,
             "old_value": old_val,
-            "new_value": req.corrected_value
+            "new_value": req.corrected_value,
+            "recalculation_status": "SUCCESS" if recalc_error is None else "FAILED"
         }
     }
     rev["history"].append(event)
@@ -770,35 +812,8 @@ async def escalate_review(
         raise ValueError(f"Cannot escalate review from '{prev_status}' to '{new_status}'.")
 
     target = req.escalation_target or "ADMIN"
-    rev["status"] = new_status
-    rev["updated_at"] = now
 
-    comment_item = {
-        "comment_id": f"cmt-{uuid.uuid4().hex[:8]}",
-        "comment_type": "ESCALATION",
-        "text": f"[Escalated to {target}] Reason: {req.escalation_reason}." + (f" Comments: {req.comments}" if req.comments else ""),
-        "officer_username": actor_user.get("username", "officer"),
-        "officer_role": actor_user.get("role", "OFFICER"),
-        "timestamp": now
-    }
-    rev["comments"].append(comment_item)
-
-    event = {
-        "event_id": f"evt-{uuid.uuid4().hex[:8]}",
-        "action": "ESCALATED",
-        "actor_username": actor_user.get("username", "officer"),
-        "actor_role": actor_user.get("role", "OFFICER"),
-        "details": f"Audit escalated to {target}. Reason: {req.escalation_reason}.",
-        "previous_state": prev_status,
-        "new_state": new_status,
-        "timestamp": now,
-        "metadata": {"escalation_target": target, "reason": req.escalation_reason}
-    }
-    rev["history"].append(event)
-
-    await save_review(rev)
-
-    # ── Phase 4B: Audit → Enforcement Persistent Case Creation ──
+    # ── Phase 4B: Audit → Enforcement Persistent Case Creation & Linkage ──
     try:
         from database.db import get_enforcement_case_by_analysis_id, save_enforcement_case, generate_case_reference
         existing_case = await get_enforcement_case_by_analysis_id(rev["analysis_id"])
@@ -846,13 +861,42 @@ async def escalate_review(
             await save_enforcement_case(case_record)
             rev["enforcement_case_id"] = case_id
             rev["enforcement_case_reference"] = case_ref
-            await save_review(rev)
         else:
             rev["enforcement_case_id"] = existing_case["id"]
             rev["enforcement_case_reference"] = existing_case["case_reference"]
-            await save_review(rev)
-    except Exception:
-        pass
+
+        # Update review status, comments, and audit timeline
+        rev["status"] = new_status
+        rev["updated_at"] = now
+
+        comment_item = {
+            "comment_id": f"cmt-{uuid.uuid4().hex[:8]}",
+            "comment_type": "ESCALATION",
+            "text": f"[Escalated to {target}] Reason: {req.escalation_reason}." + (f" Comments: {req.comments}" if req.comments else ""),
+            "officer_username": actor_user.get("username", "officer"),
+            "officer_role": actor_user.get("role", "OFFICER"),
+            "timestamp": now
+        }
+        rev["comments"].append(comment_item)
+
+        event = {
+            "event_id": f"evt-{uuid.uuid4().hex[:8]}",
+            "action": "ESCALATED",
+            "actor_username": actor_user.get("username", "officer"),
+            "actor_role": actor_user.get("role", "OFFICER"),
+            "details": f"Audit escalated to {target}. Reason: {req.escalation_reason}.",
+            "previous_state": prev_status,
+            "new_state": new_status,
+            "timestamp": now,
+            "metadata": {"escalation_target": target, "reason": req.escalation_reason}
+        }
+        rev["history"].append(event)
+
+        await save_review(rev)
+
+    except Exception as e:
+        logger.error(f"[ReviewService] Failed to persist enforcement escalation for review '{review_id}': {e}", exc_info=True)
+        raise RuntimeError(f"Failed to persist enforcement escalation for review '{review_id}': {e}") from e
 
     return rev
 
